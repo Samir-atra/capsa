@@ -19,7 +19,7 @@ def test_vae(use_case=None):
             optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
             loss=tf.keras.losses.MeanSquaredError(),
         )
-        history = model.fit(ds_train, epochs=30)
+        history = model.fit(ds_train, epochs=40)
 
         plt.plot(history.history["loss"])
         plt.show()
@@ -49,6 +49,8 @@ def test_vae(use_case=None):
 
         metrics_out = model(x_val)[0]
         y_pred, recon_loss = metrics_out
+        print(y_pred.shape)
+        print(recon_loss.shape)
 
     fig, axs = plt.subplots(2)
     axs[0].scatter(x_val, y_val, s=0.5, label="gt")
@@ -60,5 +62,5 @@ def test_vae(use_case=None):
     plt.show()
 
 
-# test_vae(use_case=1)
-test_vae(use_case=2)
+test_vae(use_case=1)
+# test_vae(use_case=2)

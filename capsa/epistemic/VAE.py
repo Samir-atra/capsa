@@ -6,7 +6,7 @@ from ..utils import Sampling, copy_layer, reverse_model, _get_out_dim
 
 
 class VAEWrapper(keras.Model):
-    def __init__(self, base_model, is_standalone=True, decoder=None):
+    def __init__(self, base_model, is_standalone=True, decoder=None, beta=1):
         super(VAEWrapper, self).__init__()
 
         self.metric_name = "VAEWrapper"
@@ -15,6 +15,8 @@ class VAEWrapper(keras.Model):
         self.feature_extractor = tf.keras.Model(
             base_model.inputs, base_model.layers[-2].output
         )
+
+        self.beta = beta
 
         # Add layers for the mean and variance of the latent space
         latent_dim = _get_out_dim(self.feature_extractor)
@@ -45,14 +47,16 @@ class VAEWrapper(keras.Model):
             reconstruction = self.decoder(mu, training=False)
 
         # Use decoder's reconstruction to compute loss
-        mse_loss = tf.reduce_mean(
-            tf.reduce_sum(tf.math.square(reconstruction - x), axis=-1)
-        )
+        mse_loss = tf.reduce_sum(tf.math.square(reconstruction - x), axis=-1)
+
+        return mse_loss
+
+    def kl_loss(self, mu, log_std):
         kl_loss = -0.5 * tf.reduce_mean(
             1 + log_std - tf.math.square(mu) - tf.math.square(tf.math.exp(log_std)),
             axis=-1,
         )
-        return mse_loss + kl_loss
+        return kl_loss
 
     def loss_fn(self, x, y, extractor_out=None):
         if extractor_out is None:
@@ -66,7 +70,9 @@ class VAEWrapper(keras.Model):
 
         mu = self.mean_layer(extractor_out)
         log_std = self.log_std_layer(extractor_out)
-        recon_loss = self.reconstruction_loss(mu=mu, log_std=log_std, x=x)
+        recon_loss = self.reconstruction_loss(
+            mu=mu, log_std=log_std, x=x
+        ) + self.beta * self.kl_loss(mu, log_std)
         return tf.reduce_mean(recon_loss + compiled_loss), predictor_y
 
     def train_step(self, data):
@@ -104,7 +110,7 @@ class VAEWrapper(keras.Model):
         if return_risk:
             mu = self.mean_layer(features, training=training)
             log_std = self.log_std_layer(features, training=training)
-            return out, self.reconstruction_loss(mu, log_std, x)
+            return out, self.reconstruction_loss(mu, log_std, x, training=training)
         else:
             return out
 

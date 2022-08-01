@@ -51,7 +51,6 @@ class Wrapper(keras.Model):
 
         for name, wrapper in self.metric_compiled.items():
             keras_metric, grad = wrapper.wrapped_train_step(x, y, features, name)
-            print(grad)
             keras_metrics.update(keras_metric)
             accum_grads += tf.scalar_mul(scalar, grad[0])
 
