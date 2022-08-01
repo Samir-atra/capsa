@@ -47,8 +47,7 @@ class VAEWrapper(keras.Model):
             reconstruction = self.decoder(mu, training=False)
 
         # Use decoder's reconstruction to compute loss
-        mse_loss = tf.reduce_sum(tf.math.square(reconstruction - x), axis=-1)
-
+        mse_loss = tf.reduce_mean(tf.math.square(reconstruction - x), axis=-1)
         return mse_loss
 
     def kl_loss(self, mu, log_std):
@@ -73,7 +72,10 @@ class VAEWrapper(keras.Model):
         recon_loss = self.reconstruction_loss(
             mu=mu, log_std=log_std, x=x
         ) + self.beta * self.kl_loss(mu, log_std)
-        return tf.reduce_mean(recon_loss + compiled_loss), predictor_y
+        return (
+            tf.reduce_mean(recon_loss + compiled_loss),
+            predictor_y,
+        )
 
     def train_step(self, data):
         x, y = data
@@ -110,7 +112,11 @@ class VAEWrapper(keras.Model):
         if return_risk:
             mu = self.mean_layer(features, training=training)
             log_std = self.log_std_layer(features, training=training)
-            return out, self.reconstruction_loss(mu, log_std, x, training=training)
+            return (
+                out,
+                self.reconstruction_loss(mu=mu, log_std=log_std, x=x)
+                + self.beta * self.kl_loss(mu, log_std),
+            )
         else:
             return out
 

@@ -8,7 +8,7 @@ from data import get_data_v1, get_data_v2
 
 
 def test_vae(use_case=None):
-
+    tf.keras.utils.set_random_seed(0)
     their_model = get_user_model()
     ds_train, _, x_val, y_val = get_data_v2(batch_size=256)
 
