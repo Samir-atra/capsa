@@ -67,7 +67,7 @@ class HistogramWrapper(keras.Model):
         if extractor_out is None:
             extractor_out = self.feature_extractor(x, training=True)
         hist_input = extractor_out
-        self.histogram_layer(hist_input)
+        self.histogram_layer(hist_input, training=True)
         out = self.output_layer(extractor_out)
         loss = tf.reduce_mean(
             self.compiled_loss(y, out, regularization_losses=self.losses),
@@ -120,10 +120,10 @@ class HistogramWrapper(keras.Model):
 
         if self.metric_wrapper is not None:
             # get the correct inputs to histogram if we have an additional metric
-            features = self.metric_wrapper.input_to_histogram(x, training=False)
+            features = self.metric_wrapper.input_to_histogram(x, training=training)
 
         predictor_y = self.output_layer(features)
-        bias = self.histogram_layer(features, training=False)
+        bias = self.histogram_layer(features, training=training)
 
         return predictor_y, bias
 
@@ -159,6 +159,7 @@ class HistogramLayer(tf.keras.layers.Layer):
     def call(self, inputs, training=True):
         # Updates frequencies if we are training
         if training:
+            print("training")
             self.minimums.assign(
                 tf.math.minimum(tf.reduce_min(inputs, axis=0), self.minimums)
             )
@@ -176,7 +177,6 @@ class HistogramLayer(tf.keras.layers.Layer):
             self.num_batches.assign_add(1)
         else:
             # Returns the probability of a datapoint occurring if we are in inference mode
-
             # Normalize histograms
             hist_probs = tf.divide(
                 self.frequencies, tf.reduce_sum(self.frequencies, axis=0)

@@ -12,3 +12,5 @@ from .aleatoric import MVEWrapper
 
 # Epistemic
 from .epistemic import DropoutWrapper, EnsembleWrapper, VAEWrapper
+
+from .wrap import wrap
