@@ -44,7 +44,7 @@ def make_standard_classifier(n_outputs=1):
     return tf.keras.Model(inp, x)
 
 
-latent_dim = 32
+latent_dim = 100
 
 
 def make_face_decoder_network():
@@ -84,7 +84,7 @@ wrapped_classifier = VAEWrapper(
 )
 # Training hyperparameters
 batch_size = 32
-num_epochs = 2  # keep small to run faster
+num_epochs = 6  # keep small to run faster
 learning_rate = 1e-5
 
 data_path = tf.keras.utils.get_file(
@@ -93,27 +93,26 @@ data_path = tf.keras.utils.get_file(
 dataloader = TrainingDatasetLoader(data_path, batch_size=batch_size)
 
 
-wrapped_classifier.compile(
+standard_classifier.compile(
     optimizer=tf.keras.optimizers.Adam(learning_rate),
     loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
     metrics=[tf.keras.metrics.BinaryAccuracy()],
 )
 
-history = wrapped_classifier.fit(
+history = standard_classifier.fit(
     dataloader,
     epochs=num_epochs,
     batch_size=batch_size,
-    callbacks=[HistogramCallback()],
 )
 
 
 import mitdeeplearning as mdl
 
 test_faces = mdl.lab2.get_test_faces()
-all_outs = [wrapped_classifier(np.array(x, dtype=np.float32)) for x in test_faces]
-# predictions = all_outs
-predictions = [out[0] for out in all_outs]
-biases = [out[1] for out in all_outs]
+all_outs = [standard_classifier(np.array(x, dtype=np.float32)) for x in test_faces]
+predictions = all_outs
+#predictions = [out[0] for out in all_outs]
+#biases = [out[1] for out in all_outs]
 
 keys = ["Light Female", "Light Male", "Dark Female", "Dark Male"]
 for group, key in zip(test_faces, keys):
@@ -123,6 +122,6 @@ for group, key in zip(test_faces, keys):
 
 predictions = tf.squeeze(tf.sigmoid(predictions))
 predictions = predictions.numpy().mean(1)
-biases = np.asarray(biases).mean(1)
+#biases = np.asarray(biases).mean(1)
 print(predictions)
-print(biases)
+#print(biases)
