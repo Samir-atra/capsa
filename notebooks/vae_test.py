@@ -75,14 +75,6 @@ def make_face_decoder_network():
 
 
 standard_classifier = make_standard_classifier()
-"""
-wrapped_classifier = HistogramWrapper(
-    standard_classifier,
-    metric_wrapper=VAEWrapper(
-        standard_classifier, decoder=make_face_decoder_network(), latent_dim=10
-    ),
-)
-"""
 
 wrapped_classifier = VAEWrapper(
     standard_classifier,
