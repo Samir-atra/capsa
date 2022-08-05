@@ -4,7 +4,7 @@ from tensorflow import keras
 from ..wrapper import Wrapper
 from ..utils import copy_layer
 import tensorflow_probability as tfp
-
+import numpy as np
 
 class HistogramCallback(tf.keras.callbacks.Callback):
     def on_epoch_begin(self, epoch, logs=None):
@@ -78,12 +78,12 @@ class HistogramWrapper(keras.Model):
             tf.gradients(loss, features),
         )
 
-    def call(self, x, training=False, return_risk=True, features=None):
+    def call(self, x, training=False, return_risk=True, features=None, softmax=False):
         if self.is_standalone:
             features = self.feature_extractor(x, training=False)
 
         predictor_y = self.output_layer(features)
-        bias = self.histogram_layer(features, training=training)
+        bias = self.histogram_layer(features, training=training, softmax=softmax)
 
         return predictor_y, bias
 
@@ -116,7 +116,7 @@ class HistogramLayer(tf.keras.layers.Layer):
             initial_value=tf.zeros(input_shape[1:]), trainable=False
         )
 
-    def call(self, inputs, training=True):
+    def call(self, inputs, training=True, softmax=False):
         # Updates frequencies if we are training
         if training:
             self.minimums.assign(
@@ -150,6 +150,8 @@ class HistogramLayer(tf.keras.layers.Layer):
                 ),
                 tf.dtypes.int32,
             )
+            print(self.frequencies)
+
             # Multiply probabilities together to compute bias
             second_element = tf.repeat(
                 [tf.range(tf.shape(inputs)[1])], repeats=[tf.shape(inputs)[0]], axis=0
@@ -157,8 +159,12 @@ class HistogramLayer(tf.keras.layers.Layer):
             indices = tf.stack([bin_indices, second_element], axis=2)
 
             probabilities = tf.gather_nd(hist_probs, indices)
-            bias = tf.reduce_prod(probabilities, axis=1)
-            return bias
+            print("probabilities", probabilities)
+            logits = tf.reduce_sum(tf.math.log(probabilities), axis=1)
+            logits = logits - np.mean(logits)
+            if softmax:
+                return tf.math.softmax(logits)
+            return logits
 
     def update_state(self):
         self.edges.assign(tf.linspace(self.minimums, self.maximums, self.num_bins + 1))

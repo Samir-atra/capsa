@@ -116,7 +116,7 @@ class VAEWrapper(keras.Model):
             tf.gradients(loss, features),
         )
 
-    def call(self, x, training=False, return_risk=True, features=None):
+    def call(self, x, training=False, return_risk=True, features=None, softmax=False):
         if self.is_standalone:
             features = self.feature_extractor(x, training=training)
 
@@ -130,7 +130,7 @@ class VAEWrapper(keras.Model):
             if self.epistemic:
                 outs.append(self.reconstruction_loss(mu, log_std, x))
             if self.bias:
-                outs.append(self.histogram_layer(mu, training=training))
+                outs.append(self.histogram_layer(mu, training=training, softmax=softmax))
             return tuple(outs)
         else:
             return out

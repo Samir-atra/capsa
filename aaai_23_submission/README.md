@@ -2,14 +2,15 @@
 Experiments listed in order of priority, with datasets. Figures and data are in the results/ folder.
 
 ### Bias
-- [ ] Toy example with regression
-- [ ] MNIST highest-bias images
-- [ ] VAE + Face Dataset
+- [-] Toy example with regression
+- [-] MNIST highest-bias images
+- [ ] VAE + Face Dataset (skin types with biases and accuracies done, more visualizations?)
+- [ ] Feature drop experiment
 - [ ] Low priority: driving dataset?
 
 ### Aleatoric
 - [ ] Toy example with regression
-- [ ] MNIST mislabeled images
+- [-] MNIST mislabeled images
 - [ ] Incorrect segmentations with Kitti dataset
 
 ### Epistemic
