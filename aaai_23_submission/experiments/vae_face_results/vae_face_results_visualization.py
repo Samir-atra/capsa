@@ -14,7 +14,13 @@ from tqdm import tqdm
 
 test_faces = mdl.lab2.get_test_faces()
 keys = ["Light Female", "Light Male", "Dark Female", "Dark Male"]
-probs = np.array([1.8098767e-29, 4.0885006e-30, 1.3895825e-30, 1.1570064e-31])
+probs = np.array([1.9163518e-29, 2.5964466e-30, 1.5205098e-30, 7.6509994e-32])
+
+
+logits = np.array([-67.99536,  -68.94391,  -70.070045, -71.775635])
+log_probs = -1 * (logits - np.mean(logits)) + np.mean(logits)
+probs = tf.math.softmax(logits)
+
 probs = np.round(probs/sum(probs), 4)
 
 for group, key, prob in zip(test_faces,keys,probs): 

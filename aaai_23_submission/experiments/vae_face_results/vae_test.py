@@ -99,6 +99,7 @@ history = wrapped_classifier.fit(
     dataloader,
     epochs=num_epochs,
     batch_size=batch_size,
+    callbacks=[HistogramCallback()]
 )
 
 
