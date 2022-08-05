@@ -4,12 +4,12 @@ Experiments listed in order of priority, with datasets. Figures and data are in 
 ### Bias
 - [x] Toy example with regression
 - [x] MNIST highest-bias images
-- [ ] VAE + Face Dataset (skin types with biases and accuracies done, more visualizations?)
+- [x] VAE + Face Dataset (skin types with biases and accuracies done, more visualizations?)
 - [ ] Feature drop experiment
 - [ ] Low priority: driving dataset?
 
 ### Aleatoric
-- [ ] Toy example with regression
+- [x] Toy example with regression
 - [x] MNIST mislabeled images
 - [ ] Incorrect segmentations with Kitti dataset
 
@@ -19,7 +19,7 @@ Experiments listed in order of priority, with datasets. Figures and data are in 
 - [ ] Low priority: table with RMSE, NLL
 
 ### Composability
-- [ ] Toy example with regression
+- [x] Toy example with regression
 - [ ] Ensembling the MVE metric (both model + MVE, as well as just MVE) (which dataset?)
 - [ ] Ensembling dropout + MVE with dropout (which dataset?)
 
