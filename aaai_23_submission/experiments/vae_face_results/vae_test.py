@@ -17,7 +17,16 @@ import functools
 
 n_filters = 12  # base number of convolutional filters
 latent_dim = 100
-
+data_path = tf.keras.utils.get_file(
+    "train_face.h5", "https://www.dropbox.com/s/hlz8atheyozp1yx/train_face.h5?dl=1"
+)
+test_dataloader = TrainingDatasetLoader(data_path, batch_size=32, training=False)
+selected_inds = test_dataloader.train_inds
+sorted_inds = np.sort(selected_inds)
+train_img = (test_dataloader.images[sorted_inds, :, :, ::-1] / 255.0).astype(np.float32)
+train_label = test_dataloader.labels[sorted_inds, ...]
+plt.imshow(train_img[0])
+plt.savefig("testimg.png")
 """Function to define a standard CNN model"""
 
 def make_standard_classifier(n_outputs=1):
@@ -86,9 +95,6 @@ batch_size = 32
 num_epochs = 6  # keep small to run faster
 learning_rate = 1e-5
 
-data_path = tf.keras.utils.get_file(
-    "train_face.h5", "https://www.dropbox.com/s/hlz8atheyozp1yx/train_face.h5?dl=1"
-)
 dataloader = TrainingDatasetLoader(data_path, batch_size=batch_size)
 wrapped_classifier.compile(
     optimizer=tf.keras.optimizers.Adam(learning_rate),
@@ -120,3 +126,57 @@ predictions = predictions.numpy().mean(1)
 biases = np.asarray(biases).mean(1)
 print(predictions)
 print(biases)
+
+
+test_outs = wrapped_classifier(train_img, softmax=True)
+print(test_outs)
+test_biases = np.squeeze(test_outs[1])
+sorted_bias_inds = np.argsort(test_biases)
+sorted_biases = np.array(test_biases[sorted_bias_inds])
+sorted_images = np.array(train_img[sorted_bias_inds])
+num_images = 20
+
+num_samples = len(train_img) // num_images
+all_imgs = []
+all_bias = []
+for percentile in range(num_images):
+    cur_imgs = sorted_images[percentile * num_samples : (percentile + 1) * num_samples]
+    cur_bias = sorted_biases[percentile * num_samples : (percentile + 1) * num_samples]
+    avged_imgs = tf.reduce_mean(cur_imgs, axis=0)
+    all_imgs.append(avged_imgs)
+    all_bias.append(tf.reduce_mean(cur_bias))
+
+fig = plt.figure()
+fig.subplots_adjust(hspace=0.6)
+for img in range(num_images):
+    ax = fig.add_subplot(num_images/5, 5, img + 1)
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    img_to_show = sorted_images[img]
+    ax.imshow(img_to_show, interpolation="nearest")
+plt.subplots_adjust(wspace=0.20,hspace=0.20)
+
+plt.savefig("least_biased_faces.PNG")
+plt.clf()
+
+fig = plt.figure()
+fig.subplots_adjust(hspace=0.6)
+for img in range(-1 * num_images, 0):
+    ax = fig.add_subplot(num_images/5, 5, -1 * img)
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    img_to_show = sorted_images[img]
+    ax.imshow(img_to_show, interpolation="nearest")
+plt.subplots_adjust(wspace=0.20,hspace=0.20)
+plt.savefig("highest_biased_faces.PNG")
+
+fig = plt.figure()
+fig.subplots_adjust(hspace=0.6)
+for img in range(num_images):
+    ax = fig.add_subplot(num_images/5, 5, img + 1)
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    img_to_show = all_imgs[img]
+    ax.imshow(img_to_show, interpolation="nearest")
+plt.subplots_adjust(wspace=0.20,hspace=0.20)
+plt.savefig("percentile.PNG")

@@ -11,7 +11,7 @@ import functools
 
 
 class TrainingDatasetLoader(tf.keras.utils.Sequence):
-    def __init__(self, data_path, batch_size):
+    def __init__(self, data_path, batch_size, training=True):
 
         print("Opening {}".format(data_path))
         sys.stdout.flush()
@@ -23,9 +23,14 @@ class TrainingDatasetLoader(tf.keras.utils.Sequence):
         self.images = self.cache["images"][:]
         self.labels = self.cache["labels"][:].astype(np.float32)
         self.image_dims = self.images.shape
-        n_train_samples = self.image_dims[0]
+        total_train_samples = self.image_dims[0]
 
-        self.train_inds = np.random.permutation(np.arange(n_train_samples))
+        if training:
+            n_train_samples = np.arange(int(0.7 * total_train_samples))
+        else:
+            n_train_samples = int(0.7 * total_train_samples) + np.arange(int(0.3 * total_train_samples))
+
+        self.train_inds = np.random.permutation(n_train_samples)
 
         self.pos_train_inds = self.train_inds[self.labels[self.train_inds, 0] == 1.0]
         self.neg_train_inds = self.train_inds[self.labels[self.train_inds, 0] != 1.0]
