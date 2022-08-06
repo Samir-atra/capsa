@@ -107,7 +107,7 @@ def reverse_model(model, latent_dim):
         if i == len(model.layers) - 1:
             x = reverse_layer(model.layers[i])(inputs)
         else:
-            if type(model.layers[i - 1]) == layers.InputLayer:
+            if type(model.layers[i - 1]) == layers.InputLayer or type(model.layers[i - 1] == layers.Flatten):
                 original_input = model.layers[i - 1].input_shape
                 x = reverse_layer(model.layers[i], original_input)(x)
             else:
@@ -167,6 +167,8 @@ def reverse_layer(layer, output_shape=None):
             return layers.Conv2DTranspose.from_config(config)
         elif layer_type == layers.Conv3D:
             return layers.Conv3DTranspose.from_config(config)
+    elif layer_type == layers.Flatten:
+        return layers.Reshape(output_shape[1:])
     else:
         raise NotImplementedError()
 

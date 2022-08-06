@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# NYU depth data
+aaai_23_submission/data/nyu_depth/
