@@ -25,7 +25,7 @@ def generate_cubic(x, noise=False):
 # individual data files             #
 #####################################
 vb_dir   = os.path.dirname(__file__)
-data_dir = os.path.join(vb_dir, "data/uci")
+data_dir = "/home/sadhanalolla/capsa/aaai_23_submission/data/uci/"
 
 def _load_boston():
     """
@@ -394,11 +394,10 @@ def load_flight_delay():
 
     return (X_train, y_train), (X_test, y_test), y_scale
 
-
-# (X_train, y_train), (X_test, y_test) = load_dataset('boston')
-# (X_train, y_train), (X_test, y_test) = load_dataset('concrete')
-# (X_train, y_train), (X_test, y_test) = load_dataset('energy-efficiency')
-# (X_train, y_train), (X_test, y_test) = load_dataset('kin8nm')
+# (X_train, y_train), (X_test, y_test), _ = load_dataset('boston')
+# (X_train, y_train), (X_test, y_test), _  = load_dataset('concrete')
+# (X_train, y_train), (X_test, y_test), _  = load_dataset('energy-efficiency')
+# (X_train, y_train), (X_test, y_test), _  = load_dataset('kin8nm')
 # (X_train, y_train), (X_test, y_test) = load_dataset('naval')
 # (X_train, y_train), (X_test, y_test) = load_dataset('power-plant')
 # (X_train, y_train), (X_test, y_test) = load_dataset('protein')

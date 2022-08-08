@@ -1,0 +1,232 @@
+No protocol specified
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(train_all_models.py:579746): Gdk-CRITICAL **: 18:52:26.047: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+2022-08-07 18:52:26.477056: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-08-07 18:52:26.482874: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudnn.so.8'; dlerror: libcudnn.so.8: cannot open shared object file: No such file or directory
+2022-08-07 18:52:26.482899: W tensorflow/core/common_runtime/gpu/gpu_device.cc:1850] Cannot dlopen some GPU libraries. Please make sure the missing libraries mentioned above are installed properly if you would like to use GPU. Follow the guide at https://www.tensorflow.org/install/gpu for how to download and setup the required libraries for your platform.
+Skipping registering GPU devices...
+2022-08-07 18:52:26.483135: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Traceback (most recent call last):
+  File "train_all_models.py", line 19, in <module>
+    model = DropoutWrapper(get_toy_model((13, )), metric_wrapper=MVEWrapper)
+TypeError: __init__() got an unexpected keyword argument 'metric_wrapper'
+No protocol specified
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(train_all_models.py:580961): Gdk-CRITICAL **: 18:53:01.691: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+2022-08-07 18:53:02.155290: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-08-07 18:53:02.161286: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudnn.so.8'; dlerror: libcudnn.so.8: cannot open shared object file: No such file or directory
+2022-08-07 18:53:02.161311: W tensorflow/core/common_runtime/gpu/gpu_device.cc:1850] Cannot dlopen some GPU libraries. Please make sure the missing libraries mentioned above are installed properly if you would like to use GPU. Follow the guide at https://www.tensorflow.org/install/gpu for how to download and setup the required libraries for your platform.
+Skipping registering GPU devices...
+2022-08-07 18:53:02.161549: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Loading dataset boston....
+Done loading dataset boston
+new min rmse 9.245561
+new min nll [11.009397]
+new min rmse 8.117311
+new min nll [8.384275]
+new min rmse 7.119191
+new min nll [6.887456]
+new min rmse 6.3303027
+new min nll [5.7522163]
+new min rmse 5.8251233
+new min nll [4.906057]
+new min rmse 5.249214
+new min rmse 5.0996103
+new min nll [4.5862727]
+new min rmse 4.8755016
+new min nll [4.5526485]
+new min rmse 4.8262596
+new min rmse 4.6288958
+new min nll [4.489706]
+new min rmse 4.54102
+new min nll [4.4429064]
+new min rmse 4.4250607
+new min nll [4.2010584]
+new min rmse 4.2931213
+new min nll [3.8931544]
+new min rmse 4.257946
+new min rmse 4.120191
+new min rmse 4.0988083
+new min rmse 4.0383234
+new min nll [3.311521]
+new min rmse 3.983002
+new min rmse 3.927257
+new min rmse 3.8739672
+new min rmse 3.6731827
+new min rmse 3.66019
+new min rmse 3.5827906
+new min rmse 3.564647
+new min rmse 3.5146353
+new min nll [3.1351063]
+new min rmse 3.4667382
+new min rmse 3.4003143
+new min rmse 3.2512608
+new min rmse 3.1200976
+new min nll [3.1175888]
+new min rmse 3.0905552
+new min nll [3.1142306]
+new min rmse 3.0710144
+new min nll [3.0808105]
+new min rmse 3.0581324
+new min nll [3.059883]
+new min rmse 2.9818296
+new min rmse 2.9482872
+new min rmse 2.8771524
+new min rmse 2.8148541
+new min nll [2.911104]
+new min rmse 2.7653058
+new min rmse 2.7237186
+new min rmse 2.668391
+new min rmse 2.651499
+new min rmse 2.6172802
+new min rmse 2.5650153
+new min rmse 2.5573857
+new min rmse 2.5566475
+new min rmse 2.5236886
+new min rmse 2.506649
+new min rmse 2.467393
+new min rmse 2.466061
+new min rmse 2.398451
+new min rmse 2.3933291
+new min rmse 2.3732982
+new min rmse 2.3284547
+new min rmse 2.3191748
+new min rmse 2.3180785
+new min rmse 2.2908397
+new min rmse 2.275727
+new min rmse 2.2474225
+new min rmse 2.237453
+new min rmse 2.2292364
+new min rmse 2.22396
+new min rmse 2.22137
+new min rmse 2.2033608
+new min rmse 2.1957371
+new min rmse 2.1836264
+new min rmse 2.1730824
+new min rmse 2.1612082
+new min rmse 2.157843
+new min rmse 2.1455398
+new min rmse 2.1430922
+new min rmse 2.1404757
+new min rmse 2.13543
+new min rmse 2.1178885
+new min rmse 2.0648623
+new min nll [2.8359632]
+new min rmse 2.03323
+Traceback (most recent call last):
+  File "train_all_models.py", line 23, in <module>
+    model, min_rmse, min_nll = trainer.train()
+  File "/home/sadhanalolla/capsa/aaai_23_submission/experiments/uci_dataset_experiments/custom_training_loop.py", line 50, in train
+    for step, (x_batch_train, y_batch_train) in enumerate(self.train_dataset):
+KeyboardInterrupt
+No protocol specified
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(train_all_models.py:798048): Gdk-CRITICAL **: 18:54:35.529: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+2022-08-07 18:54:35.977309: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-08-07 18:54:35.983062: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudnn.so.8'; dlerror: libcudnn.so.8: cannot open shared object file: No such file or directory
+2022-08-07 18:54:35.983087: W tensorflow/core/common_runtime/gpu/gpu_device.cc:1850] Cannot dlopen some GPU libraries. Please make sure the missing libraries mentioned above are installed properly if you would like to use GPU. Follow the guide at https://www.tensorflow.org/install/gpu for how to download and setup the required libraries for your platform.
+Skipping registering GPU devices...
+2022-08-07 18:54:35.983369: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Loading dataset boston....
+Done loading dataset boston
+new min rmse 11.005719
+new min nll [29.94848]
+new min rmse 10.075423
+new min nll [26.166298]
+new min rmse 9.365723
+new min nll [21.547562]
+new min rmse 8.643326
+new min nll [18.012062]
+new min rmse 7.8742685
+new min nll [15.281561]
+new min rmse 7.531343
+new min nll [12.594412]
+new min rmse 7.1733317
+new min rmse 6.7210355
+new min rmse 6.4596844
+new min nll [10.3582115]
+new min rmse 6.097374
+new min nll [9.248921]
+new min rmse 5.874218
+new min rmse 5.621854
+new min nll [7.890935]
+new min rmse 5.430416
+new min rmse 5.2677402
+new min nll [7.0908966]
+new min rmse 5.19341
+new min nll [6.136138]
+new min rmse 4.937521
+new min rmse 4.837912
+new min rmse 4.656822
+new min rmse 4.4875503
+new min rmse 4.395238
+new min rmse 4.2943463
+new min rmse 4.2838583
+new min nll [6.019542]
+new min rmse 4.0834684
+new min rmse 3.9345565
+new min nll [5.5381017]
+new min rmse 3.931967
+new min nll [5.392064]
+new min rmse 3.8828158
+new min nll [5.2966785]
+new min rmse 3.8097773
+new min rmse 3.8028507
+new min nll [5.077878]
+new min rmse 3.7250113
+new min rmse 3.6992443
+new min rmse 3.6148343
+new min nll [4.954584]
+new min nll [4.870529]
+new min rmse 3.598438
+new min rmse 3.5054488
+new min nll [4.529337]
+new min nll [4.452706]
+new min nll [4.3877096]
+new min rmse 3.4244087
+new min rmse 3.3883882
+new min rmse 3.3819892
+new min nll [4.3334503]
+new min rmse 3.3528814
+new min rmse 3.1543872
+new min nll [3.971225]
+new min rmse 3.1053295
+new min rmse 3.0982203
+new min rmse 3.0561318
+new min rmse 3.0454803
+new min nll [3.8823867]
+new min rmse 3.0100813
+new min nll [3.758781]
+new min rmse 2.9410226
+new min nll [3.38514]
+new min rmse 2.9250686
+new min rmse 2.912045
+new min rmse 2.8192909
+new min rmse 2.8180208
+new min rmse 2.752756
+new min rmse 2.69852
+new min rmse 2.6973987
+new min rmse 2.6707907
+Traceback (most recent call last):
+  File "train_all_models.py", line 23, in <module>
+    model, min_rmse, min_nll = trainer.train()
+  File "/home/sadhanalolla/capsa/aaai_23_submission/experiments/uci_dataset_experiments/custom_training_loop.py", line 50, in train
+    for step, (x_batch_train, y_batch_train) in enumerate(self.train_dataset):
+  File "/home/sadhanalolla/.local/lib/python3.8/site-packages/tensorflow/python/data/ops/dataset_ops.py", line 494, in __iter__
+    return iterator_ops.OwnedIterator(self)
+  File "/home/sadhanalolla/.local/lib/python3.8/site-packages/tensorflow/python/data/ops/iterator_ops.py", line 696, in __init__
+    self._create_iterator(dataset)
+  File "/home/sadhanalolla/.local/lib/python3.8/site-packages/tensorflow/python/data/ops/iterator_ops.py", line 721, in _create_iterator
+    gen_dataset_ops.make_iterator(ds_variant, self._iterator_resource)
+  File "/home/sadhanalolla/.local/lib/python3.8/site-packages/tensorflow/python/ops/gen_dataset_ops.py", line 3409, in make_iterator
+    _result = pywrap_tfe.TFE_Py_FastPathExecute(
+KeyboardInterrupt

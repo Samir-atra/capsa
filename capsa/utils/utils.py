@@ -17,10 +17,10 @@ def MLP(in_dim, emb_dim, trainable=True):
     )
 
 
-def get_user_model():
+def get_user_model(input_shape=(1,)):
     return tf.keras.Sequential(
         [
-            tf.keras.Input(shape=(1,)),
+            tf.keras.Input(shape=input_shape),
             layers.Dense(16, "relu"),
             layers.Dense(32, "relu"),
             layers.Dense(64, "relu"),

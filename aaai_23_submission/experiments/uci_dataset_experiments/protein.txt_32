@@ -1,0 +1,909 @@
+Loading dataset protein....
+Done loading dataset protein
+protein
+MVE and Dropout trial 0
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0185665>}
+new min rmse 6.0870466
+new min nll [3.2625427]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8801221>}
+new min rmse 5.8984733
+new min nll [3.15713]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83674437>}
+new min rmse 5.71714
+new min nll [3.1207552]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8096348>}
+new min rmse 5.6246257
+new min nll [3.09376]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7877924>}
+new min rmse 5.5510135
+new min nll [3.0745347]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7741141>}
+new min rmse 5.496765
+new min nll [3.0532556]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76472276>}
+new min rmse 5.4811354
+new min nll [3.044783]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7560768>}
+new min rmse 5.477685
+new min nll [3.0411973]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74859095>}
+new min rmse 5.417582
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73981833>}
+new min rmse 5.3775606
+new min nll [3.034467]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73490536>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+new min nll [3.0260477]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7308692>}
+new min rmse 5.251758
+new min nll [3.0034552]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7263271>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Dropout trial 0
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0340648>}
+new min rmse 6.3328004
+new min nll [85.36438]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.88224256>}
+new min rmse 5.7336173
+new min nll [61.226944]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8204676>}
+new min rmse 5.6790075
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=201>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7960378>}
+new min rmse 5.506287
+new min nll [59.965317]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.774545>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=401>
+new min nll [57.67634]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7606113>}
+new min rmse 5.4027014
+new min nll [51.60872]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7512284>}
+new min rmse 5.395045
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=601>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74538046>}
+new min rmse 5.3402653
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7376928>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+new min nll [48.422142]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7315353>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=901>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=901>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.72696745>}
+new min rmse 5.331645
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.72269154>}
+new min rmse 5.19915
+nll hasn't decreased in 3 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1101>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7192712>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+nll hasn't decreased in 4 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Ensemble trial 0
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.7498037>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0842139>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.646595>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.8491554>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.189993>}
+new min rmse 6.3266892
+new min nll [3.2878158]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.015012>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.93170595>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9986504>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1123608>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8533577>}
+new min rmse 5.7832317
+new min nll [3.177586]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9000664>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.85361296>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9017641>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9642839>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80558777>}
+new min rmse 5.6912313
+new min nll [3.1343763]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.850664>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81949663>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8557775>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.89705557>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78576136>}
+new min rmse 5.6182904
+new min nll [3.108131]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8094507>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78570795>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81389534>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84267443>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7582141>}
+new min rmse 5.540174
+new min nll [3.0861125]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7912992>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77325815>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79517895>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8179076>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7487925>}
+new min rmse 5.4548826
+new min nll [3.0503402]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7742167>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75972766>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7776519>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7964559>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7382492>}
+new min rmse 5.3600707
+new min nll [3.020057]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.760445>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7487799>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7634468>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77968895>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7293851>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75096786>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7412111>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7539114>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76742727>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7233976>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74330366>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7346188>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74556416>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75762004>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.71802694>}
+new min rmse 5.3272514
+new min nll [3.013182]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7342912>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7272456>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7365341>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7470393>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7113303>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7289444>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7225986>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7303252>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74011034>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7077956>}
+new min rmse 5.2521806
+nll hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7253483>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7195176>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7261654>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7351681>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.70519125>}
+new min rmse 5.1884494
+new min nll [3.0010138]
+Ensemble + Dropout trial 0
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.2716911>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.3685889>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.5866469>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1484945>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1227689>}
+new min rmse 6.212652
+new min nll [3.2611392]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.94069326>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9033271>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9484675>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.90814495>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.94417185>}
+new min rmse 5.8696065
+new min nll [3.1836228]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8616324>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8591541>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8783647>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.86732316>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.88991445>}
+new min rmse 5.8297715
+new min nll [3.1694]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8376921>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8435358>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8523525>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8525972>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8707728>}
+new min rmse 5.7019
+new min nll [3.1451945]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80516726>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81753486>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8166128>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82393974>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83539665>}
+new min rmse 5.677294
+new min nll [3.135317]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7881762>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80533046>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8008777>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8081871>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8162124>}
+new min rmse 5.5967026
+new min nll [3.1178284]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77573365>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7973448>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7885192>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7987913>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80448896>}
+new min rmse 5.498884
+new min nll [3.0996501]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76401687>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7880742>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77790076>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78744143>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79097426>}
+new min rmse 5.4967833
+new min nll [3.0975347]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75509936>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7804773>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.767922>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77804327>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7812562>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7492331>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7748707>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7601902>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7709272>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7749427>}
+new min rmse 5.3970933
+new min nll [3.0818105]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7416035>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7679394>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75320065>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7632905>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7676629>}
+new min rmse 5.3735456
+new min nll [3.0755405]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73784244>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7642922>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74948597>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75858814>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76297075>}
+new min rmse 5.314118
+new min nll [3.069191]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7330905>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7593365>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7439027>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7537341>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75737536>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+protein
+MVE and Dropout trial 1
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.8765597>}
+new min rmse 7.284841
+new min nll [3.4180105]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1132565>}
+new min rmse 5.840204
+new min nll [3.1490304]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9646814>}
+new min rmse 5.754128
+new min nll [3.1215272]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9044677>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=301>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=301>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8618169>}
+new min rmse 5.748774
+new min nll [3.1132145]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83543056>}
+new min rmse 5.638833
+new min nll [3.0886638]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82045954>}
+new min rmse 5.532618
+new min nll [3.0656443]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80408543>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7909878>}
+new min rmse 5.491154
+new min nll [3.05036]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78176695>}
+new min rmse 5.4161196
+new min nll [3.033233]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77368265>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7669682>}
+new min rmse 5.2288275
+new min nll [3.0031598]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76054484>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Dropout trial 1
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.456341>}
+new min rmse 7.226129
+new min nll [84.64748]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9930048>}
+new min rmse 5.709846
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=101>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8954665>}
+new min rmse 5.6782575
+new min nll [72.285736]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84642625>}
+new min rmse 5.5102844
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=301>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81503046>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=401>
+new min nll [69.52211]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80013>}
+new min rmse 5.3503027
+new min nll [51.920135]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.784489>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=601>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=601>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7710909>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+new min nll [47.468407]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7607272>}
+new min rmse 5.3052535
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75645274>}
+new min rmse 5.2190766
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=901>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7461417>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+nll hasn't decreased in 3 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7414791>}
+new min rmse 5.1880784
+nll hasn't decreased in 4 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1101>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7357714>}
+new min rmse 5.1252284
+nll hasn't decreased in 5 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Ensemble trial 1
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9815324>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.923944>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.4387989>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.2195501>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.3751953>}
+new min rmse 6.872057
+new min nll [3.3557382]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9282863>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1202736>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9760088>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0295892>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0459285>}
+new min rmse 5.9519134
+new min nll [3.184638]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8758271>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.94827527>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.886841>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.91929185>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9471908>}
+new min rmse 5.9099283
+new min nll [3.1755805]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8453599>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.88000256>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8456574>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8695198>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.89020437>}
+new min rmse 5.745663
+new min nll [3.1236496]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81861943>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83730334>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81419337>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8321557>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8483467>}
+new min rmse 5.725306
+new min nll [3.1181018]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7997734>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8108787>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7945873>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80856466>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82202977>}
+new min rmse 5.6716137
+new min nll [3.0949826]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7875582>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79383475>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7789778>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7913601>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80268514>}
+new min rmse 5.539492
+new min nll [3.0584602]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77799624>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78329384>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7695184>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78040516>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78919303>}
+new min rmse 5.5240746
+new min nll [3.0484645]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.768709>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77207386>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76001006>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7702773>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7766273>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75983906>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76261985>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7508161>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76030695>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7648547>}
+new min rmse 5.434294
+new min nll [3.0366547]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75322735>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7552976>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7443127>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7532688>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75634944>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7476408>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74954635>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7392259>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7478517>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7491063>}
+new min rmse 5.321049
+new min nll [3.0138328]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74225706>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7437854>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73382396>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74242353>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7425871>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+Ensemble + Dropout trial 1
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.2246548>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=2.156366>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.9436498>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.6492549>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.7984204>}
+new min rmse 6.622371
+new min nll [3.3268495]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.98960286>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1560197>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0564326>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0656601>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.99556845>}
+new min rmse 5.864184
+new min nll [3.1942945]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.91635513>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0185322>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9709295>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.95671266>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.92685056>}
+new min rmse 5.7682476
+new min nll [3.1719615]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.87343943>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9562024>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9466253>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8955213>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.883981>}
+new min rmse 5.7023745
+new min nll [3.1539376]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8438778>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.90648204>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9108428>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8546872>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.85337716>}
+new min rmse 5.6594815
+new min nll [3.142344]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82784826>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8766078>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.89052683>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8329948>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8356369>}
+new min rmse 5.637332
+new min nll [3.1340232]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8129235>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.853254>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.87059784>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8119709>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81919587>}
+new min rmse 5.555603
+new min nll [3.1170263]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8016495>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83555335>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8564753>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7967138>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80751175>}
+new min rmse 5.545313
+new min nll [3.1112137]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7936207>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82143766>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8455175>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7854021>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7985443>}
+new min rmse 5.4629464
+new min nll [3.0955777]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78364646>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8077317>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8341432>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77489275>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78849244>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7766945>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7966635>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8242617>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.766045>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78028286>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7740567>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78984666>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81859195>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7613712>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7758286>}
+new min rmse 5.322113
+new min nll [3.0722556]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76694053>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7804896>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8105561>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7534595>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7692292>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+protein
+MVE and Dropout trial 2
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9522554>}
+new min rmse 7.0550823
+new min nll [3.3635092]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9806987>}
+new min rmse 5.93969
+new min nll [3.195364]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9244624>}
+new min rmse 5.834605
+new min nll [3.1632726]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.88429445>}
+new min rmse 5.799804
+new min nll [3.155527]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.85443914>}
+new min rmse 5.7400813
+new min nll [3.1297674]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8359717>}
+new min rmse 5.719303
+new min nll [3.1178906]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8215983>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=601>
+new min nll [3.1158533]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8105629>}
+new min rmse 5.678084
+new min nll [3.102271]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7989364>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+new min nll [3.100504]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7903247>}
+new min rmse 5.6375084
+new min nll [3.09438]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78117853>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77680904>}
+new min rmse 5.5514717
+new min nll [3.082601]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77035826>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Dropout trial 2
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.7554985>}
+new min rmse 6.4080057
+new min nll [108.07058]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0326774>}
+new min rmse 5.912921
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=101>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9685518>}
+new min rmse 5.7717056
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=201>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.91893154>}
+new min rmse 5.65174
+nll hasn't decreased in 3 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=301>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8799898>}
+new min rmse 5.6442084
+nll hasn't decreased in 4 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=401>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8549564>}
+new min rmse 5.5853643
+nll hasn't decreased in 5 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=501>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8354573>}
+new min rmse 5.504436
+nll hasn't decreased in 6 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=601>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8218112>}
+new min rmse 5.4761143
+nll hasn't decreased in 7 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8089567>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+nll hasn't decreased in 8 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7961416>}
+new min rmse 5.326948
+new min nll [96.66822]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7889011>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+new min nll [87.77657]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7808685>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1101>
+new min nll [67.058044]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7741667>}
+rmse hasn't decreased in 3 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Ensemble trial 2
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.91570365>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8486798>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.3282758>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1030782>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0361334>}
+new min rmse 6.6327605
+new min nll [3.3206608]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9579496>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8904766>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9956081>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.87003124>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9469588>}
+new min rmse 5.8079133
+new min nll [3.175117]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8718719>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84329754>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9183514>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8158151>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8751642>}
+new min rmse 5.737299
+new min nll [3.1475236]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8294994>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81332934>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.87199146>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.784011>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8346524>}
+new min rmse 5.536164
+new min nll [3.087992]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7958665>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78839964>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8360766>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76043504>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8038189>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7756919>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7724914>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8134282>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74641037>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7846858>}
+new min rmse 5.477546
+new min nll [3.0542867]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7626093>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7615461>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7965477>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7373633>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7723642>}
+new min rmse 5.397284
+new min nll [3.029241]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75196576>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7516566>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78231174>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.72941613>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7617388>}
+new min rmse 5.3731117
+new min nll [3.0190148]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7418864>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7432844>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7704651>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.72268>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7521496>}
+new min rmse 5.3650484
+new min nll [3.0165608]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7342103>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73643076>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7607319>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.71757495>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74439013>}
+new min rmse 5.327442
+new min nll [3.0075102]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7273575>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7297436>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7521528>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7127252>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73777425>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7209854>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7232915>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7442417>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7073836>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7309204>}
+new min rmse 5.2373943
+new min nll [2.995896]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.71784234>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7201578>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74015003>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.70594126>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.72769654>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+Ensemble + Dropout trial 2
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.703106>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.3629131>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.2010942>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.6823063>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.3762001>}
+new min rmse 6.206334
+new min nll [3.256806]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9814892>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9052198>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.908842>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1172365>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0130962>}
+new min rmse 5.827465
+new min nll [3.1773777]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.916977>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.85464764>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.86360395>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0035541>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9310582>}
+new min rmse 5.802906
+new min nll [3.1670847]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8822267>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8331052>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83609575>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9434582>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8901643>}
+new min rmse 5.674282
+new min nll [3.1393304]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84854674>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80751354>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8154703>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.89704394>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8541326>}
+new min rmse 5.615154
+new min nll [3.1249347]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82959014>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7912754>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8029322>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.86779>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8312404>}
+new min rmse 5.5560274
+new min nll [3.110657]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81427985>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7764184>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7925067>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84234506>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8118941>}
+new min rmse 5.421533
+new min nll [3.0858831]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8010288>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7673528>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78582275>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8237451>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80024123>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7898267>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75925434>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77857393>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8099778>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78769815>}
+new min rmse 5.421383
+nll hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7794189>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75136554>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77050745>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7975803>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7776078>}
+new min rmse 5.348555
+new min nll [3.0744548]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7705231>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74455476>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7644314>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7867268>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7683593>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7656542>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74049>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7619075>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7800786>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7628654>}
+new min rmse 5.244747
+new min nll [3.059674]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7586766>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7344735>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7566961>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7718262>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75564927>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+new min nll [3.0572517]
+protein
+MVE and Dropout trial 3
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1292758>}
+new min rmse 7.245653
+new min nll [3.382023]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0433111>}
+new min rmse 5.78785
+new min nll [3.177867]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.93567395>}
+new min rmse 5.721529
+new min nll [3.1449277]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.87786067>}
+new min rmse 5.5689163
+new min nll [3.1072602]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8396961>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=401>
+new min nll [3.0812654]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8191037>}
+new min rmse 5.538766
+new min nll [3.0595598]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8036782>}
+new min rmse 5.4818444
+new min nll [3.0461133]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78842205>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7779035>}
+new min rmse 5.4578924
+new min nll [3.0451915]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7690405>}
+new min rmse 5.431732
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=901>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76153296>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7567564>}
+new min rmse 5.3249464
+new min nll [3.0228417]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7511643>}
+new min rmse 5.2862988
+new min nll [3.0053034]
+***
+Dropout trial 3
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.97823536>}
+new min rmse 6.6693397
+new min nll [154.4781]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.90188634>}
+new min rmse 5.9211454
+new min nll [106.16199]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84266686>}
+new min rmse 5.751248
+new min nll [81.13331]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8187254>}
+new min rmse 5.663819
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=301>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7945634>}
+new min rmse 5.6185694
+new min nll [74.25372]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78005606>}
+new min rmse 5.4660807
+new min nll [73.587585]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7671271>}
+new min rmse 5.420017
+new min nll [59.967056]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75964576>}
+new min rmse 5.4065514
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75231194>}
+new min rmse 5.341243
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74742603>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=901>
+nll hasn't decreased in 3 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=901>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74079245>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+nll hasn't decreased in 4 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7364921>}
+new min rmse 5.1947303
+nll hasn't decreased in 5 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1101>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7328362>}
+new min rmse 5.1474295
+nll hasn't decreased in 6 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Ensemble trial 3
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.97583807>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.6597247>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.7761917>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1305217>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.2072006>}
+new min rmse 6.1815643
+new min nll [3.2715778]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8788823>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0373499>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.88833296>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.94175714>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0046518>}
+new min rmse 5.7607064
+new min nll [3.1688972]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82749987>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.929642>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8229447>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8696369>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.91269827>}
+new min rmse 5.676817
+new min nll [3.1347492]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79807425>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8752867>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79676735>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8317385>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.86763155>}
+new min rmse 5.5821004
+new min nll [3.0997386]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77360547>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8346129>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7722155>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80092853>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8305016>}
+new min rmse 5.5706615
+new min nll [3.0844011]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7551388>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8075384>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7573936>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7814113>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8046244>}
+new min rmse 5.490838
+new min nll [3.0555758]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74648523>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7918444>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7490218>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77122563>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7896898>}
+new min rmse 5.332854
+new min nll [3.0171156]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73922366>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7792677>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7427067>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7625364>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.776652>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.730778>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76707697>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73437834>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7538652>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7643042>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.725554>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7590457>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7293442>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7488185>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7568087>}
+rmse hasn't decreased in 3 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+new min nll [3.0151277]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.71808654>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.748728>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.72153527>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7406607>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74621844>}
+rmse hasn't decreased in 4 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+new min nll [3.0143762]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7138576>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7424211>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7174982>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.736659>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74016905>}
+new min rmse 5.296384
+new min nll [3.0112643]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.71127933>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73737174>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.71472305>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7332945>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73570675>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+Ensemble + Dropout trial 3
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1809835>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.7266003>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1108043>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0763826>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0424731>}
+new min rmse 6.2981653
+new min nll [3.265665]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9187493>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.93925226>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.88975024>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.85060215>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.912385>}
+new min rmse 5.8845477
+new min nll [3.190572]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8913008>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8845327>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.842373>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8406174>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8534399>}
+new min rmse 5.810357
+new min nll [3.1715722]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.86314154>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84986246>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8118352>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82388145>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8208917>}
+new min rmse 5.731696
+new min nll [3.1495352]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.838276>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8252141>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78865486>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80529255>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79764175>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+new min nll [3.1489253]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82511115>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8073707>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7716798>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79362947>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.780634>}
+new min rmse 5.620379
+new min nll [3.119217]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8162219>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79348385>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76173145>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7850786>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7687903>}
+new min rmse 5.548354
+new min nll [3.1051211]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80864453>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78271544>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7534028>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77934617>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75916>}
+new min rmse 5.5246806
+new min nll [3.0996976]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8002525>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77143794>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7457814>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7706001>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7505528>}
+new min rmse 5.4414454
+new min nll [3.0830812]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79251564>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7644602>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73997885>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76389754>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7453856>}
+new min rmse 5.430676
+new min nll [3.0821896]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78633666>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75711364>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73485905>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7571786>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7390894>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78265387>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75292873>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7316358>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7536376>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7356927>}
+new min rmse 5.28698
+new min nll [3.0602138]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77654654>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7474502>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7274953>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7485585>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7309698>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+protein
+MVE and Dropout trial 4
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.8445258>}
+new min rmse 6.9302974
+new min nll [3.3976722]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0353044>}
+new min rmse 5.8493705
+new min nll [3.2048032]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9362111>}
+new min rmse 5.780207
+new min nll [3.1815803]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8799339>}
+new min rmse 5.6485105
+new min nll [3.138758]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8525122>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=401>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=401>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83354133>}
+new min rmse 5.4882927
+new min nll [3.0916877]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8166517>}
+new min rmse 5.4471188
+new min nll [3.073889]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80217373>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79015046>}
+new min rmse 5.4427376
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78361446>}
+new min rmse 5.4259725
+new min nll [3.0688634]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7749184>}
+new min rmse 5.382897
+new min nll [3.0647674]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76766205>}
+new min rmse 5.35468
+new min nll [3.055072]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76133955>}
+new min rmse 5.328991
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Dropout trial 4
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8730073>}
+new min rmse 6.6092634
+new min nll [84.6589]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.91544586>}
+new min rmse 6.005406
+new min nll [54.26467]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8646931>}
+new min rmse 5.869208
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=201>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.827317>}
+new min rmse 5.6837974
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=301>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8023539>}
+new min rmse 5.6116796
+nll hasn't decreased in 3 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=401>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7896839>}
+new min rmse 5.530362
+nll hasn't decreased in 4 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=501>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7768493>}
+new min rmse 5.4224544
+nll hasn't decreased in 5 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=601>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7668457>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=701>
+new min nll [42.419136]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7570249>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=801>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75068337>}
+new min rmse 5.330446
+nll hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=901>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74487627>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+nll hasn't decreased in 3 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1001>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7412635>}
+new min rmse 5.297657
+nll hasn't decreased in 4 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1101>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7357129>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+nll hasn't decreased in 5 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=1201>
+***
+Ensemble trial 4
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84062123>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82259536>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.4273431>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.6989551>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.2701555>}
+new min rmse 6.0759563
+new min nll [3.2581007]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8490076>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8730628>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9658411>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8381268>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.98235434>}
+new min rmse 5.890979
+new min nll [3.1877894]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81009763>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8234678>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8966274>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8036687>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.89513665>}
+new min rmse 5.8477907
+new min nll [3.1685035]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7870814>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79653674>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.85674256>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7788009>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.85338485>}
+new min rmse 5.6806273
+new min nll [3.1126032]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76719505>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7752662>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8245102>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7595485>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.81828463>}
+new min rmse 5.6505747
+new min nll [3.0987508]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75434905>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76133645>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80446887>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74678046>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7962195>}
+new min rmse 5.5844646
+new min nll [3.0751367]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74924237>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75355166>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79285765>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7423724>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78234893>}
+new min rmse 5.453088
+new min nll [3.038139]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7405057>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74390644>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7782173>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.734826>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.76737446>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7352363>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73714596>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7678152>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7302839>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7577712>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.72803706>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.72940034>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7572508>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.723808>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7476217>}
+new min rmse 5.361001
+new min nll [3.0262785]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7219452>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7223426>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.748228>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.71808064>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73860717>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7194878>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7185556>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74272573>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7157834>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73321444>}
+new min rmse 5.3602915
+new min nll [3.024117]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7153774>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7140225>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.73619854>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.71219426>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7271007>}
+new min rmse 5.296566
+new min nll [3.0147712]
+Ensemble + Dropout trial 4
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.1015378>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.3566802>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.4079357>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.5104803>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.2453146>}
+new min rmse 6.7623916
+new min nll [3.3311012]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9410432>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9870583>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9339928>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0642321>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.0167942>}
+new min rmse 5.890307
+new min nll [3.1954856]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.882891>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9196453>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.872575>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9456997>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9425599>}
+new min rmse 5.8073616
+new min nll [3.171802]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8441112>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.87914157>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8384613>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8913849>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9015801>}
+new min rmse 5.6914377
+new min nll [3.144186]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8192778>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8524794>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8136932>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8562102>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8706855>}
+new min rmse 5.636745
+new min nll [3.1315887]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8003127>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83649975>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7960562>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.83270246>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84932876>}
+new min rmse 5.6034966
+new min nll [3.1202836]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78719413>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.82108605>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7833664>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8150383>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8327748>}
+new min rmse 5.4404507
+new min nll [3.0900946]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7772797>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.80758125>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77300775>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8010429>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.818358>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7674285>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.79484445>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7648214>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78951746>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8050692>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+new min nll [3.089184]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7617104>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7843413>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7585565>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7803148>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7947485>}
+new min rmse 5.3913765
+new min nll [3.0822625]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7565729>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7756806>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75213903>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77056646>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7849826>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75303316>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.769417>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7479669>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7644524>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7782545>}
+new min rmse 5.2828655
+new min nll [3.060742]
+{'mve_0_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7478602>, 'mve_1_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7622113>, 'mve_2_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.74262184>, 'mve_3_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.75712055>, 'mve_4_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.77093405>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'iter:0' shape=() dtype=int64, numpy=0>
+MVE + Dropout 
+ RMSE:  5.329469394683838 +/- 0.11603172 
+ [3.0299182] +/- 0.03295572
+Pure Dropout 
+ RMSE:  5.219282627105713 +/- 0.080185786 
+ [53.066956] +/- 9.051586
+Pure Ensemble 
+ RMSE:  5.267968559265137 +/- 0.048375368 
+ [3.0073557] +/- 0.007533431
+Dropout + Ensemble 
+ RMSE:  5.290164756774902 +/- 0.027278652 
+ [3.063931] +/- 0.0057544345

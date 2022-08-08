@@ -1,0 +1,139 @@
+yacht
+MVE and Dropout trial 0
+Loading dataset yacht....
+Done loading dataset yacht
+num_epochs 108
+length of training set 276
+new min rmse 9.53895
+new min nll [3.8341503]
+new min rmse 5.2180943
+new min nll [3.5371678]
+new min nll [3.4733095]
+new min rmse 3.6682515
+new min nll [3.3258862]
+new min rmse 1.2780312
+new min nll [3.116957]
+new min nll [3.0380604]
+new min nll [2.9543767]
+new min rmse 0.3500372
+new min nll [2.809247]
+new min rmse 0.29534173
+new min nll [2.6086836]
+new min nll [2.5416522]
+new min nll [2.4649658]
+new min nll [2.3835092]
+new min nll [2.2064037]
+new min nll [2.1641731]
+new min nll [2.0956497]
+new min nll [1.9630982]
+new min rmse 0.2256656
+new min nll [1.8389368]
+new min rmse 0.20026593
+new min nll [1.722604]
+new min rmse 0.008634599
+new min nll [1.7090042]
+new min nll [1.6045482]
+new min nll [1.5811869]
+new min nll [1.5097413]
+new min nll [1.3915403]
+new min nll [1.2858839]
+new min nll [1.1646391]
+new min nll [1.123729]
+new min nll [1.1032169]
+new min nll [1.1018766]
+new min nll [0.9651208]
+new min nll [0.81693006]
+new min nll [0.7612952]
+new min rmse 0.005665124
+new min nll [0.73856795]
+new min nll [0.73406935]
+new min nll [0.70789766]
+new min nll [0.6312463]
+new min nll [0.62357116]
+new min nll [0.47312427]
+new min nll [0.31038332]
+new min nll [0.26938605]
+new min nll [0.25664473]
+new min nll [0.09642959]
+new min nll [-0.07049704]
+new min rmse 0.0032333278
+new min nll [-0.07720113]
+***
+Dropout trial 0
+Loading dataset yacht....
+Done loading dataset yacht
+num_epochs 108
+length of training set 276
+new min rmse 11.953855
+new min nll [29.802626]
+new min rmse 8.018378
+new min nll [5.7561665]
+new min rmse 5.9236097
+new min nll [3.9864473]
+new min rmse 5.2163386
+new min rmse 2.4956002
+new min nll [2.3942084]
+new min nll [2.3713496]
+new min rmse 2.4312394
+new min nll [2.3380437]
+new min rmse 1.4911852
+new min nll [1.8822397]
+new min rmse 0.4675459
+new min nll [1.8045441]
+new min rmse 0.008065185
+new min nll [1.7925005]
+new min nll [1.696958]
+new min nll [1.6957986]
+new min nll [1.5598118]
+new min nll [1.5596124]
+new min nll [1.5041288]
+new min nll [1.3726873]
+new min nll [1.3595833]
+new min nll [1.3300648]
+new min nll [1.003625]
+new min nll [0.9633752]
+new min nll [0.9405227]
+new min nll [0.7354137]
+new min rmse 0.003254182
+new min nll [0.50622845]
+new min nll [0.18648434]
+***
+Ensemble trial 0
+Loading dataset yacht....
+Done loading dataset yacht
+num_epochs 108
+length of training set 276
+new min rmse 10.986756
+new min nll [3.9506826]
+new min rmse 6.9394426
+new min nll [3.5724769]
+new min rmse 5.6493583
+new min nll [3.3776164]
+new min rmse 2.3437672
+new min nll [2.9254887]
+new min rmse 1.8509305
+new min nll [2.5264277]
+new min rmse 1.3485678
+new min nll [2.416101]
+new min rmse 0.9171045
+new min nll [2.2558136]
+new min rmse 0.0855508
+new min nll [2.2102683]
+new min nll [2.1677184]
+new min nll [2.0413432]
+new min nll [2.0045903]
+new min nll [1.8170698]
+new min nll [1.7749068]
+new min rmse 0.05241237
+new min nll [1.7368621]
+new min nll [1.6890306]
+new min nll [1.4700487]
+new min nll [1.4270464]
+new min nll [1.408003]
+new min nll [1.3383169]
+new min nll [1.3048607]
+new min nll [1.2490498]
+new min nll [1.2291129]
+new min nll [1.2164989]
+new min nll [1.185787]
+new min nll [1.1076076]

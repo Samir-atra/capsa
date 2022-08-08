@@ -17,13 +17,14 @@ class DropoutWrapper(keras.Model):
         for i in range(len(base_model.layers)):
             cur_layer = base_model.layers[i]
             # We do not add dropouts after the input or final layers to preserve stability
-            if i == 0:
-                x = cur_layer(inputs)
-            elif i == len(base_model.layers) - 1:
+            if i == len(base_model.layers) - 1:
                 x = base_model.layers[i](x)
             else:
                 next_layer = base_model.layers[i + 1]
-                x = cur_layer(x)
+                if i == 0:
+                    x = cur_layer(inputs)
+                else:
+                    x = cur_layer(x)
                 # We do not repeat dropout layers if they're already added
                 if (
                     type(cur_layer) == tf.keras.layers.Dense
@@ -74,15 +75,16 @@ class DropoutWrapper(keras.Model):
         result = self.train_step((x, y))
         return {prefix + k: v for k, v in result.items()}
 
-    def call(self, x, training=False, return_risk=True, features=None, T=20):
+    def call(self, x, training=False, return_risk=True, features=None, T=20, raw=False):
         y_hat = self.new_model(x, training=training)
-
         if return_risk:
             all_forward_passes = []
-            for _ in range(T - 1):
+            for _ in range(T):
                 all_forward_passes.append(
                     self.new_model(x, training=True)
                 )  # we need training=True so that dropout is applied
+            if raw:
+                return tf.stack(all_forward_passes)
             std = tf.math.reduce_std(all_forward_passes, axis=0)
             y_hat = tf.reduce_mean(all_forward_passes, axis=0)
             return y_hat, std

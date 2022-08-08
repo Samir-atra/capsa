@@ -5,7 +5,7 @@ from keras import optimizers as optim
 
 class EnsembleWrapper(keras.Model):
     def __init__(
-        self, base_model, metric_wrapper=None, num_members=1, is_standalone=True
+        self, base_model, metric_wrapper=None, num_members=5, is_standalone=True
     ):
         super(EnsembleWrapper, self).__init__()
 
@@ -94,17 +94,24 @@ class EnsembleWrapper(keras.Model):
             accum_grads += tf.scalar_mul(scalar, grad[0])
         return keras_metrics, [accum_grads]
 
-    def call(self, x, training=False, return_risk=True, features=None):
+    def call(self, x, training=False, return_risk=True, features=None, raw=False):
         outs = []
         for wrapper in self.metrics_compiled.values():
+            for _ in range(20):
+                # ensembling the user model
+                if self.metric_wrapper is None:
+                    out = wrapper(x)
 
-            # ensembling the user model
-            if self.metric_wrapper is None:
-                out = wrapper(x)
-
-            # ensembling one of our own metrics
-            else:
-                out = wrapper(x, training, return_risk, features)
-            outs.append(out)
-
-        return outs
+                # ensembling one of our own metrics
+                else:
+                    out = wrapper(x, training, return_risk, features)
+                outs.append(out)
+        outs = tf.stack(outs)
+        if raw:
+            return outs
+        if self.metric_wrapper is not None:
+            mu = tf.reduce_mean([outs[i][0] for i in range(len(outs))], axis=0)
+            var = tf.reduce_mean([outs[i][1] + (outs[i][0])**2 for i in range(len(outs))], axis=0) - mu**2
+            return mu, tf.sqrt(var)
+        else:
+            return outs

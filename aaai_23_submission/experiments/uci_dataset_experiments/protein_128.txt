@@ -1,0 +1,53 @@
+Loading dataset protein....
+Done loading dataset protein
+protein
+MVE and Dropout trial 0
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.86400586>}
+new min rmse 7.4975677
+new min nll [3.502152]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.96899724>}
+new min rmse 5.7379084
+new min nll [3.2122247]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.88743335>}
+new min rmse 5.573271
+new min nll [3.1777167]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.84555036>}
+new min rmse 5.384347
+new min nll [3.1586642]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8231772>}
+new min rmse 5.3265214
+new min nll [3.1150618]
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8018425>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=501>
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=501>
+{'mve_loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.78952074>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=601>
+new min nll [3.0884597]
+***
+Dropout trial 0
+Loading dataset protein....
+Done loading dataset protein
+num_epochs 1
+length of training set 41157
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=1.7856901>}
+new min rmse 6.9350915
+new min nll [101.97153]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.9320482>}
+new min rmse 6.157719
+new min nll [68.94788]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.86296785>}
+new min rmse 5.5503445
+new min nll [64.19197]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8303226>}
+new min rmse 5.408741
+nll hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=301>
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.8107178>}
+rmse hasn't decreased in 1 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=401>
+new min nll [56.5857]
+{'loss': <tf.Tensor: shape=(), dtype=float32, numpy=0.7953334>}
+rmse hasn't decreased in 2 cur_steps <tf.Variable 'Adam/iter:0' shape=() dtype=int64, numpy=501>
+new min nll [54.92859]

@@ -1,0 +1,111 @@
+power-plant
+MVE and Dropout trial 0
+Loading dataset power-plant....
+Done loading dataset power-plant
+num_epochs 3
+length of training set 8611
+new min rmse 20.58257
+new min nll [4.351544]
+new min rmse 7.6023173
+new min nll [3.4746456]
+new min rmse 6.5135136
+new min nll [3.196021]
+new min rmse 3.4622786
+new min nll [2.8744586]
+new min nll [2.8254466]
+new min rmse 2.877848
+new min nll [2.6552846]
+new min rmse 2.4854217
+new min nll [2.6052132]
+new min rmse 2.366463
+new min rmse 2.1357114
+new min nll [2.5877905]
+new min rmse 0.96616924
+new min nll [2.5051236]
+***
+Dropout trial 0
+Loading dataset power-plant....
+Done loading dataset power-plant
+num_epochs 3
+length of training set 8611
+new min rmse 27.021746
+new min nll [124.011314]
+new min rmse 7.328139
+new min nll [6.9949217]
+new min rmse 5.2807417
+new min nll [3.6817985]
+new min rmse 4.4030523
+new min nll [3.2895653]
+new min rmse 3.4081116
+new min nll [2.8645773]
+new min rmse 2.9222245
+new min nll [2.4958377]
+new min rmse 2.5648196
+new min nll [2.395712]
+new min rmse 2.5141566
+new min rmse 2.2310593
+new min nll [2.2902741]
+new min nll [2.1566596]
+new min rmse 1.8557262
+new min nll [2.040157]
+new min rmse 1.7272896
+new min nll [1.9784981]
+***
+Ensemble trial 0
+Loading dataset power-plant....
+Done loading dataset power-plant
+num_epochs 3
+length of training set 8611
+new min rmse 18.82371
+new min nll [4.414303]
+new min rmse 7.91791
+new min nll [3.7187412]
+new min rmse 6.49022
+new min nll [3.435928]
+new min rmse 6.331598
+new min rmse 4.3350277
+new min nll [3.0942304]
+new min rmse 3.8650546
+new min nll [2.9440312]
+new min rmse 3.0358589
+new min nll [2.7386916]
+new min nll [2.6958857]
+new min rmse 2.6914635
+new min nll [2.5759354]
+new min rmse 2.101739
+new min nll [2.4240127]
+new min rmse 2.0560591
+new min rmse 1.9432285
+new min rmse 1.2083895
+new min nll [2.3786516]
+Ensemble + Dropout trial 0
+Loading dataset power-plant....
+Done loading dataset power-plant
+num_epochs 3
+length of training set 8611
+new min rmse 20.252352
+new min nll [4.4302197]
+new min rmse 10.183911
+new min nll [3.8359275]
+new min rmse 6.4221644
+new min nll [3.4437919]
+new min rmse 6.282669
+new min nll [3.3409748]
+new min rmse 5.7730613
+new min nll [3.2721567]
+new min rmse 5.148252
+new min nll [3.1329865]
+new min rmse 5.03682
+new min nll [3.1156144]
+new min rmse 4.453339
+new min nll [3.105194]
+new min rmse 4.245972
+new min nll [2.9841263]
+new min rmse 3.832162
+new min nll [2.903292]
+new min rmse 3.3175557
+new min nll [2.8103878]
+new min rmse 3.3115067
+new min nll [2.7865918]
+new min rmse 2.2942138
+new min nll [2.6293857]
