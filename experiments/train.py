@@ -1,13 +1,19 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
+
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+from keras.callbacks import CSVLogger
 # import pandas as pd
 
 from models import create
 from run_utils import setup
 from utils import load_depth_data, visualize_depth_map, plot_loss
+
+# tf logging - don't print INFO messages
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 visualizations_path, checkpoints_path, plots_path, logs_path = setup()
 
@@ -27,7 +33,8 @@ their_model.compile(
     loss=keras.losses.MeanSquaredError(),
 )
 
-history = their_model.fit(x_train, y_train, epochs=256, batch_size=8) # 10000 epochs
+logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+history = their_model.fit(x_train, y_train, epochs=256, batch_size=8, callbacks=[logger], verbose=0) # 10000 epochs
 
 plot_loss(history, plots_path)
 visualize_depth_map(x_train, y_train, their_model, visualizations_path)

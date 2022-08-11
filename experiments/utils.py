@@ -15,7 +15,7 @@ def visualize_depth_map(x, y, model, visualizations_path, name='map.png'):
     cmap = plt.cm.jet
     cmap.set_bad(color="black")
 
-    pred = model.predict(x)
+    pred = model.predict(x, verbose=0)
     fig, ax = plt.subplots(6, 3, figsize=(50, 50))
     for i in range(6):
         ax[i, 0].imshow(x[i])
