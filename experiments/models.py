@@ -1,12 +1,11 @@
 # https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/models/depth/deterministic.py
 
-import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, \
     UpSampling2D, Cropping2D, concatenate, ZeroPadding2D, SpatialDropout2D
 import functools
 
-def create(input_shape, drop_prob=0.1, reg=None, activation=tf.nn.relu, num_class=1):
+def create(input_shape, drop_prob=0.0, reg=None, activation=tf.nn.relu, num_class=1):
 
     concat_axis = 3
     inputs = tf.keras.layers.Input(shape=input_shape)
@@ -91,5 +90,8 @@ def get_crop_shape(target, refer):
 
     return (ch1, ch2), (cw1, cw2)
 
-their_model = create(input_shape=(128, 160, 3), drop_prob=0.0, activation=tf.nn.relu, num_class=1)
-# print(their_model(np.random.rand(32, 128, 160, 3)).shape)
+# import numpy as np
+# their_model = create((128, 160, 3))
+# x = np.ones((1, 128, 160, 3), dtype=np.float32)
+# output = their_model(x)
+# print(output.shape)
