@@ -3,29 +3,18 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
-import h5py
 # import pandas as pd
 
 from models import create
-from utils import visualize_depth_map, plot_loss
+from run_utils import setup
+from utils import load_depth_data, visualize_depth_map, plot_loss
 
-def _load_depth():
-    train = h5py.File("/home/iaroslavelistratov/data/depth_train.h5", "r")
-    test = h5py.File("/home/iaroslavelistratov/data/depth_test.h5", "r")
-    return (train["image"], train["depth"]), (test["image"], test["depth"])
-
-def load_depth():
-    return _load_depth()
-
-def load_apollo():
-    test = h5py.File("/home/iaroslavelistratov/data/apolloscape_test.h5", "r")
-    return (None, None), (test["image"], test["depth"])
+visualizations_path, checkpoints_path, plots_path, logs_path = setup()
 
 ### https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/train_depth.py#L34
-(x_train, y_train), (x_test, y_test) = load_depth()
-# (X_train, y_train), (X_test, y_test), y_train_scale = load_dataset('depth')
-x_train = tf.convert_to_tensor(x_train[:16], tf.float32) #256 # 1024
-y_train = tf.convert_to_tensor(y_train[:16], tf.float32) #256 # 1024
+(x_train, y_train), (x_test, y_test) = load_depth_data()
+x_train = tf.convert_to_tensor(x_train[:256], tf.float32) #16, 256, 1024
+y_train = tf.convert_to_tensor(y_train[:256], tf.float32) #16, 256, 1024
 
 x_train /= 255.
 y_train /= 255.
@@ -38,7 +27,7 @@ their_model.compile(
     loss=keras.losses.MeanSquaredError(),
 )
 
-history = their_model.fit(x_train, y_train, epochs=500, batch_size=16) # 10000 epochs
-plot_loss(history)
+history = their_model.fit(x_train, y_train, epochs=256, batch_size=8) # 10000 epochs
 
-visualize_depth_map(x_train, y_train, their_model)
+plot_loss(history, plots_path)
+visualize_depth_map(x_train, y_train, their_model, visualizations_path)
