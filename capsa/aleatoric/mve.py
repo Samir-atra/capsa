@@ -119,7 +119,7 @@ class MVEWrapper(keras.Model):
         loss = self.neg_log_likelihood(y, mu, logvariance) # (N_SAMPLES, 128, 160, 1)
         # tf.print('loss 1', tf.convert_to_tensor(loss.shape))
 
-        loss = tf.reduce_mean(loss, axis=[1, 2])  # (N_SAMPLES, 1)
+        # loss = tf.reduce_mean(loss, axis=[1, 2])  # (N_SAMPLES, 1)
         # tf.print('loss 2', tf.convert_to_tensor(loss.shape))
 
         loss = tf.reduce_mean(loss) # ( )

@@ -1,5 +1,5 @@
-N_SAMPLES = 256 # 256
-BS = 8 # 8
+N_SAMPLES = 128 # 256
+BS = 32 # 8
 EP = 256 # 256
 LR = 5e-5 # 5e-5
 
@@ -30,8 +30,8 @@ x_train /= 255.
 y_train /= 255.
 
 _, (x_test_ood, y_test_ood) = load_apollo_data()
-x_test_ood = tf.convert_to_tensor(x_test_ood[:32], tf.float32) #16, 256, 1024
-y_test_ood = tf.convert_to_tensor(y_test_ood[:32], tf.float32) #16, 256, 1024
+x_test_ood = tf.convert_to_tensor(x_test_ood[:N_SAMPLES], tf.float32) #16, 256, 1024
+y_test_ood = tf.convert_to_tensor(y_test_ood[:N_SAMPLES], tf.float32) #16, 256, 1024
 x_test_ood /= 255.
 y_test_ood /= 255.
 
@@ -89,7 +89,7 @@ def train_ensemble_wrapper():
 
 
 
-visualizations_path, plots_path, logs_path = setup()
+visualizations_path, checkpoints_path, plots_path, logs_path = setup()
 logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
 their_model = create(x_train.shape[1:])
@@ -101,13 +101,50 @@ model.compile(
     # loss=keras.losses.MeanSquaredError(),
 )
 
+# model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+#     filepath=os.path.join(checkpoints_path, 'ckpt', 'ep_{epoch:02d}'),
+#     save_weights_only=True,
+#     monitor='loss', # todo-high: val_loss
+#     save_best_only=False,
+#     # mode='auto',
+#     save_freq=192, # batches, not epochs
+# )
+
 history = model.fit(x_train, y_train, epochs=EP, batch_size=BS, callbacks=[logger], verbose=0) # 10000 epochs
 plot_loss(history, plots_path)
 
-pred, variance = model(x_train[:32]) # (256, 128, 160, 1) and (256, 128, 160, 1)
-# pred = np.zeros_like(variance)
-visualize_depth_map_uncertainty(x_train, y_train[:32], pred, variance, visualizations_path, 'iid.png')
+# https://www.tensorflow.org/guide/keras/save_and_serialize#tf_checkpoint_format
+### need this to load weights
+# _, _ = model(x_train[:32]) 
+# load_status = model.load_weights('/home/iaroslavelistratov/results/job_02/checkpoints/ckpt')
+# load_status.assert_consumed()
 
-pred_ood, variance_ood = model(x_test_ood)
-# pred_ood = np.zeros_like(variance_ood)
-visualize_depth_map_uncertainty(x_test_ood, y_test_ood, pred_ood, variance_ood, visualizations_path, 'ood.png')
+model.save_weights(f'{checkpoints_path}/ckpt')
+load_status = model.load_weights(f'{checkpoints_path}/ckpt')
+load_status.assert_consumed()
+
+
+### plot
+# because if just to range(0, N_SAMPLES, BS) it's num_save_times=N_SAMPLES/BS which can be a huge number if dataset is big
+num_save_times = min(N_SAMPLES//BS, 10)
+
+for i in range(0, num_save_times*BS, BS):
+    # print(i, i+6)
+    x, y = x_train[i:i+6], y_train[i:i+6]
+    x_ood, y_ood = x_test_ood[i:i+6], y_test_ood[i:i+6]
+
+    pred, variance = model(x) # (6, 128, 160, 1) and (6, 128, 160, 1)
+    pred_ood, variance_ood = model(x_ood)
+
+    # normalize separately
+    # variance_normalized = (variance - np.min(variance)) / (np.max(variance) - np.min(variance))
+    # variance_ood_normalized = (variance_ood - np.min(variance_ood)) / (np.max(variance_ood) - np.min(variance_ood))
+
+    # normalize tougher
+    cat = tf.stack([variance, variance_ood]) #(6, 128, 160, 1), (6, 128, 160, 1) = (2, 6, 128, 160, 1)
+    cat_normalized = (cat - np.min(cat)) / (np.max(cat) - np.min(cat))
+    variance_normalized = cat_normalized[0]
+    variance_ood_normalized = cat_normalized[1]
+
+    visualize_depth_map_uncertainty(x, y, pred, variance_normalized, visualizations_path, f'{i}_iid.png')
+    visualize_depth_map_uncertainty(x_ood, y_ood, pred_ood, variance_ood_normalized, visualizations_path, f'{i}_ood.png')
