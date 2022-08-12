@@ -1,3 +1,9 @@
+N_SAMPLES = 256 # 256
+BS = 8 # 8
+EP = 256 # 256
+LR = 5e-5 # 5e-5
+
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,14 +24,14 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 ### https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/train_depth.py#L34
 (x_train, y_train), (x_test, y_test) = load_depth_data()
-x_train = tf.convert_to_tensor(x_train[:256], tf.float32) #16, 256, 1024
-y_train = tf.convert_to_tensor(y_train[:256], tf.float32) #16, 256, 1024
+x_train = tf.convert_to_tensor(x_train[:N_SAMPLES], tf.float32) #16, 256, 1024
+y_train = tf.convert_to_tensor(y_train[:N_SAMPLES], tf.float32) #16, 256, 1024
 x_train /= 255.
 y_train /= 255.
 
 _, (x_test_ood, y_test_ood) = load_apollo_data()
-x_test_ood = tf.convert_to_tensor(x_test_ood[:256], tf.float32) #16, 256, 1024
-y_test_ood = tf.convert_to_tensor(y_test_ood[:256], tf.float32) #16, 256, 1024
+x_test_ood = tf.convert_to_tensor(x_test_ood[:32], tf.float32) #16, 256, 1024
+y_test_ood = tf.convert_to_tensor(y_test_ood[:32], tf.float32) #16, 256, 1024
 x_test_ood /= 255.
 y_test_ood /= 255.
 
@@ -34,7 +40,7 @@ def train_base_model():
     visualizations_path, checkpoints_path, plots_path, logs_path = setup()
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-    their_model = create(input_shape=x_train.shape[1:], drop_prob=0.0, activation=tf.nn.relu, num_class=1)
+    their_model = create(x_train.shape[1:])
     # trainer = trainer_obj(model, opts, args.learning_rate)
 
     their_model.compile(
@@ -53,7 +59,7 @@ def train_ensemble_wrapper():
     visualizations_path, checkpoints_path, plots_path, logs_path = setup()
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-    their_model = create(input_shape=x_train.shape[1:], drop_prob=0.0, activation=tf.nn.relu, num_class=1)
+    their_model = create(x_train.shape[1:])
     # trainer = trainer_obj(model, opts, args.learning_rate)
 
     model = EnsembleWrapper(their_model, num_members=2)
@@ -78,5 +84,30 @@ def train_ensemble_wrapper():
     pred_ood, epistemic_ood = get_ensemble_uncertainty(x_test_ood, model)
     visualize_depth_map_uncertainty(x_test_ood, y_test_ood, pred_ood, epistemic_ood, visualizations_path, 'ood.png')
 
-train_base_model()
-train_ensemble_wrapper()
+# train_base_model()
+# train_ensemble_wrapper()
+
+
+
+visualizations_path, plots_path, logs_path = setup()
+logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+
+their_model = create(x_train.shape[1:])
+# trainer = trainer_obj(model, opts, args.learning_rate)
+
+model = MVEWrapper(their_model)
+model.compile(
+    optimizer=keras.optimizers.Adam(learning_rate=LR),
+    # loss=keras.losses.MeanSquaredError(),
+)
+
+history = model.fit(x_train, y_train, epochs=EP, batch_size=BS, callbacks=[logger], verbose=0) # 10000 epochs
+plot_loss(history, plots_path)
+
+pred, variance = model(x_train[:32]) # (256, 128, 160, 1) and (256, 128, 160, 1)
+# pred = np.zeros_like(variance)
+visualize_depth_map_uncertainty(x_train, y_train[:32], pred, variance, visualizations_path, 'iid.png')
+
+pred_ood, variance_ood = model(x_test_ood)
+# pred_ood = np.zeros_like(variance_ood)
+visualize_depth_map_uncertainty(x_test_ood, y_test_ood, pred_ood, variance_ood, visualizations_path, 'ood.png')

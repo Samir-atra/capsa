@@ -42,18 +42,18 @@ def _create_folders(target_dir='/home/iaroslavelistratov/results', tag='test'):
 
     # within each job's folder create semantically meaningful subfolders
     visualizations_path = f'{path}/visualizations'
-    checkpoints_path = f'{path}/checkpoints'
+    # checkpoints_path = f'{path}/checkpoints'
     source_path = f'{path}/source'
     plots_path = f'{path}/plots'
     logs_path = f'{path}/logs'
 
     os.makedirs(visualizations_path)
-    os.makedirs(checkpoints_path)
+    # os.makedirs(checkpoints_path)
     os.makedirs(source_path)
     os.makedirs(plots_path)
     os.makedirs(logs_path)
 
-    return visualizations_path, checkpoints_path, source_path, plots_path, logs_path
+    return visualizations_path, source_path, plots_path, logs_path
 
 # def _create_logger(target_dir):
 #     logger = logging.getLogger()
@@ -76,7 +76,7 @@ def _log_model_source(target_dir, algorithm_name='unet'):
     ''' Log raw model object file source -- copy it from the image to the data-server '''
 
     name_to_path = {
-        'unet': '/home/iaroslavelistratov/capsa/experiments',
+        'unet': '/home/iaroslavelistratov/capsa',
         # 'prediction_cnn': f'{pwd}/core/models/prediction/cnn',
         # 'prediction_attn': f'{pwd}/core/models/prediction/cnn_attention',
         # 'prediction_gnn': f'{pwd}/core/models/prediction/cnn_gnn',
@@ -111,10 +111,10 @@ def setup():
     # config = _read_hyperparameters(config_location, gpu_worker_id)
     # algorithm_name = config['algorithm_name']
 
-    visualizations_path, checkpoints_path, source_path, plots_path, logs_path = _create_folders()
+    visualizations_path, source_path, plots_path, logs_path = _create_folders()
     # logger = _create_logger(logs_path)
     # _log_hyperparameters(logger, config)
     _log_model_source(source_path)
 
     # return config, logger, visualizations_path, plots_path, train_dir, val_dir
-    return visualizations_path, checkpoints_path, plots_path, logs_path
+    return visualizations_path, plots_path, logs_path
