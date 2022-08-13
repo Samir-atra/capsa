@@ -1,3 +1,4 @@
+import os
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,6 +24,29 @@ def totensor_and_normalize(x, y):
     x = tf.convert_to_tensor(x[:config.N_SAMPLES], tf.float32)
     y = tf.convert_to_tensor(y[:config.N_SAMPLES], tf.float32)
     return x / 255. , y / 255.
+
+def get_checkpoint_callback(checkpoints_path):
+    itters_per_ep = config.N_SAMPLES / config.BS
+    total_itters = itters_per_ep * config.EP
+    save_itters = int(total_itters // 10) # save 10 times during training
+    # save_ep = int(save_itters / itters_per_ep)
+    # last_saved_ep = round(save_itters * 10 // itters_per_ep)
+    print('total_itters:', total_itters)
+    print('save_itters:', save_itters)
+
+    checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+        # todo-low: tf tutorial saves all checkpoints to same folder https://www.tensorflow.org/tutorials/keras/save_and_load#checkpoint_callback_options
+        #   - what is the "checkpoint" file which is shared for all checkpoints? It contains prefixes for both an index file as well as for one or more data files
+        #   - alternatively can just save checkpoints to different folders to create a separate "checkpoint" file for every saved weights -- filepath=os.path.join(checkpoints_path, 'ep_{epoch:02d}', 'weights.tf')
+        filepath=os.path.join(checkpoints_path, 'ep_{epoch:02d}_weights.tf'),
+        save_weights_only=True,
+        # monitor='loss', # val_loss
+        save_best_only=False,
+        # mode='auto',
+        save_freq=save_itters, # batches, not epochs
+    )
+
+    return checkpoint_callback
 
 def plot_loss(history, plots_path, name='loss'):
     for k, v in history.history.items():
