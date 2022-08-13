@@ -95,6 +95,12 @@ model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     save_freq=save_itters, # batches, not epochs
 )
 
-history = model.fit(x_train, y_train, epochs=config.EP, batch_size=config.BS, callbacks=[logger, model_checkpoint_callback], verbose=0) # 10000 epochs
+history = model.fit(x_train, y_train, epochs=config.EP, batch_size=config.BS,
+    validation_split=0.2,
+    # validation_freq=2,
+    callbacks=[logger, model_checkpoint_callback],
+    verbose=0,
+)
+
 plot_loss(history, plots_path)
 plot_multiple(model, x_train, y_train, x_test_ood, y_test_ood, vis_path)
