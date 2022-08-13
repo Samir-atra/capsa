@@ -22,7 +22,8 @@ def visualize_depth_map(x, y, pred, visualizations_path, name='map.png'):
         ax[i, 2].imshow(pred[i, :, :, 0], cmap=cmap)
 
     plt.savefig(f'{visualizations_path}/{name}')
-    plt.show()
+    # plt.show()
+    plt.close()
 
 # hacky ugly way - should reuse visualize_depth_map
 def visualize_depth_map_uncertainty(x, y, pred, uncertain, visualizations_path, name='map.png'):
@@ -37,7 +38,8 @@ def visualize_depth_map_uncertainty(x, y, pred, uncertain, visualizations_path, 
         ax[i, 3].imshow(uncertain[i, :, :, 0], cmap=cmap)
 
     plt.savefig(f'{visualizations_path}/{name}')
-    plt.show()
+    # plt.show()
+    plt.close()
 
 def plot_loss(history, plots_path, name='loss.png'):
     for k, v in history.history.items():
@@ -45,4 +47,5 @@ def plot_loss(history, plots_path, name='loss.png'):
     plt.legend(loc='upper right')
 
     plt.savefig(f'{plots_path}/{name}')
-    plt.show()
+    # plt.show()
+    plt.close()
