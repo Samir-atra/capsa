@@ -1,6 +1,6 @@
-N_SAMPLES = 128 # 256
+N_SAMPLES = 64 # 256
 BS = 32 # 8
-EP = 256 # 256
+EP = 32 # 256
 LR = 5e-5 # 5e-5
 
 
@@ -101,27 +101,42 @@ model.compile(
     # loss=keras.losses.MeanSquaredError(),
 )
 
-# model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-#     filepath=os.path.join(checkpoints_path, 'ckpt', 'ep_{epoch:02d}'),
-#     save_weights_only=True,
-#     monitor='loss', # todo-high: val_loss
-#     save_best_only=False,
-#     # mode='auto',
-#     save_freq=192, # batches, not epochs
-# )
+itters_per_ep = N_SAMPLES / BS
+total_itters = itters_per_ep * EP
+save_itters = int(total_itters // 10) # save 10 times during training
+# save_ep = int(save_itters / itters_per_ep)
+# last_saved_ep = round(save_itters * 10 // itters_per_ep)
+print('total_itters:', total_itters)
+print('save_itters:', save_itters)
 
-history = model.fit(x_train, y_train, epochs=EP, batch_size=BS, callbacks=[logger], verbose=0) # 10000 epochs
+model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+    # todo-low: tf tutorial saves all checkpoints to same folder https://www.tensorflow.org/tutorials/keras/save_and_load#checkpoint_callback_options
+    #   - what is the "checkpoint" file which is shared for all checkpoints? It contains prefixes for both an index file as well as for one or more data files
+    #   - alternatively can just save checkpoints to different folders to create a separate "checkpoint" file for every saved weights -- filepath=os.path.join(checkpoints_path, 'ep_{epoch:02d}', 'weights.tf')
+    filepath=os.path.join(checkpoints_path, 'ep_{epoch:02d}_weights.tf'),
+    save_weights_only=True,
+    # monitor='loss', # val_loss
+    save_best_only=False,
+    # mode='auto',
+    save_freq=save_itters, # batches, not epochs
+)
+
+history = model.fit(x_train, y_train, epochs=EP, batch_size=BS, callbacks=[logger, model_checkpoint_callback], verbose=0) # 10000 epochs
 plot_loss(history, plots_path)
 
-# https://www.tensorflow.org/guide/keras/save_and_serialize#tf_checkpoint_format
 ### need this to load weights
-# _, _ = model(x_train[:32]) 
-# load_status = model.load_weights('/home/iaroslavelistratov/results/job_02/checkpoints/ckpt')
-# load_status.assert_consumed()
-
-model.save_weights(f'{checkpoints_path}/ckpt')
-load_status = model.load_weights(f'{checkpoints_path}/ckpt')
+del model
+their_model = create(x_train.shape[1:])
+model = MVEWrapper(their_model)
+model.compile(optimizer=keras.optimizers.Adam(learning_rate=LR))
+# https://github.com/tensorflow/tensorflow/issues/33150#issuecomment-574517363
+_ = model.fit(x_train, y_train, epochs=1, batch_size=BS, verbose=0)
+_, _ = model(x_train)
+latest = tf.train.latest_checkpoint(checkpoints_path)
+load_status = model.load_weights(latest)
+# used as validation that all variable values have been restored from the checkpoint
 load_status.assert_consumed()
+print(f'successfully loaded weights from {latest}')
 
 
 ### plot
