@@ -80,6 +80,25 @@ class EnsembleWrapper(keras.Model):
 
         return keras_metrics
 
+    # todo-high: almost exactly same as train_step -- reduce code duplication
+    def test_step(self, data):
+        keras_metrics = {}
+
+        for name, wrapper in self.metrics_compiled.items():
+
+            # ensembling user model
+            if self.metric_wrapper is None:
+                _ = wrapper.test_step(data)
+                for m in wrapper.metrics:
+                    keras_metrics[f"{name}_{m.name}"] = m.result()
+
+            # ensembling one of our metrics
+            else:
+                keras_metric = wrapper.test_step(data, name)
+                keras_metrics.update(keras_metric)
+
+        return keras_metrics
+
     def wrapped_train_step(self, x, y, features, prefix):
         keras_metrics = {}
 
