@@ -20,7 +20,7 @@ _, (x_test_ood, y_test_ood) = load_apollo_data()
 x_test_ood, y_test_ood = totensor_and_normalize(x_test_ood, y_test_ood)
 
 def train_base_model():
-    vis_path, checkpoints_path, plots_path, logs_path = setup()
+    vis_path, checkpoints_path, plots_path, logs_path = setup('base')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = create(x_train.shape[1:])
@@ -36,7 +36,7 @@ def train_base_model():
     visualize_depth_map(x_train, y_train, pred, vis_path)
 
 def train_ensemble_wrapper():
-    vis_path, checkpoints_path, plots_path, logs_path = setup()
+    vis_path, checkpoints_path, plots_path, logs_path = setup('ensemble')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = create(x_train.shape[1:])
@@ -68,7 +68,7 @@ def train_ensemble_wrapper():
 
 
 
-vis_path, checkpoints_path, plots_path, logs_path = setup()
+vis_path, checkpoints_path, plots_path, logs_path = setup('mve')
 logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
 their_model = create(x_train.shape[1:])

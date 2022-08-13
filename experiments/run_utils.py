@@ -23,15 +23,18 @@ import shutil
 
 #     return config
 
-def _create_folders(target_dir='/home/iaroslavelistratov/results', tag='test'):
+def _create_folders(model_name):
     ''' Put logs of all jobs in the same jobarray into one directory '''
-    
+
+    target_dir = f'/data/capsa/depth/{model_name}'
+
     # create that dir only once, all the following jobs of the same array will use it
     possible_jobarray_names = ['job_%.2d' % i for i in range(50)]
     for jobarray_name in possible_jobarray_names:
         path = os.path.join(target_dir, jobarray_name)
         if not os.path.exists(path):
             # add time and tag
+            # tag='test'
             # current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             # path = f'{path}_{current_time}_{tag}'
             os.makedirs(path)
@@ -103,7 +106,7 @@ def _log_model_source(target_dir, algorithm_name='unet'):
 #         logger.info(f'device_name: {torch.cuda.get_device_name(0)}')
 #     logger.info('\n')
 
-def setup():
+def setup(model_name):
     # pwd = os.getcwd()
     # log_dir = f'{pwd}/examples'
     # data_dir = f'{pwd}/data/'
@@ -111,7 +114,7 @@ def setup():
     # config = _read_hyperparameters(config_location, gpu_worker_id)
     # algorithm_name = config['algorithm_name']
 
-    visualizations_path, checkpoints_path, source_path, plots_path, logs_path = _create_folders()
+    visualizations_path, checkpoints_path, source_path, plots_path, logs_path = _create_folders(model_name)
     # logger = _create_logger(logs_path)
     # _log_hyperparameters(logger, config)
     _log_model_source(source_path)
