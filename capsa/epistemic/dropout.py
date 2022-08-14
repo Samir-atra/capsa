@@ -56,7 +56,7 @@ class DropoutWrapper(keras.Model):
         )
         return loss, y_hat
 
-    def train_step(self, data):
+    def train_step(self, data, prefix=None):
         x, y = data
 
         with tf.GradientTape() as t:
@@ -66,7 +66,16 @@ class DropoutWrapper(keras.Model):
         gradients = t.gradient(loss, trainable_vars)
         self.optimizer.apply_gradients(zip(gradients, trainable_vars))
         self.compiled_metrics.update_state(y, y_hat)
-        return {m.name: m.result() for m in self.metrics}
+        # return {m.name: m.result() for m in self.metrics}
+        if prefix is None:
+            prefix = self.metric_name
+        return {f'{prefix}_loss': loss}
+    
+    def test_step(self, data):
+        x, y = data
+        loss, y_hat = self.loss_fn(x, y)
+        prefix = self.metric_name
+        return {f'{prefix}_loss': loss}
 
     @tf.function
     def wrapped_train_step(self, x, y, features, prefix):
