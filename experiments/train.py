@@ -58,18 +58,8 @@ def train_ensemble_wrapper():
         verbose=0,
     )
     plot_loss(history, plots_path)
-
-    def get_ensemble_uncertainty(x_train, model):
-        outs = model(x_train)
-        preds = np.concatenate((outs[0][np.newaxis, ...], outs[1][np.newaxis, ...]), 0)
-        pred, epistemic = np.mean(preds, 0), np.std(preds, 0)
-        return pred, epistemic
-
-    pred, epistemic = get_ensemble_uncertainty(x_train, model)
-    visualize_depth_map_uncertainty(x_train, y_train, pred, epistemic, vis_path, 'iid.png')
-
-    pred_ood, epistemic_ood = get_ensemble_uncertainty(x_test_ood, model)
-    visualize_depth_map_uncertainty(x_test_ood, y_test_ood, pred_ood, epistemic_ood, vis_path, 'ood.png')
+    visualize_depth_map(model, ds_train, vis_path, 'iid')
+    visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
 def train_mve_wrapper():
     vis_path, checkpoints_path, plots_path, logs_path = setup('mve')

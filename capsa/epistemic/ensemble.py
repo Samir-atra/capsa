@@ -126,4 +126,5 @@ class EnsembleWrapper(keras.Model):
                 out = wrapper(x, training, return_risk, features)
             outs.append(out)
 
-        return outs
+        preds = tf.stack(outs)
+        return tf.math.reduce_mean(preds, 0), tf.math.reduce_std(preds, 0)
