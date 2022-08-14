@@ -154,3 +154,19 @@ class Augment(tf.keras.layers.Layer):
     inputs = self.augment_inputs(inputs)
     labels = self.augment_labels(labels)
     return inputs, labels
+
+def plot_calibration_curves(mu, sigma, plots_path):
+    percentiles = np.arange(100)/100
+    vals = []
+    for percentile in percentiles:
+    ppf_for_this_percentile = stats.norm.ppf(percentile, mu, std)
+    print("y_val", y_val[0], "ppf", ppf_for_this_percentile[0], "mu", mu[0], "std", std[0])
+    vals.append((y_val <= ppf_for_this_percentile).mean())
+
+    print(np.mean(abs(percentiles - vals)))
+
+    plt.clf()
+    plt.scatter(percentiles, vals)
+    plt.scatter(percentiles, percentiles)
+    plt.show()
+    plt.savefig(f"{plots_path}/calibration_curve_dropout.pdf")
