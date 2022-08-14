@@ -5,19 +5,19 @@ from tensorflow import keras
 import matplotlib.pyplot as plt
 
 import config
-from utils import load_depth_data, load_apollo_data, totensor_and_normalize, \
-    visualize_depth_map, visualize_depth_map_uncertainty, plot_multiple, \
-    plot_loss, load_model
+from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
+    visualize_depth_map, plot_loss, load_model
 
-(x_train, y_train), (x_test, y_test) = load_depth_data()
-x_train, y_train = totensor_and_normalize(x_train, y_train)
+(x_train, y_train), (x_test, y_test) = load_depth_data() # (27260, 128, 160, 3), (27260, 128, 160, 1) and (3029, 128, 160, 3), (3029, 128, 160, 1)
+ds_train = get_normalized_ds(x_train[:config.N_TRAIN], y_train[:config.N_TRAIN])
+ds_val = get_normalized_ds(x_train[-config.N_VAL:], y_train[-config.N_VAL:])
+# ds_test = get_normalized_ds(x_test, y_test)
 
-_, (x_test_ood, y_test_ood) = load_apollo_data()
-x_test_ood, y_test_ood = totensor_and_normalize(x_test_ood, y_test_ood)
+_, (x_ood, y_ood) = load_apollo_data() # (1000, 128, 160, 3), (1000, 128, 160, 1)
+ds_ood = get_normalized_ds(x_ood, y_ood)
 
-# todo-med: move these lines somewhere else
-checkpoints_path = '/home/iaroslavelistratov/results/job_00/checkpoints'
-vis_path = '/home/iaroslavelistratov/results/job_00/temp_visualizations'
+checkpoints_path = '/data/capsa/depth/mve/job_00/checkpoints'
+vis_path = '/data/capsa/depth/mve/job_00/temp_visualizations'
 os.makedirs(vis_path, exist_ok=True)
 
 l = sorted(glob.glob(os.path.join(checkpoints_path, '*.tf*')))
@@ -27,5 +27,6 @@ weights_names = list(set(l))
 
 for name in weights_names:
     path = f'{checkpoints_path}/{name}.tf'
-    model = load_model(path, x_train, y_train)
-    plot_multiple(model, x_train, y_train, x_test_ood, y_test_ood, vis_path, prefix=f'{name}_')
+    model = load_model(path, ds_train)
+    visualize_depth_map(model, ds_train, vis_path, f'{name}_iid')
+    visualize_depth_map(model, ds_ood, vis_path, f'{name}_ood')

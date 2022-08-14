@@ -5,7 +5,7 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, \
     UpSampling2D, Cropping2D, concatenate, ZeroPadding2D, SpatialDropout2D
 import functools
 
-def create(input_shape, drop_prob=0.0, reg=None, activation=tf.nn.relu, num_class=1):
+def unet(input_shape=(128, 160, 3), drop_prob=0.0, reg=None, activation=tf.nn.relu, num_class=1):
 
     concat_axis = 3
     inputs = tf.keras.layers.Input(shape=input_shape)

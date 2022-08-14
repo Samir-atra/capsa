@@ -4,7 +4,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 # base
 BS = 32
-EP = 256
+EP = 100
 LR = 5e-5
 
 # # ensebmle
@@ -17,5 +17,6 @@ LR = 5e-5
 # EP = 48 # 256
 # LR = 5e-5
 
-N_SAMPLES = 16384
+N_TRAIN = 64 #16384
+N_VAL = 64
 NUM_PLOTS = 10
