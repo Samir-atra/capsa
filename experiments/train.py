@@ -11,11 +11,17 @@ from models import create
 from run_utils import setup
 from utils import load_depth_data, load_apollo_data, totensor_and_normalize, \
     visualize_depth_map, visualize_depth_map_uncertainty, plot_multiple, \
-    plot_loss, get_checkpoint_callback
+    plot_loss, get_checkpoint_callback, load_depth_as_dataset, Augment
 
-(x_train, y_train), (x_test, y_test) = load_depth_data()
-x_train, y_train = totensor_and_normalize(x_train, y_train)
+train_ds, test_ds, inp_shape = load_depth_as_dataset()
+train_batches = (
+    train_ds
+    .cache()
+    .batch(config.BS)
+    .map(Augment())
+    .prefetch(buffer_size=tf.data.AUTOTUNE))
 
+test_batches = test_ds.batch(config.BS)
 _, (x_test_ood, y_test_ood) = load_apollo_data()
 x_test_ood, y_test_ood = totensor_and_normalize(x_test_ood, y_test_ood)
 
@@ -44,7 +50,7 @@ def train_ensemble_wrapper():
     vis_path, checkpoints_path, plots_path, logs_path = setup('ensemble')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-    their_model = create(x_train.shape[1:])
+    their_model = create(inp_shape)
     model = EnsembleWrapper(their_model, num_members=2)
     model.compile(
         optimizer=[keras.optimizers.Adam(learning_rate=config.LR)],
@@ -52,8 +58,8 @@ def train_ensemble_wrapper():
     )
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
-    history = model.fit(x_train, y_train, epochs=config.EP, batch_size=config.BS,
-        validation_split=0.2,
+    history = model.fit(train_batches, epochs=config.EP, batch_size=config.BS,
+        validation_data=test_batches,
         callbacks=[logger, checkpoint_callback], 
         verbose=0,
     )
@@ -75,39 +81,38 @@ def train_mve_wrapper():
     vis_path, checkpoints_path, plots_path, logs_path = setup('mve')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-    their_model = create(x_train.shape[1:], drop_prob=0.1)
+    their_model = create(inp_shape, drop_prob=0.1)
     model = MVEWrapper(their_model)
     model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR))
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
-    history = model.fit(x_train, y_train, epochs=config.EP, batch_size=config.BS,
-        validation_split=0.2,
+    history = model.fit(train_batches, epochs=config.EP, batch_size=config.BS,
         callbacks=[logger, checkpoint_callback],
         verbose=0,
+        validation_data=test_batches
     )
 
     plot_loss(history, plots_path)
-    plot_multiple(model, x_train, y_train, x_test_ood, y_test_ood, vis_path)
+    # plot_multiple(model, x_train, y_train, x_test_ood, y_test_ood, vis_path)
 
 def train_dropout_wrapper():
     vis_path, checkpoints_path, plots_path, logs_path = setup('dropout')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-    model = create(x_train.shape[1:], drop_prob=0.1)
+    model = create(inp_shape, drop_prob=0.1)
     model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR), loss=tf.keras.losses.MeanSquaredError())
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
-    history = model.fit(x_train, y_train, epochs=config.EP, batch_size=config.BS,
-        validation_split=0.2,
+    history = model.fit(train_batches, epochs=config.EP, batch_size=config.BS,
         callbacks=[logger, checkpoint_callback],
         verbose=0,
+        validation_data=test_batches
     )
 
     plot_loss(history, plots_path)
-    plot_multiple(model, x_train, y_train, x_test_ood, y_test_ood, vis_path)
 
 
 # train_base_model()
-# train_ensemble_wrapper()
-train_mve_wrapper()
+train_ensemble_wrapper()
+#train_mve_wrapper()
 #train_dropout_wrapper()

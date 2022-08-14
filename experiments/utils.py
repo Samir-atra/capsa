@@ -16,14 +16,28 @@ def load_depth_data():
     test = h5py.File("/home/iaroslavelistratov/data/depth_test.h5", "r")
     return (train["image"], train["depth"]), (test["image"], test["depth"])
 
+def load_depth_as_dataset():
+    (train_x, train_y), (test_x, test_y) = load_depth_data()
+    train_x, train_y = totensor_and_normalize(train_x, train_y)
+    (test_x, test_y)= totensor_and_normalize(test_x, test_y)
+    train_dataset = tf.data.Dataset.from_tensor_slices((train_x, train_y))
+    test_dataset = tf.data.Dataset.from_tensor_slices((test_x, test_y))
+    return train_dataset, test_dataset, train_x.shape[1:]
+
+
 def load_apollo_data():
     test = h5py.File("/home/iaroslavelistratov/data/apolloscape_test.h5", "r")
     return (None, None), (test["image"], test["depth"])
 
-def totensor_and_normalize(x, y):
-    x = tf.convert_to_tensor(x[:config.N_SAMPLES], tf.float32)
-    y = tf.convert_to_tensor(y[:config.N_SAMPLES], tf.float32)
+def totensor_and_normalize(x, y, training=True):
+    if training:
+        x = tf.convert_to_tensor(x[:config.N_SAMPLES], tf.float32)
+        y = tf.convert_to_tensor(y[:config.N_SAMPLES], tf.float32)
+    else:
+        x = tf.convert_to_tensor(x, tf.float32)
+        y = tf.convert_to_tensor(y, tf.float32)
     return x / 255. , y / 255.
+
 
 def get_checkpoint_callback(checkpoints_path):
     itters_per_ep = config.N_SAMPLES / config.BS
@@ -128,3 +142,15 @@ def load_model(path, x, y):
     load_status.assert_consumed()
     print(f'Successfully loaded weights from {path}.')
     return model
+
+class Augment(tf.keras.layers.Layer):
+  def __init__(self, seed=42):
+    super().__init__()
+    # both use the same seed, so they'll make the same random changes.
+    self.augment_inputs = tf.keras.layers.RandomFlip(mode="horizontal", seed=seed)
+    self.augment_labels = tf.keras.layers.RandomFlip(mode="horizontal", seed=seed)
+
+  def call(self, inputs, labels):
+    inputs = self.augment_inputs(inputs)
+    labels = self.augment_labels(labels)
+    return inputs, labels

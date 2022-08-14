@@ -12,7 +12,7 @@ def create(input_shape, drop_prob=0.0, reg=None, activation=tf.nn.relu, num_clas
     # inputs_normalized = tf.multiply(inputs, 1/255.)
 
     Conv2D_ = functools.partial(Conv2D, activation=activation, padding='same', kernel_regularizer=reg, bias_regularizer=reg)
-
+ 
     conv1 = Conv2D_(32, (3, 3))(inputs)
     conv1 = Conv2D_(32, (3, 3))(conv1)
     pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
