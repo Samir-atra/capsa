@@ -67,7 +67,10 @@ def train_mve_wrapper():
 
     their_model = unet()
     model = MVEWrapper(their_model)
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR))
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+        loss=keras.losses.MeanSquaredError(),
+    )
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
     history = model.fit(ds_train, epochs=config.EP,
