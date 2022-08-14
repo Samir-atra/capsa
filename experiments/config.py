@@ -17,5 +17,10 @@ LR = 5e-5
 # EP = 48 # 256
 # LR = 5e-5
 
+# # dropout
+BS = 32
+EP = 48
+LR = 5e-5
+
 N_SAMPLES = 16384
 NUM_PLOTS = 10

@@ -6,7 +6,7 @@ from tensorflow import keras
 from keras.callbacks import CSVLogger
 
 import config
-from capsa import Wrapper, MVEWrapper, EnsembleWrapper
+from capsa import Wrapper, MVEWrapper, EnsembleWrapper, DropoutWrapper
 from models import create
 from run_utils import setup
 from utils import load_depth_data, load_apollo_data, totensor_and_normalize, \
@@ -75,9 +75,26 @@ def train_mve_wrapper():
     vis_path, checkpoints_path, plots_path, logs_path = setup('mve')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-    their_model = create(x_train.shape[1:])
+    their_model = create(x_train.shape[1:], drop_prob=0.1)
     model = MVEWrapper(their_model)
     model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR))
+
+    checkpoint_callback = get_checkpoint_callback(checkpoints_path)
+    history = model.fit(x_train, y_train, epochs=config.EP, batch_size=config.BS,
+        validation_split=0.2,
+        callbacks=[logger, checkpoint_callback],
+        verbose=0,
+    )
+
+    plot_loss(history, plots_path)
+    plot_multiple(model, x_train, y_train, x_test_ood, y_test_ood, vis_path)
+
+def train_dropout_wrapper():
+    vis_path, checkpoints_path, plots_path, logs_path = setup('dropout')
+    logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+
+    model = create(x_train.shape[1:], drop_prob=0.1)
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR), loss=tf.keras.losses.MeanSquaredError())
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
     history = model.fit(x_train, y_train, epochs=config.EP, batch_size=config.BS,
@@ -93,3 +110,4 @@ def train_mve_wrapper():
 # train_base_model()
 # train_ensemble_wrapper()
 train_mve_wrapper()
+#train_dropout_wrapper()
