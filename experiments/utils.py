@@ -57,34 +57,26 @@ def plot_loss(history, plots_path, name='loss'):
     # plt.show()
     plt.close()
 
-def visualize_depth_map(x, y, pred, visualizations_path, name='map'):
+def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True):
     cmap = plt.cm.jet
-    cmap.set_bad(color="black")
+    cmap.set_bad(color='black')
+    col = 4 if plot_uncertainty else 3
+    fig, ax = plt.subplots(6, col, figsize=(50, 50))
 
-    fig, ax = plt.subplots(6, 3, figsize=(50, 50))
+    x, y = iter(ds).get_next()
+    if plot_uncertainty:
+        pred, uncertainty = model(x)
+    else:
+        pred = model(x)
+
     for i in range(6):
         ax[i, 0].imshow(x[i])
         ax[i, 1].imshow(y[i, :, :, 0], cmap=cmap)
         ax[i, 2].imshow(pred[i, :, :, 0], cmap=cmap)
+        if plot_uncertainty:
+            ax[i, 3].imshow(uncertainty[i, :, :, 0], cmap=cmap)
 
-    plt.savefig(f'{visualizations_path}/{name}.pdf', bbox_inches='tight', format='pdf')
-    # plt.show()
-    plt.close()
-
-# hacky ugly way - should reuse visualize_depth_map
-def visualize_depth_map_uncertainty(x, y, pred, uncertain, visualizations_path, name='map'):
-    cmap = plt.cm.jet
-    cmap.set_bad(color="black")
-
-    fig, ax = plt.subplots(6, 4, figsize=(50, 50))
-    for i in range(6):
-        ax[i, 0].imshow(x[i])
-        ax[i, 1].imshow(y[i, :, :, 0], cmap=cmap)
-        ax[i, 2].imshow(pred[i, :, :, 0], cmap=cmap)
-        ax[i, 3].imshow(uncertain[i, :, :, 0], cmap=cmap)
-
-    plt.savefig(f'{visualizations_path}/{name}.pdf', bbox_inches='tight', format='pdf')
-    # plt.show()
+    plt.savefig(f'{vis_path}/{name}.pdf', bbox_inches='tight', format='pdf')
     plt.close()
 
 def plot_multiple(model, x_train, y_train, x_test_ood, y_test_ood, vis_path, prefix=''):
