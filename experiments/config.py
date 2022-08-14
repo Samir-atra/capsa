@@ -5,7 +5,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 # base
 BS = 32
 EP = 100
-LR = 5e-5
+LR = 1e-4 #5e-5
 
 # # ensebmle
 # BS = 32
@@ -17,6 +17,13 @@ LR = 5e-5
 # EP = 48 # 256
 # LR = 5e-5
 
-N_TRAIN = 64 #16384
-N_VAL = 64
+N_TRAIN = 8192 #16384
+N_VAL = 1024
 NUM_PLOTS = 10
+
+# logs, plots, visualizations, checkpoints, etc. will be saved there
+LOGS_PATH = '/home/iaroslavelistratov/results' #'/data/capsa/depth'
+# source code path for logging
+SOURCE_PATH = '/home/iaroslavelistratov/capsa'
+# optional, used only in check_saved_weights.py
+MODEL_PATH = '/home/iaroslavelistratov/results/mve/job_00'

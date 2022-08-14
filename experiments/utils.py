@@ -12,13 +12,13 @@ from models import unet
 
 # https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/train_depth.py#L34
 def load_depth_data():
-    train = h5py.File("/home/iaroslavelistratov/data/depth_train.h5", "r")
-    test = h5py.File("/home/iaroslavelistratov/data/depth_test.h5", "r")
-    return (train["image"], train["depth"]), (test["image"], test["depth"])
+    train = h5py.File('/data/capsa/data/depth_train.h5', 'r')
+    test = h5py.File('/data/capsa/data/depth_test.h5', 'r')
+    return (train['image'], train['depth']), (test['image'], test['depth'])
 
 def load_apollo_data():
-    test = h5py.File("/home/iaroslavelistratov/data/apolloscape_test.h5", "r")
-    return (None, None), (test["image"], test["depth"])
+    test = h5py.File('/data/capsa/data/apolloscape_test.h5', 'r')
+    return (None, None), (test['image'], test['depth'])
 
 def totensor_and_normalize(x, y):
     x = tf.convert_to_tensor(x, tf.float32)

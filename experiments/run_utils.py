@@ -1,13 +1,13 @@
 # https://github.com/IaroslavElistratov/gnn-motion-forecasting/blob/master/core/run_utils.py
 
-import time
-import datetime
-
 import os
-
 import logging
 import shutil
+# import time
+# import datetime
 # import yaml
+
+import config
 
 # def _read_hyperparameters(dir, gpu_worker_id):
 #     '''
@@ -26,7 +26,7 @@ import shutil
 def _create_folders(model_name):
     ''' Put logs of all jobs in the same jobarray into one directory '''
 
-    target_dir = f'/data/capsa/depth/{model_name}'
+    target_dir = os.path.join(config.LOGS_PATH, model_name)
 
     # create that dir only once, all the following jobs of the same array will use it
     possible_jobarray_names = ['job_%.2d' % i for i in range(50)]
@@ -79,7 +79,7 @@ def _log_model_source(target_dir, algorithm_name='unet'):
     ''' Log raw model object file source -- copy it from the image to the data-server '''
 
     name_to_path = {
-        'unet': '/home/iaroslavelistratov/capsa',
+        'unet': config.SOURCE_PATH,
         # 'prediction_cnn': f'{pwd}/core/models/prediction/cnn',
         # 'prediction_attn': f'{pwd}/core/models/prediction/cnn_attention',
         # 'prediction_gnn': f'{pwd}/core/models/prediction/cnn_gnn',

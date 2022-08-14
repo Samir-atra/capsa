@@ -16,8 +16,8 @@ ds_val = get_normalized_ds(x_train[-config.N_VAL:], y_train[-config.N_VAL:])
 _, (x_ood, y_ood) = load_apollo_data() # (1000, 128, 160, 3), (1000, 128, 160, 1)
 ds_ood = get_normalized_ds(x_ood, y_ood)
 
-checkpoints_path = '/data/capsa/depth/mve/job_00/checkpoints'
-vis_path = '/data/capsa/depth/mve/job_00/temp_visualizations'
+checkpoints_path = os.path.join(config.MODEL_PATH, 'checkpoints')
+vis_path = os.path.join(config.MODEL_PATH, 'temp_visualizations')
 os.makedirs(vis_path, exist_ok=True)
 
 l = sorted(glob.glob(os.path.join(checkpoints_path, '*.tf*')))
