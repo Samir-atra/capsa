@@ -83,7 +83,7 @@ def train_mve_wrapper():
 
     their_model = create(inp_shape, drop_prob=0.1)
     model = MVEWrapper(their_model)
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR))
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR), loss=tf.keras.losses.MeanSquaredError())
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
     history = model.fit(train_batches, epochs=config.EP, batch_size=config.BS,
@@ -113,6 +113,6 @@ def train_dropout_wrapper():
 
 
 # train_base_model()
-train_ensemble_wrapper()
-#train_mve_wrapper()
+# train_ensemble_wrapper()
+train_mve_wrapper()
 #train_dropout_wrapper()
