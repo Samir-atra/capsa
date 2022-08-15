@@ -6,9 +6,9 @@ from tensorflow import keras
 from keras.callbacks import CSVLogger
 
 import config
-from models import unet, AutoEncoder
+from models import unet, AutoEncoder, get_encoder, get_decoder
 from run_utils import setup
-from capsa import Wrapper, MVEWrapper, EnsembleWrapper
+from capsa import Wrapper, MVEWrapper, EnsembleWrapper, VAEWrapper
 from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
     visualize_depth_map, plot_loss, get_checkpoint_callback
 
@@ -102,7 +102,31 @@ def train_vae():
     visualize_depth_map(model, ds_train, vis_path, 'iid')
     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
-train_base_model()
-train_ensemble_wrapper()
-train_mve_wrapper()
-train_vae()
+def train_vae_wrapper():
+    vis_path, checkpoints_path, plots_path, logs_path = setup('vae')
+    logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+
+    model = VAEWrapper(
+        get_encoder(),
+        decoder = get_decoder((8, 10, 256)),
+    )
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=config.LR), #1e-4
+        loss=keras.losses.MeanSquaredError(),
+    )
+
+    checkpoint_callback = get_checkpoint_callback(checkpoints_path)
+    history = model.fit(ds_train, epochs=config.EP,
+        validation_data=ds_val,
+        callbacks=[logger, checkpoint_callback],
+        verbose=0,
+    )
+    plot_loss(history, plots_path)
+    visualize_depth_map(model, ds_train, vis_path, 'iid')
+    visualize_depth_map(model, ds_ood, vis_path, 'ood')
+
+# train_base_model()
+# train_ensemble_wrapper()
+# train_mve_wrapper()
+# train_vae()
+train_vae_wrapper()
