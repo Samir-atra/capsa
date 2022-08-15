@@ -124,7 +124,7 @@ def get_encoder(input_shape=(128, 160, 3), drop_prob=0.0):
     conv4 = Conv2D_(256, (3, 3))(conv4)
     pool4 = MaxPooling2D(pool_size=(2, 2))(conv4)
 
-    model = tf.keras.models.Model(inputs=inputs, outputs=pool4)
+    model = tf.keras.models.Model(inputs=inputs, outputs=pool4, name="encoder")
     return model
 
 def get_bottleneck(input_shape=(8, 10, 256)):
@@ -134,7 +134,7 @@ def get_bottleneck(input_shape=(8, 10, 256)):
     model = tf.keras.models.Model(inputs=inputs, outputs=conv5)
     return model
 
-def get_decoder(input_shape=(8, 10, 512), num_class=3):
+def get_decoder(input_shape=(8, 10, 256), num_class=3):
 
     inputs = tf.keras.layers.Input(shape=input_shape)
 
@@ -156,7 +156,7 @@ def get_decoder(input_shape=(8, 10, 512), num_class=3):
 
     conv10 = Conv2D(num_class, (1, 1))(conv9)
 
-    model = tf.keras.models.Model(inputs=inputs, outputs=conv10)
+    model = tf.keras.models.Model(inputs=inputs, outputs=conv10, name="decoder")
     return model
 
 # # check dims

@@ -89,7 +89,7 @@ def train_vae():
     model = AutoEncoder()
     model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=config.LR), #1e-4
-        loss=keras.losses.MeanSquaredError(),
+        run_eagerly=True
     )
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
