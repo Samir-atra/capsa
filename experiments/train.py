@@ -1,6 +1,6 @@
 import os
 import numpy as np
-
+import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 from keras.callbacks import CSVLogger
@@ -24,6 +24,30 @@ train_batches = (
 test_batches = test_ds.batch(config.BS)
 _, (x_test_ood, y_test_ood) = load_apollo_data()
 x_test_ood, y_test_ood = totensor_and_normalize(x_test_ood, y_test_ood)
+
+def display(display_list, name):
+  plt.figure(figsize=(15, 15))
+
+  title = ['Input Image', 'True Mask', 'Predicted Mask']
+
+  for i in range(len(display_list)):
+    plt.subplot(1, len(display_list), i+1)
+    plt.title(title[i])
+    plt.imshow(tf.keras.utils.array_to_img(display_list[i]))
+    plt.axis('off')
+  plt.savefig("sample" + str(name))
+
+def plot_images():
+    i = 0
+    for images, masks in train_batches.take(10):
+        sample_image, sample_mask = images[0], masks[0]
+        display([sample_image, sample_mask], "train" + str(i))
+        i += 1
+    i = 0
+    for images, masks in test_batches.take(10):
+        sample_image, sample_mask = images[0], masks[0]
+        display([sample_image, sample_mask], "test" + str(i))
+        i += 1
 
 def train_base_model():
     vis_path, checkpoints_path, plots_path, logs_path = setup('base')
@@ -112,7 +136,7 @@ def train_dropout_wrapper():
     plot_loss(history, plots_path)
 
 
-# train_base_model()
+#train_base_model()
 # train_ensemble_wrapper()
 train_mve_wrapper()
 #train_dropout_wrapper()
