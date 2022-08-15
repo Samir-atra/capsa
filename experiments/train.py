@@ -135,8 +135,26 @@ def train_dropout_wrapper():
 
     plot_loss(history, plots_path)
 
+def train_ensemble_mve_wrapper():
+    vis_path, checkpoints_path, plots_path, logs_path = setup('ensemble_mve')
+    logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
+    their_model = create(inp_shape)
+    model = EnsembleWrapper(their_model, num_members=5, metric_wrapper=MVEWrapper)
+    model.compile(
+        optimizer=[keras.optimizers.Adam(learning_rate=config.LR)],
+        loss=[keras.losses.MeanSquaredError()],
+    )
+
+    checkpoint_callback = get_checkpoint_callback(checkpoints_path)
+    history = model.fit(train_batches, epochs=config.EP, batch_size=config.BS,
+        validation_data=test_batches,
+        callbacks=[logger, checkpoint_callback], 
+        verbose=0,
+    )
+    plot_loss(history, plots_path)
 #train_base_model()
 # train_ensemble_wrapper()
-train_mve_wrapper()
+# train_mve_wrapper()
 #train_dropout_wrapper()
+train_ensemble_mve_wrapper()

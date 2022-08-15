@@ -68,10 +68,11 @@ class MVEWrapper(keras.Model):
         # return {f'{prefix}_{m.name}': m.result() for m in self.metrics}
         return {f'{prefix}_loss': loss}
 
-    def test_step(self, data):
+    def test_step(self, data, prefix=None):
         x, y = data
         loss, y_hat = self.loss_fn(x, y, training=False)
-        prefix = self.metric_name
+        if prefix is None:
+            prefix = self.metric_name
         return {f'{prefix}_loss': loss}
 
     def call(self, x, training=False, return_risk=True, features=None):
