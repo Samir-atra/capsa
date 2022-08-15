@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 from ..utils import MLP, _get_out_dim, copy_layer
-
+import numpy as np
 
 class MVEWrapper(keras.Model):
 
@@ -19,28 +19,38 @@ class MVEWrapper(keras.Model):
             )
 
         output_layer = base_model.layers[-1]
-        self.out_y = copy_layer(output_layer)
-        #self.out_mu = copy_layer(output_layer, override_activation="linear")
-        self.out_logvar = copy_layer(output_layer, override_activation="linear")
+        #self.out_y = copy_layer(output_layer)
+        self.out_mu = copy_layer(output_layer, override_activation="linear")
+        self.out_logstd = copy_layer(output_layer, override_activation="linear")
 
     @staticmethod
-    def neg_log_likelihood(y, mu, logvariance):
-        
-        variance = tf.exp(logvariance)
-        return logvariance + (y-mu)**2 / variance
+    def neg_log_likelihood(y, mu, logsigma, training=True):
+        ax = list(range(1, len(y.shape)))
+        sigma = tf.exp(logsigma)
+        #tf.print(f"training is: {training}", tf.reduce_mean(sigma))
+        logprob = -tf.math.log(sigma) - 0.5*tf.math.log(2*np.pi) - 0.5*((y-mu)/sigma)**2
+        loss = tf.reduce_mean(-logprob, axis=ax)
+        return loss
 
-    def loss_fn(self, x, y, features=None):
-        if self.is_standalone or features is None:
+    def loss_fn(self, x, y, features=None, training=True):
+        if self.is_standalone:
             features = self.feature_extractor(x, training=True)
 
-        y_hat = self.out_y(features)
-        #mu = self.out_mu(features)
-        logvariance = self.out_logvar(features)
+        #y_hat = self.out_y(features)
+        mu = self.out_mu(features)
+        logsigma = self.out_logstd(features)
+
         loss = tf.reduce_mean(
-             self.compiled_loss(y, y_hat, regularization_losses=self.losses),
+            self.compiled_loss(y, mu, regularization_losses=self.losses),
         )
-        loss += tf.reduce_mean(self.neg_log_likelihood(y, y_hat, logvariance)) # (N_SAMPLES, 128, 160, 1) -> ( )
-        return loss, y_hat
+        # tf.print('mse', tf.convert_to_tensor(loss))
+
+        loss += tf.reduce_mean(
+            self.neg_log_likelihood(y, mu, logsigma, training)
+        ) # (N_SAMPLES, 128, 160, 1) -> ( )
+        # tf.print('gaussian_nll', tf.reduce_mean(self.neg_log_likelihood(y, mu, logvariance)))
+
+        return loss, mu
 
     def train_step(self, data, prefix=None):
         x, y = data
@@ -60,7 +70,7 @@ class MVEWrapper(keras.Model):
 
     def test_step(self, data):
         x, y = data
-        loss, y_hat = self.loss_fn(x, y)
+        loss, y_hat = self.loss_fn(x, y, training=False)
         prefix = self.metric_name
         return {f'{prefix}_loss': loss}
 
@@ -68,10 +78,11 @@ class MVEWrapper(keras.Model):
 
         if self.is_standalone:
             features = self.feature_extractor(x, training)
-        y_hat = self.out_y(features)
+        y_hat = self.out_mu(features)
 
-        # todo-high: - note y_pred so not MSE supervised
-        #mu = self.out_mu(features)
-        logvariance = self.out_logvar(features)
-        variance = tf.exp(logvariance)
-        return y_hat, variance
+        if return_risk:
+            logstd = self.out_logstd(features)
+            std = tf.exp(logstd)
+            return (y_hat, std)
+        else:
+            return y_hat
