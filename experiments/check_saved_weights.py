@@ -28,5 +28,7 @@ weights_names = list(set(l))
 for name in weights_names:
     path = f'{checkpoints_path}/{name}.tf'
     model = load_model(path, ds_train)
-    visualize_depth_map(model, ds_train, vis_path, f'{name}_iid')
-    visualize_depth_map(model, ds_ood, vis_path, f'{name}_ood')
+    visualize_depth_map(model, ds_train, vis_path, 'train')
+    visualize_depth_map(model, ds_val, vis_path, 'val')
+    visualize_depth_map(model, ds_test, vis_path, 'test')
+    visualize_depth_map(model, ds_ood, vis_path, 'ood')
