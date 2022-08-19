@@ -5,6 +5,9 @@ import tensorflow as tf
 from tensorflow import keras
 from keras.callbacks import CSVLogger
 
+# rm
+from debug_minimal import DebugWrappar
+
 import config
 from models import unet, AutoEncoder, get_encoder, get_decoder
 from run_utils import setup
@@ -45,7 +48,7 @@ def train_ensemble_wrapper():
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
-    model = EnsembleWrapper(their_model, num_members=2)
+    model = EnsembleWrapper(their_model, num_members=1)
     model.compile(
         optimizer=[keras.optimizers.Adam(learning_rate=config.LR)],
         loss=[keras.losses.MeanSquaredError()],
@@ -125,8 +128,33 @@ def train_vae_wrapper():
     visualize_depth_map(model, ds_train, vis_path, 'iid')
     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
+
+
+def train_debug():
+    vis_path, checkpoints_path, plots_path, logs_path = setup('debug')
+    logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+
+    their_model = unet()
+    model = DebugWrappar(their_model)
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+        loss=keras.losses.MeanSquaredError(),
+    )
+
+    checkpoint_callback = get_checkpoint_callback(checkpoints_path)
+    history = model.fit(ds_train, epochs=config.EP,
+        validation_data=ds_val,
+        callbacks=[logger, checkpoint_callback], 
+        verbose=0,
+    )
+    plot_loss(history, plots_path)
+    visualize_depth_map(model, ds_train, vis_path, 'iid')
+    visualize_depth_map(model, ds_ood, vis_path, 'ood')
+
+
 # train_base_model()
 # train_ensemble_wrapper()
 # train_mve_wrapper()
 # train_vae()
-train_vae_wrapper()
+# train_vae_wrapper()
+train_debug()
