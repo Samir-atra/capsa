@@ -72,8 +72,7 @@ def unet(input_shape=(128, 160, 3), drop_prob=0.0, reg=None, activation=tf.nn.re
     conv10 = Conv2D(num_class, (1, 1))(conv9)
 
     # conv10 = tf.multiply(conv10, 255.)
-    model = tf.keras.models.Model(inputs=inputs, outputs=conv10)
-    return model
+    return tf.keras.models.Model(inputs=inputs, outputs=conv10)
 
 def get_crop_shape(target, refer):
     # width, the 3rd dimension

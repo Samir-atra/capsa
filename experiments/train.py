@@ -40,10 +40,10 @@ def train_base_model():
         verbose=0,
     )
     plot_loss(history, plots_path)
-    visualize_depth_map(model, ds_train, vis_path, 'train')
-    visualize_depth_map(model, ds_val, vis_path, 'val')
-    visualize_depth_map(model, ds_test, vis_path, 'test')
-    visualize_depth_map(model, ds_ood, vis_path, 'ood')
+    visualize_depth_map(model, ds_train, vis_path, 'train', False)
+    # visualize_depth_map(model, ds_val, vis_path, 'val', False)
+    visualize_depth_map(model, ds_test, vis_path, 'test', False)
+    visualize_depth_map(model, ds_ood, vis_path, 'ood', False)
 
 def train_ensemble_wrapper():
     vis_path, checkpoints_path, plots_path, logs_path = setup('ensemble')

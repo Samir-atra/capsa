@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 
+from debug_minimal import DebugWrappar
+
 import config
 from capsa import Wrapper, MVEWrapper, EnsembleWrapper
 from models import unet
@@ -116,15 +118,30 @@ def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True):
 def load_model(path, ds):
     # path = tf.train.latest_checkpoint(checkpoints_path)
 
-    their_model = unet()
-    # todo-med: make work with other wrappers
-    model = MVEWrapper(their_model)
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR))
+
+
+    # their_model = unet()
+    # # todo-med: make work with other wrappers
+    # model = EnsembleWrapper(their_model, num_members=1) # MVEWrapper(their_model)
+    # model.compile(
+    #     optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+    #     loss=keras.losses.MeanSquaredError(),
+    # )
+
+
+
+    model = unet()
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+        loss=keras.losses.MeanSquaredError(),
+    )
+
+
 
     # https://github.com/tensorflow/tensorflow/issues/33150#issuecomment-574517363
     _ = model.fit(ds, epochs=1, verbose=0)
     x, y = iter(ds).get_next()
-    _, _ = model(x[:config.BS])
+    # _, _ = model(x[:config.BS])
+    _ = model(x[:config.BS])
 
     load_status = model.load_weights(path)
     # used as validation that all variable values have been restored from the checkpoint
