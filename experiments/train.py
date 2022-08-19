@@ -145,11 +145,14 @@ def train_debug():
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
-    model = DebugWrappar(their_model)
-    model.compile(
+    their_model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=config.LR),
         loss=keras.losses.MeanSquaredError(),
     )
+
+    model = DebugWrappar(their_model)
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=1000000),
+        loss=keras.losses.MeanSquaredError(),)
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
     history = model.fit(ds_train, epochs=config.EP,
