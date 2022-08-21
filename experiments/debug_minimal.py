@@ -9,25 +9,40 @@ class DebugWrappar(keras.Model):
 
         self.metric_name = "debug"
         self.base_model = base_model
+        self.loss_tracker = keras.metrics.Mean()
+        self.val_loss_tracker = keras.metrics.Mean()
+
+    @property
+    def metrics(self):
+        return [self.loss_tracker, self.val_loss_tracker]
+
+    def compile(self, optimizer, loss):
+        super(DebugWrappar, self).compile()
+        self.optimizer = optimizer
+        self.loss_fn = loss
 
     def train_step(self, data):
-        keras_metrics = {}
+        x, y = data
 
-        _ = self.base_model.train_step(data)
-        for m in self.base_model.metrics:
-            keras_metrics[f"{self.metric_name}_{m.name}"] = m.result()
+        with tf.GradientTape() as tape:
+            y_hat = self.base_model(x)
+            loss = self.loss_fn(y, y_hat)
+        grads = tape.gradient(loss, self.trainable_weights)
+        self.optimizer.apply_gradients(
+            zip(grads, self.trainable_weights)
+        )
 
-        return keras_metrics
+        self.loss_tracker.update_state(loss)
+        return {"loss": self.loss_tracker.result()}
 
     # todo-high: almost exactly same as train_step -- reduce code duplication
     def test_step(self, data):
-        keras_metrics = {}
+        x, y = data
 
-        _ = self.base_model.test_step(data)
-        for m in self.base_model.metrics:
-            keras_metrics[f"{self.metric_name}_{m.name}"] = m.result()
-
-        return keras_metrics
+        y_hat = self.base_model(x, training=False)
+        loss = self.loss_fn(y, y_hat)
+        self.val_loss_tracker.update_state(loss)
+        return {"val_loss": self.val_loss_tracker.result()}
 
     def call(self, x, training=False, return_risk=True, features=None):
         outs = []
