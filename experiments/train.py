@@ -17,7 +17,7 @@ from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
 
 (x_train, y_train), (x_test, y_test) = load_depth_data() # (27260, 128, 160, 3), (27260, 128, 160, 1) and (3029, 128, 160, 3), (3029, 128, 160, 1)
 ds_train = get_normalized_ds(x_train[:config.N_TRAIN], y_train[:config.N_TRAIN])
-ds_val = get_normalized_ds(x_train[-config.N_VAL:], y_train[-config.N_VAL:])
+# ds_val = get_normalized_ds(x_train[-config.N_VAL:], y_train[-config.N_VAL:])
 ds_test = get_normalized_ds(x_test, y_test)
 
 _, (x_ood, y_ood) = load_apollo_data() # (1000, 128, 160, 3), (1000, 128, 160, 1)
@@ -35,7 +35,7 @@ def train_base_model():
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
     history = their_model.fit(ds_train, epochs=config.EP,
-        validation_data=ds_val,
+        validation_data=ds_test,
         callbacks=[logger, checkpoint_callback],
         verbose=0,
     )
@@ -81,14 +81,14 @@ def train_mve_wrapper():
 
     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
     history = model.fit(ds_train, epochs=config.EP,
-        validation_data=ds_val,
+        validation_data=ds_test,
         callbacks=[logger, checkpoint_callback],
         verbose=0,
     )
     plot_loss(history, plots_path)
     visualize_depth_map(model, ds_train, vis_path, 'train')
     visualize_depth_map(model, ds_val, vis_path, 'val')
-    visualize_depth_map(model, ds_test, vis_path, 'test')
+    # visualize_depth_map(model, ds_test, vis_path, 'test')
     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
 def train_vae():
@@ -169,9 +169,9 @@ def train_debug():
     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
 
-# train_base_model()
+train_base_model()
 # train_ensemble_wrapper()
 # train_mve_wrapper()
 # train_vae()
 # train_vae_wrapper()
-train_debug()
+# train_debug()
