@@ -1,4 +1,5 @@
 # https://github.com/IaroslavElistratov/gnn-motion-forecasting/blob/master/core/run_utils.py
+# todo-high: redundant, just use the vis callback and add to it functionally to copy source code
 
 import os
 import logging
@@ -56,7 +57,7 @@ def _create_folders(model_name):
     os.makedirs(plots_path)
     os.makedirs(logs_path)
 
-    return visualizations_path, checkpoints_path, source_path, plots_path, logs_path
+    return path, visualizations_path, checkpoints_path, source_path, plots_path, logs_path
 
 # def _create_logger(target_dir):
 #     logger = logging.getLogger()
@@ -114,10 +115,10 @@ def setup(model_name):
     # config = _read_hyperparameters(config_location, gpu_worker_id)
     # algorithm_name = config['algorithm_name']
 
-    visualizations_path, checkpoints_path, source_path, plots_path, logs_path = _create_folders(model_name)
+    path, visualizations_path, checkpoints_path, source_path, plots_path, logs_path = _create_folders(model_name)
     # logger = _create_logger(logs_path)
     # _log_hyperparameters(logger, config)
     _log_model_source(source_path)
 
     # return config, logger, visualizations_path, plots_path, train_dir, val_dir
-    return visualizations_path, checkpoints_path, plots_path, logs_path
+    return path, visualizations_path, checkpoints_path, plots_path, logs_path
