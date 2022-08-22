@@ -7,19 +7,19 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 # EP = 100
 # LR = 1e-4 #5e-5
 
-# # ensebmle
+# # ensemble
 # BS = 32
 # EP = 256
 # LR = 5e-5
 
 # # mve
-BS = 32 # 8
-EP = 70 # 256
+BS = 32
+EP = 20 # 70
 LR = 5e-5
 
 # # vae
-# BS = 32 # 8
-# EP = 10 # 256
+# BS = 32
+# EP = 10
 # LR = 1e-4
 
 N_TRAIN = 25000 #24576 #1024 #1024 #8192 #16384
