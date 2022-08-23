@@ -11,7 +11,7 @@ from debug_minimal import DebugWrappar
 import config
 from models import unet, AutoEncoder, get_encoder, get_decoder
 from run_utils import setup
-from callbacks import VisCallback, get_checkpoint_callback
+from callbacks import VisCallback, MVEVisCallback, get_checkpoint_callback
 from capsa import Wrapper, MVEWrapper, EnsembleWrapper, VAEWrapper
 from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
     visualize_depth_map, plot_loss
@@ -29,7 +29,7 @@ y_train = y_train[idx,...]
 
 
 ds_train = get_normalized_ds(x_train[:config.N_TRAIN], y_train[:config.N_TRAIN])
-ds_val = get_normalized_ds(x_train[-config.N_VAL:], y_train[-config.N_VAL:])
+ds_val = get_normalized_ds(x_train[config.N_TRAIN:], y_train[config.N_TRAIN:])
 ds_test = get_normalized_ds(x_test, y_test)
 
 _, (x_ood, y_ood) = load_apollo_data() # (1000, 128, 160, 3), (1000, 128, 160, 1)
@@ -110,7 +110,7 @@ def train_mve_wrapper():
     )
 
     # checkpoint_callback = get_checkpoint_callback(logs_path)
-    vis_callback = VisCallback(f'{path}/tensorboard', ds_train, ds_val, model_name)
+    vis_callback = MVEVisCallback(f'{path}/tensorboard', ds_train, ds_val, model_name) # VisCallback
     history = model.fit(ds_train, epochs=config.EP,
         validation_data=ds_val,
         callbacks=[vis_callback, logger], #checkpoint_callback

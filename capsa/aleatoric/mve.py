@@ -19,7 +19,7 @@ class MVEWrapper(keras.Model):
             )
 
         output_layer = base_model.layers[-1]
-        self.out_y = copy_layer(output_layer)
+        # self.out_y = copy_layer(output_layer)
         self.out_mu = copy_layer(output_layer, override_activation="linear")
         self.out_logvar = copy_layer(output_layer, override_activation="linear")
 
@@ -28,25 +28,35 @@ class MVEWrapper(keras.Model):
         variance = tf.exp(logvariance)
         return logvariance + (y-mu)**2 / variance
 
-    def loss_fn(self, x, y, features=None):
+    def loss_fn(self, x, y, return_var=False, features=None):
         if self.is_standalone:
             features = self.feature_extractor(x, training=True)
 
-        y_hat = self.out_y(features)
+        # y_hat = self.out_y(features)
+        # mu = self.out_mu(features)
+        # logvariance = self.out_logvar(features)
+
+        # loss = tf.reduce_mean(
+        #     self.compiled_loss(y, y_hat, regularization_losses=self.losses),
+        # )
+        # # tf.print('mse', tf.convert_to_tensor(loss))
+
+        # loss += tf.reduce_mean(
+        #     self.neg_log_likelihood(y, mu, logvariance)
+        # ) # (N_SAMPLES, 128, 160, 1) -> ( )
+        # # # tf.print('gaussian_nll', tf.reduce_mean(self.neg_log_likelihood(y, mu, logvariance)))
+
         mu = self.out_mu(features)
         logvariance = self.out_logvar(features)
 
         loss = tf.reduce_mean(
-            self.compiled_loss(y, y_hat, regularization_losses=self.losses),
-        )
-        # tf.print('mse', tf.convert_to_tensor(loss))
-
-        loss += tf.reduce_mean(
             self.neg_log_likelihood(y, mu, logvariance)
-        ) # (N_SAMPLES, 128, 160, 1) -> ( )
-        # # tf.print('gaussian_nll', tf.reduce_mean(self.neg_log_likelihood(y, mu, logvariance)))
+        )
 
-        return loss, y_hat
+        if return_var:
+            return loss, mu, tf.exp(logvariance)
+        else:
+            return loss, mu
 
     def train_step(self, data, prefix=None):
         x, y = data
@@ -74,11 +84,15 @@ class MVEWrapper(keras.Model):
 
         if self.is_standalone:
             features = self.feature_extractor(x, training)
-        y_hat = self.out_y(features)
+        # y_hat = self.out_y(features)
+        y_hat = self.out_mu(features)
 
         if return_risk:
             logvariance = self.out_logvar(features)
             variance = tf.exp(logvariance)
+            # https://github.com/themis-ai/capsa/pull/13#discussion_r921336509
+            # but need this to computel loss inside the callback
+            # mu = self.out_mu(features)
             return (y_hat, variance)
         else:
             return y_hat

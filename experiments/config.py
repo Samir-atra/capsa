@@ -23,7 +23,7 @@ LR = 5e-5
 # LR = 1e-4
 
 N_TRAIN = 25000 #24576 #1024 #1024 #8192 #16384
-N_VAL = 4096 #2684 #1024 #1024 #1024
+N_VAL = 27250 - N_TRAIN #2684 #1024 #1024 #1024
 NUM_PLOTS = 10
 
 # logs, plots, visualizations, checkpoints, etc. will be saved there
