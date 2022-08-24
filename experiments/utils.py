@@ -32,7 +32,7 @@ def _get_ds(x, y, shuffle):
     ds = ds.cache()
     if shuffle:
         ds = ds.shuffle(x.shape[0])
-    ds = ds.batch(config.BS)
+    ds = ds.batch(config.BS, drop_remainder=True)
     ds = ds.prefetch(tf.data.AUTOTUNE)
     return ds
 
@@ -97,25 +97,25 @@ def load_model(path, ds):
 
 
 
-    # their_model = unet()
-    # # todo-med: make work with other wrappers
-    # model = EnsembleWrapper(their_model, num_members=1) # MVEWrapper(their_model)
-    # model.compile(
-    #     optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-    #     loss=keras.losses.MeanSquaredError(),
-    # )
-
-
-
-    model = unet()
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+    their_model = unet()
+    # todo-med: make work with other wrappers
+    model = MVEWrapper(their_model) #EnsembleWrapper(their_model, num_members=1) 
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=config.LR),
         loss=keras.losses.MeanSquaredError(),
     )
 
 
+    '''
+    model = unet()
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+        loss=keras.losses.MeanSquaredError(),
+    )
+    '''
+
 
     # https://github.com/tensorflow/tensorflow/issues/33150#issuecomment-574517363
-    _ = model.fit(ds, epochs=1, verbose=0)
+    _ = model.fit(ds, epochs=1)
     x, y = iter(ds).get_next()
     # _, _ = model(x[:config.BS])
     _ = model(x[:config.BS])
