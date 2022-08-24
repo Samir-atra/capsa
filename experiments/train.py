@@ -11,7 +11,7 @@ from debug_minimal import DebugWrappar
 import config
 from models import unet, AutoEncoder, get_encoder, get_decoder
 from run_utils import setup
-from callbacks import VisCallback, get_checkpoint_callback
+from callbacks import VisCallback, get_checkpoint_callback, CalibrationCallback
 from capsa import Wrapper, MVEWrapper, EnsembleWrapper, VAEWrapper
 from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
     visualize_depth_map, plot_loss
@@ -77,7 +77,7 @@ def train_ensemble_wrapper():
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
-    model = EnsembleWrapper(their_model, num_members=1)
+    model = EnsembleWrapper(their_model, num_members=5)
     model.compile(
         optimizer=[keras.optimizers.Adam(learning_rate=config.LR)],
         loss=[keras.losses.MeanSquaredError()],
@@ -113,7 +113,7 @@ def train_mve_wrapper():
     vis_callback = VisCallback(f'{path}/tensorboard', ds_train, ds_val, model_name)
     history = model.fit(ds_train, epochs=config.EP,
         validation_data=ds_val,
-        callbacks=[vis_callback, logger], #checkpoint_callback
+        callbacks=[vis_callback, logger, CalibrationCallback(ds_val)], #checkpoint_callback
         verbose=0,
     )
     plot_loss(history, plots_path)
@@ -191,7 +191,7 @@ def train_debug():
     vis_callback = VisCallback(f'{path}/tensorboard', ds_train, ds_test, model_name)
     history = model.fit(ds_train, epochs=config.EP,
         validation_data=ds_val,
-        callbacks=[vis_callback, logger], #checkpoint_callback
+        callbacks=[vis_callback, logger, CalibrationCallback(ds_test)], #checkpoint_callback
         verbose=0,
     )
     plot_loss(history, plots_path)
@@ -202,7 +202,7 @@ def train_debug():
 
 
 # train_base_model()
-# train_ensemble_wrapper()
+#train_ensemble_wrapper()
 train_mve_wrapper()
 # train_vae()
 # train_vae_wrapper()

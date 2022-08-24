@@ -6,6 +6,11 @@ import datetime
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+from tqdm import tqdm
+from scipy import stats
+
+import matplotlib.pyplot as plt
+
 
 def gallery(array, ncols=3):
     nindex, height, width, intensity = array.shape
@@ -149,3 +154,45 @@ def get_checkpoint_callback(checkpoints_path):
     )
 
     return checkpoint_callback
+
+class CalibrationCallback(tf.keras.callbacks.Callback):
+    def __init__(self, ds_test):
+        self.ds_test = ds_test
+    
+    def gen_calibration_plot(self, path):
+        percentiles = np.arange(41)/40
+        vals = []
+        mu = []
+        std = []
+        y_test = []
+        for step, (x_test_batch, y_test_batch) in enumerate(self.ds_test):
+            #outs = np.array([self.model(x_test_batch, training=True) for _ in range(20)])
+            #mu_batch = np.array([i[0] for i in outs])
+            #std_batch = np.array([i[1] for i in outs])
+            #total_mu = tf.math.reduce_mean(mu_batch, axis=0)
+            #mu.append(total_mu)
+            #std.append(tf.math.reduce_mean(std_batch + mu_batch, axis=0) - total_mu**2)
+            mu_batch, std_batch = self.model(x_test_batch)
+            mu.append(mu_batch)
+            std.append(std_batch)
+            y_test.append(y_test_batch)
+        mu = np.array(mu)
+        std = np.array(std)
+        y_test = np.array(y_test)
+        y_test = y_test.reshape(-1, *y_test.shape[-3:])
+        mu = mu.reshape(-1, *mu.shape[-3:])
+        std = std.reshape(-1, *std.shape[-3:])
+        for percentile in tqdm(percentiles):
+            ppf_for_this_percentile = stats.norm.ppf(percentile, mu, std)
+            vals.append((y_test <= ppf_for_this_percentile).mean())
+
+        plt.clf()
+        plt.scatter(percentiles, vals)
+        plt.scatter(percentiles, percentiles)
+        plt.title(str(np.mean(abs(percentiles - vals))))
+        plt.show()
+        plt.savefig(path)
+
+    def on_epoch_end(self, epoch, logs=None):
+        path = f"calibration_curve_{epoch}"
+        self.gen_calibration_plot(path)

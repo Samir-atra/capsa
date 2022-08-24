@@ -27,8 +27,8 @@ N_VAL = 4096 #2684 #1024 #1024 #1024
 NUM_PLOTS = 10
 
 # logs, plots, visualizations, checkpoints, etc. will be saved there
-LOGS_PATH = '/home/iaroslavelistratov/results' #'/data/capsa/depth'
+LOGS_PATH = '/home/sadhanalolla/results' #'/data/capsa/depth'
 # source code path for logging
-SOURCE_PATH = '/home/iaroslavelistratov/capsa'
+SOURCE_PATH = '/home/sadhanalolla/capsa'
 # optional, used only in check_saved_weights.py
-MODEL_PATH = '/home/iaroslavelistratov/results/base/job_01'
+MODEL_PATH = '/data/capsa/23aug_depth/job_10/tensorboard/save/20220822-093812_depth_mve_'
