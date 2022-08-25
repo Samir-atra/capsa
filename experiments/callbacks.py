@@ -123,11 +123,14 @@ class VisCallback(tf.keras.callbacks.Callback):
         # todo-med: Note A has "y_hat = self.model(x, training=True)"
         if self.model_name == 'base':
             y_hat = self.model.predict(x_test_batch, verbose=0)
+        elif self.model_name == 'mve':
+            y_hat, sigma = self.model.predict(x_test_batch, verbose=0)
         else:
             y_hat, _ = self.model.predict(x_test_batch, verbose=0)
         with self.val_summary_writer.as_default():
             self.save_summary(vloss, x_test_batch, y_test_batch, y_hat)
-
+            if self.model_name == 'mve':
+                tf.summary.scalar('sigma', tf.reduce_mean(sigma), step=self.iter)
         if vloss < self.min_vloss:
             self.min_vloss = vloss
             self.save(f'model_vloss-{round(vloss, 3)}_itter-{self.iter}')
@@ -181,7 +184,7 @@ class CalibrationCallback(tf.keras.callbacks.Callback):
         y_test = np.array(y_test)
         y_test = y_test.reshape(-1, *y_test.shape[-3:])
         mu = mu.reshape(-1, *mu.shape[-3:])
-        std = std.reshape(-1, *std.shape[-3:])
+        std = tf.sqrt(std.reshape(-1, *std.shape[-3:]))
         for percentile in tqdm(percentiles):
             ppf_for_this_percentile = stats.norm.ppf(percentile, mu, std)
             vals.append((y_test <= ppf_for_this_percentile).mean())

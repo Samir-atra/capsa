@@ -18,7 +18,7 @@ from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
 
 (x_train, y_train), (x_test, y_test) = load_depth_data() # (27260, 128, 160, 3), (27260, 128, 160, 1) and (3029, 128, 160, 3), (3029, 128, 160, 1)
 
-
+'''
 idx = np.random.choice(x_train.shape[0], x_train.shape[0], replace=False).astype(np.int32)
 # convert to np array here because cannot index h5 with unsorted idxs 
 # and sorting random indexes here will result in the original (not sorted) data
@@ -27,7 +27,7 @@ y_train = np.array(y_train)
 x_train = x_train[idx,...]
 y_train = y_train[idx,...]
 
-
+'''
 ds_train = get_normalized_ds(x_train[:config.N_TRAIN], y_train[:config.N_TRAIN])
 ds_val = get_normalized_ds(x_train[-config.N_VAL:], y_train[-config.N_VAL:])
 ds_test = get_normalized_ds(x_test, y_test)
@@ -112,8 +112,8 @@ def train_mve_wrapper():
     # checkpoint_callback = get_checkpoint_callback(logs_path)
     vis_callback = VisCallback(f'{path}/tensorboard', ds_train, ds_val, model_name)
     history = model.fit(ds_train, epochs=config.EP,
-        validation_data=ds_val,
-        callbacks=[vis_callback, logger, CalibrationCallback(ds_val)], #checkpoint_callback
+        validation_data=ds_test,
+        callbacks=[vis_callback, logger], #checkpoint_callback
         verbose=0,
     )
     plot_loss(history, plots_path)

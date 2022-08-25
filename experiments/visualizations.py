@@ -39,15 +39,15 @@ def gen_calibration_plot(model, path, ds_test):
         y_test = np.array(y_test)
         y_test = y_test.reshape(-1, *y_test.shape[-3:])
         mu = mu.reshape(-1, *mu.shape[-3:])
-        std = std.reshape(-1, *std.shape[-3:])
+        std = tf.sqrt(std.reshape(-1, *std.shape[-3:]))
         
         for percentile in tqdm(percentiles):
             ppf_for_this_percentile = stats.norm.ppf(percentile, mu, std)
             vals.append((y_test <= ppf_for_this_percentile).mean())
 
         plt.clf()
-        plt.scatter(percentiles, vals)
-        plt.scatter(percentiles, percentiles)
+        plt.plot(percentiles, vals)
+        plt.plot(percentiles, percentiles)
         plt.title(str(np.mean(abs(percentiles - vals))))
         plt.show()
         plt.savefig(path)
