@@ -14,7 +14,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 # # mve
 BS = 32
-EP = 20 # 70
+EP = 40 # 70
 LR = 5e-5
 
 # # vae
@@ -31,4 +31,4 @@ LOGS_PATH = '/home/sadhanalolla/results' #'/data/capsa/depth'
 # source code path for logging
 SOURCE_PATH = '/home/sadhanalolla/capsa'
 # optional, used only in check_saved_weights.py
-MODEL_PATH = '/data/capsa/23aug_depth/job_10/tensorboard/save/20220822-093812_depth_mve_'
+MODEL_PATH = '/home/sadhanalolla/results/mve/job_07/tensorboard/save/20220825-105053_depth_mve_'
