@@ -9,8 +9,9 @@ from keras.callbacks import CSVLogger
 from debug_minimal import DebugWrappar
 
 import config
-from models import unet, AutoEncoder, get_encoder, get_decoder
 from run_utils import setup
+from losses import MSE
+from models import unet, AutoEncoder, get_encoder, get_decoder
 from callbacks import VisCallback, MVEVisCallback, get_checkpoint_callback
 from capsa import Wrapper, MVEWrapper, EnsembleWrapper, VAEWrapper
 from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
@@ -52,7 +53,7 @@ def train_base_model():
     their_model = unet()
     their_model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-        loss=keras.losses.MeanSquaredError(),
+        loss=MSE, #keras.losses.MeanSquaredError(),
     )
 
     # checkpoint_callback = get_checkpoint_callback(checkpoints_path)
@@ -78,7 +79,7 @@ def train_ensemble_wrapper():
     model = EnsembleWrapper(their_model, num_members=1)
     model.compile(
         optimizer=[keras.optimizers.Adam(learning_rate=config.LR)],
-        loss=[keras.losses.MeanSquaredError()],
+        loss=[MSE],
     )
 
     # checkpoint_callback = get_checkpoint_callback(logs_path)
@@ -104,7 +105,7 @@ def train_mve_wrapper():
     model = MVEWrapper(their_model)
     model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-        loss=keras.losses.MeanSquaredError(),
+        loss=MSE,
     )
 
     # checkpoint_callback = get_checkpoint_callback(logs_path)
@@ -152,7 +153,7 @@ def train_mve_wrapper():
 #     )
 #     model.compile(
 #         optimizer=keras.optimizers.Adam(learning_rate=config.LR), #1e-4
-#         loss=keras.losses.MeanSquaredError(),
+#         loss=MSE,
 #     )
 
 #     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
@@ -176,13 +177,13 @@ def train_debug():
     their_model = unet()
     # their_model.compile(
     #     optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-    #     loss=keras.losses.MeanSquaredError(),
+    #     loss=MSE,
     # )
 
     model = DebugWrappar(their_model)
     model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-        loss=keras.losses.MeanSquaredError()
+        loss=MSE,
     )
 
     # checkpoint_callback = get_checkpoint_callback(logs_path)
