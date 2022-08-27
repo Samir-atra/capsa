@@ -109,7 +109,7 @@ def train_mve_wrapper():
     )
 
     # checkpoint_callback = get_checkpoint_callback(logs_path)
-    vis_callback = MVEVisCallback(checkpoints_path, logs_path, ds_train, ds_test)
+    vis_callback = MVEVisCallback(checkpoints_path, logs_path, model_name, ds_train, ds_test)
     history = model.fit(ds_train, epochs=config.EP,
         validation_data=ds_test,
         callbacks=[vis_callback, logger], #checkpoint_callback

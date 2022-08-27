@@ -4,7 +4,7 @@ import datetime
 
 import config
 
-def _create_folders(model_name, dataset_name="", tag_name=""):
+def _create_folders(model_name, dataset_name, tag_name):
     ''' Put logs of all jobs in the same jobarray into one directory '''
 
     current_time_est = datetime.datetime.now(datetime.timezone.utc)
@@ -41,8 +41,8 @@ def _log_model_source(target_dir, algorithm_name='all'):
                 shutil.copy(file_src, file_trg)
                 os.chmod(file_trg, int('664', base=8))
 
-def setup(model_name):
-    path, checkpoints_path, vis_path, source_path, plots_path, logs_path = _create_folders(model_name)
+def setup(model_name, dataset_name="", tag_name=""):
+    path, checkpoints_path, vis_path, source_path, plots_path, logs_path = _create_folders(model_name, dataset_name, tag_name)
     _log_model_source(source_path)
 
     return path, checkpoints_path, vis_path, plots_path, logs_path

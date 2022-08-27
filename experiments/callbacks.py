@@ -20,7 +20,7 @@ def gallery(array, ncols=3):
               .reshape(height*nrows, width*ncols, intensity))
     return result
 
-class VisCallback(tf.keras.callbacks.Callback):
+class BaseCallback(tf.keras.callbacks.Callback):
 
     # https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/trainers/deterministic.py
 
@@ -78,6 +78,11 @@ class VisCallback(tf.keras.callbacks.Callback):
             y_ = y[idx,...]
         return x_, y_
 
+class VisCallback(BaseCallback):
+
+    def __init__(self, checkpoints_path, logs_path, model_name, xy_train, xy_test):
+        super().__init__(checkpoints_path, logs_path, model_name, xy_train, xy_test)
+
     def on_train_batch_end(self, batch, logs=None):
         """ Note, this setup doesn't track initial loss (of the untrained model) """
 
@@ -114,33 +119,16 @@ class VisCallback(tf.keras.callbacks.Callback):
             self.save_summary(vloss, x_test_batch, y_test_batch, y_hat)
 
         if vloss < self.min_vloss:
-            self.min_vloss = vloss.numpy()
+            self.min_vloss = vloss.numpy() if isinstance(vloss, np.ndarray) else vloss
             self.save("{:0.3f}vloss_{}iter.tf".format(self.min_vloss, self.iter))
 
-class MVEVisCallback(tf.keras.callbacks.Callback):
+class MVEVisCallback(BaseCallback):
 
-    # reduced version VisCallback to avoid, did this way to avoid cluttering VisCallback
-    # more granular val_loss (due to running model every n steps on_train_batch_end, instead of on on_epoch_end)
-    # downside is slower training due to additionally running the model
+    # more granular val_loss downside is slower training due to additionally running the model
+    # (every n steps on_train_batch_end, instead of on on_epoch_end)
 
-    def __init__(self, checkpoints_path, logs_path, xy_train, xy_test):
-
-        self.save_dir = checkpoints_path
-
-        train_log_dir = os.path.join(logs_path, 'train-epoch')
-        val_log_dir = os.path.join(logs_path, 'val-epoch')
-        train_bs_log_dir = os.path.join(logs_path, 'train-batch')
-
-        self.train_summary_writer = tf.summary.create_file_writer(train_log_dir)
-        self.val_summary_writer = tf.summary.create_file_writer(val_log_dir)
-        self.train_bs_summary_writer = tf.summary.create_file_writer(train_bs_log_dir)
-
-        (x_train, y_train), (x_test, y_test) = iter(xy_train).get_next(), iter(xy_test).get_next()
-        self.x_train, self.y_train = x_train, y_train
-        self.x_test, self.y_test = x_test, y_test
-
-        self.min_vloss = float('inf')
-        self.iter = 0
+    def __init__(self, checkpoints_path, logs_path, model_name, xy_train, xy_test):
+        super().__init__(checkpoints_path, logs_path, model_name, xy_train, xy_test)
 
     def save_summary(self, loss, x, y, y_hat, var):
         # x (32, 128, 160, 3), y (32, 128, 160, 1)
@@ -151,16 +139,6 @@ class MVEVisCallback(tf.keras.callbacks.Callback):
         tf.summary.image('x', [gallery(tf.gather(x, idx).numpy())], max_outputs=1, step=self.iter)
         tf.summary.image('y', [gallery(tf.gather(y, idx).numpy())], max_outputs=1, step=self.iter)
         tf.summary.image('y_hat', [gallery(tf.gather(y_hat, idx).numpy())], max_outputs=1, step=self.iter)
-
-    def save(self, name):
-        save_path = os.path.join(self.save_dir, name)
-        self.model.save_weights(save_path, save_format='tf')
-
-    def get_batch(self, x, y, batch_size):
-        idx = np.random.choice(x.shape[0], batch_size, replace=False).astype(np.int32)
-        x_ = tf.gather(x, idx)
-        y_ = tf.gather(y, idx)
-        return x_, y_
 
     def on_train_batch_end(self, batch, logs=None):
         loss_names = [i for i in logs]
