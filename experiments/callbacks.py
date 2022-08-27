@@ -1,8 +1,4 @@
 import os
-from pathlib import Path
-import time
-import datetime
-
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
@@ -28,14 +24,13 @@ class VisCallback(tf.keras.callbacks.Callback):
 
     # https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/trainers/deterministic.py
 
-    def __init__(self, path, xy_train, xy_test, model_name='', dataset_name='depth', tag_name=''):
-        current_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        self.save_dir = os.path.join(path, 'save','{}_{}_{}_{}'.format(current_time, dataset_name, model_name, tag_name))
-        Path(self.save_dir).mkdir(parents=True, exist_ok=True)
+    def __init__(self, checkpoints_path, logs_path, model_name, xy_train, xy_test):
 
-        train_log_dir = os.path.join(path, 'logs', '{}_{}_{}_{}_train-epoch'.format(current_time, dataset_name, model_name, tag_name))
-        val_log_dir = os.path.join(path, 'logs', '{}_{}_{}_{}_val-epoch'.format(current_time, dataset_name, model_name, tag_name))
-        train_bs_log_dir = os.path.join(path, 'logs', '{}_{}_{}_{}_train-batch'.format(current_time, dataset_name, model_name, tag_name))
+        self.save_dir = checkpoints_path
+
+        train_log_dir = os.path.join(logs_path, 'train-epoch')
+        val_log_dir = os.path.join(logs_path, 'val-epoch')
+        train_bs_log_dir = os.path.join(logs_path, 'train-batch')
 
         self.train_summary_writer = tf.summary.create_file_writer(train_log_dir)
         self.val_summary_writer = tf.summary.create_file_writer(val_log_dir)
@@ -119,8 +114,8 @@ class VisCallback(tf.keras.callbacks.Callback):
             self.save_summary(vloss, x_test_batch, y_test_batch, y_hat)
 
         if vloss < self.min_vloss:
-            self.min_vloss = vloss
-            self.save(f'model_vloss-{round(vloss, 3)}_itter-{self.iter}')
+            self.min_vloss = vloss.numpy()
+            self.save("{:0.3f}vloss_{}iter.tf".format(self.min_vloss, self.iter))
 
 class MVEVisCallback(tf.keras.callbacks.Callback):
 
@@ -128,15 +123,13 @@ class MVEVisCallback(tf.keras.callbacks.Callback):
     # more granular val_loss (due to running model every n steps on_train_batch_end, instead of on on_epoch_end)
     # downside is slower training due to additionally running the model
 
-    def __init__(self, path, xy_train, xy_test, tag_name=''):
+    def __init__(self, checkpoints_path, logs_path, xy_train, xy_test):
 
-        current_time = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-        self.save_dir = os.path.join(path, 'save','{}_{}'.format(current_time, tag_name))
-        Path(self.save_dir).mkdir(parents=True, exist_ok=True)
+        self.save_dir = checkpoints_path
 
-        train_log_dir = os.path.join(path, 'logs', '{}_{}_train'.format(current_time, tag_name))
-        val_log_dir = os.path.join(path, 'logs', '{}_{}_val'.format(current_time, tag_name))
-        train_bs_log_dir = os.path.join(path, 'logs', '{}_{}_train-batch'.format(current_time, tag_name))
+        train_log_dir = os.path.join(logs_path, 'train-epoch')
+        val_log_dir = os.path.join(logs_path, 'val-epoch')
+        train_bs_log_dir = os.path.join(logs_path, 'train-batch')
 
         self.train_summary_writer = tf.summary.create_file_writer(train_log_dir)
         self.val_summary_writer = tf.summary.create_file_writer(val_log_dir)
@@ -146,7 +139,6 @@ class MVEVisCallback(tf.keras.callbacks.Callback):
         self.x_train, self.y_train = x_train, y_train
         self.x_test, self.y_test = x_test, y_test
 
-        self.model_name = model_name
         self.min_vloss = float('inf')
         self.iter = 0
 
@@ -190,8 +182,8 @@ class MVEVisCallback(tf.keras.callbacks.Callback):
                 self.save_summary(vloss, x_test_batch, y_test_batch, y_hat, var)
 
             if vloss < self.min_vloss:
-                self.min_vloss = vloss
-                self.save(f"{round(vloss.numpy(), 3)}vloss_{self.iter}itter")
+                self.min_vloss = vloss.numpy()
+                self.save("{:0.3f}vloss_{}iter.tf".format(self.min_vloss, self.iter))
 
         self.iter += 1
 

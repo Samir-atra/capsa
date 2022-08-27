@@ -47,7 +47,7 @@ ds_ood = get_normalized_ds(x_ood, y_ood)
 def train_base_model():
     model_name = 'base'
 
-    path, vis_path, checkpoints_path, plots_path, logs_path = setup(model_name)
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
@@ -57,7 +57,7 @@ def train_base_model():
     )
 
     # checkpoint_callback = get_checkpoint_callback(checkpoints_path)
-    vis_callback = VisCallback(f'{path}/tensorboard', ds_train, ds_test, model_name)
+    vis_callback = VisCallback(checkpoints_path, logs_path, model_name, ds_train, ds_test)
     history = their_model.fit(ds_train, epochs=config.EP,
         validation_data=ds_test,
         callbacks=[vis_callback, logger], #checkpoint_callback
@@ -72,7 +72,7 @@ def train_base_model():
 def train_ensemble_wrapper():
     model_name = 'ensemble'
 
-    path, vis_path, checkpoints_path, plots_path, logs_path = setup(model_name)
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
@@ -83,7 +83,7 @@ def train_ensemble_wrapper():
     )
 
     # checkpoint_callback = get_checkpoint_callback(logs_path)
-    vis_callback = VisCallback(f'{path}/tensorboard', ds_train, ds_test, model_name)
+    vis_callback = VisCallback(checkpoints_path, logs_path, model_name, ds_train, ds_test)
     history = model.fit(ds_train, epochs=config.EP,
         validation_data=ds_test,
         callbacks=[vis_callback, logger], #checkpoint_callback
@@ -98,7 +98,7 @@ def train_ensemble_wrapper():
 def train_mve_wrapper():
     model_name = 'mve'
 
-    path, vis_path, checkpoints_path, plots_path, logs_path = setup(model_name)
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
@@ -109,7 +109,7 @@ def train_mve_wrapper():
     )
 
     # checkpoint_callback = get_checkpoint_callback(logs_path)
-    vis_callback = MVEVisCallback(f'{path}/tensorboard', ds_train, ds_test, model_name) # VisCallback
+    vis_callback = MVEVisCallback(checkpoints_path, logs_path, ds_train, ds_test)
     history = model.fit(ds_train, epochs=config.EP,
         validation_data=ds_test,
         callbacks=[vis_callback, logger], #checkpoint_callback
@@ -122,7 +122,9 @@ def train_mve_wrapper():
     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
 # def train_vae():
-#     vis_path, checkpoints_path, plots_path, logs_path = setup('vae')
+#     model_name = 'vae'
+
+#     path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
 #     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
 #     model = AutoEncoder()
@@ -144,7 +146,9 @@ def train_mve_wrapper():
 #     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
 # def train_vae_wrapper():
-#     vis_path, checkpoints_path, plots_path, logs_path = setup('vae')
+#     model_name = 'vae'
+
+#     path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
 #     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
 #     model = VAEWrapper(
@@ -168,37 +172,37 @@ def train_mve_wrapper():
 #     visualize_depth_map(model, ds_test, vis_path, 'test')
 #     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
-def train_debug():
-    model_name = 'debug'
+# def train_debug():
+#     model_name = 'debug'
 
-    path, vis_path, checkpoints_path, plots_path, logs_path = setup(model_name)
-    logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+#     path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
+#     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-    their_model = unet()
-    # their_model.compile(
-    #     optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-    #     loss=MSE,
-    # )
+#     their_model = unet()
+#     # their_model.compile(
+#     #     optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+#     #     loss=MSE,
+#     # )
 
-    model = DebugWrappar(their_model)
-    model.compile(
-        optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-        loss=MSE,
-    )
+#     model = DebugWrappar(their_model)
+#     model.compile(
+#         optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+#         loss=MSE,
+#     )
 
-    # checkpoint_callback = get_checkpoint_callback(logs_path)
-    vis_callback = VisCallback(f'{path}/tensorboard', ds_train, ds_test, model_name)
-    history = model.fit(ds_train, epochs=config.EP,
-        # todo-high: note
-        validation_data=ds_val,
-        callbacks=[vis_callback, logger], #checkpoint_callback
-        verbose=0,
-    )
-    plot_loss(history, plots_path)
-    visualize_depth_map(model, ds_train, vis_path, 'train')
-    visualize_depth_map(model, ds_val, vis_path, 'val')
-    visualize_depth_map(model, ds_test, vis_path, 'test')
-    visualize_depth_map(model, ds_ood, vis_path, 'ood')
+#     # checkpoint_callback = get_checkpoint_callback(logs_path)
+#     vis_callback = VisCallback(checkpoints_path, logs_path, ds_train, ds_test)
+#     history = model.fit(ds_train, epochs=config.EP,
+#         # todo-high: note
+#         validation_data=ds_val,
+#         callbacks=[vis_callback, logger], #checkpoint_callback
+#         verbose=0,
+#     )
+#     plot_loss(history, plots_path)
+#     visualize_depth_map(model, ds_train, vis_path, 'train')
+#     visualize_depth_map(model, ds_val, vis_path, 'val')
+#     visualize_depth_map(model, ds_test, vis_path, 'test')
+#     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
 
 # train_base_model()

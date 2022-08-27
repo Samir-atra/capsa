@@ -31,4 +31,6 @@ LOGS_PATH = '/home/iaroslavelistratov/results' #'/data/capsa/depth'
 # source code path for logging
 SOURCE_PATH = '/home/iaroslavelistratov/capsa'
 # optional, used only in check_saved_weights.py
-MODEL_PATH = '/home/iaroslavelistratov/results/base/job_01'
+MODEL_PATH = '/home/iaroslavelistratov/results/base/20220827-051408'
+
+timedelta = 3 # 3 for Iaro, 0 for ET
