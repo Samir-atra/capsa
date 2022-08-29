@@ -152,7 +152,7 @@ def select_best_checkpoint(model_path):
     path = model_paths[0].split('.tf')[0]
     return f'{path}.tf', model_name
 
-def load_model(path, model_name, ds):
+def load_model(path, model_name, ds, opts=None):
     # path = tf.train.latest_checkpoint(checkpoints_path)
 
     # d = {
@@ -184,9 +184,11 @@ def load_model(path, model_name, ds):
             loss=MSE,
         )
 
-    elif model_name == 'ensemble':
+    elif model_name in ['ensemble', 'notebook_ensemble']:
+        num_members = opts['num_members']
+
         their_model = unet()
-        model = EnsembleWrapper(their_model, num_members=1)
+        model = EnsembleWrapper(their_model, num_members=num_members)
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=config.LR),
             loss=MSE,

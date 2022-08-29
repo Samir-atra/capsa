@@ -72,11 +72,11 @@ def train_base_model():
 def train_ensemble_wrapper():
     model_name = 'ensemble'
 
-    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='-3members')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
-    model = EnsembleWrapper(their_model, num_members=1)
+    model = EnsembleWrapper(their_model, num_members=3)
     model.compile(
         optimizer=[keras.optimizers.Adam(learning_rate=config.LR)],
         loss=[MSE],
@@ -209,7 +209,8 @@ def train_vae_wrapper():
 
 
 # train_base_model()
-# train_ensemble_wrapper()
+# train_dropout_wrapper()
+train_ensemble_wrapper()
 # train_mve_wrapper()
 # train_vae(is_vae=False) # AE
 train_vae(is_vae=True)
