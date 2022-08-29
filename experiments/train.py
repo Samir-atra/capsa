@@ -98,7 +98,7 @@ def train_ensemble_wrapper():
 def train_mve_wrapper():
     model_name = 'mve'
 
-    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()

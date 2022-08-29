@@ -1,8 +1,16 @@
 import tensorflow as tf
 from tensorflow import keras
+import numpy as np
 
 from ..utils import MLP, _get_out_dim, copy_layer
 
+def Gaussian_NLL(y, mu, sigma, reduce=True):
+    # https://github.com/aamini/evidential-deep-learning/blob/main/evidential_deep_learning/losses/continuous.py
+    ax = list(range(1, len(y.shape)))
+
+    logprob = -tf.math.log(sigma) - 0.5*tf.math.log(2*np.pi) - 0.5*((y-mu)/sigma)**2
+    loss = tf.reduce_mean(-logprob, axis=ax)
+    return tf.reduce_mean(loss) if reduce else loss
 
 class MVEWrapper(keras.Model):
 
@@ -46,17 +54,36 @@ class MVEWrapper(keras.Model):
         # ) # (N_SAMPLES, 128, 160, 1) -> ( )
         # # # tf.print('gaussian_nll', tf.reduce_mean(self.neg_log_likelihood(y, mu, logvariance)))
 
-        mu = self.out_mu(features)
-        logvariance = self.out_logvar(features)
 
-        loss = tf.reduce_mean(
-            self.neg_log_likelihood(y, mu, logvariance)
-        )
+
+
+        mu = self.out_mu(features)
+        logsigma = self.out_logvar(features)
+        # softplus is a smooth approximation of relu. Like relu, softplus always takes on positive values.
+        sigma = tf.nn.softplus(logsigma) + 1e-6
+
+        loss = Gaussian_NLL(y, mu, tf.math.sqrt(sigma))
+        # tf.print('loss:', loss)
 
         if return_var:
-            return loss, mu, tf.exp(logvariance)
+            return loss, mu, sigma
         else:
             return loss, mu
+
+
+
+
+        # mu = self.out_mu(features)
+        # logvariance = self.out_logvar(features)
+
+        # loss = tf.reduce_mean(
+        #     self.neg_log_likelihood(y, mu, logvariance)
+        # )
+
+        # if return_var:
+        #     return loss, mu, tf.exp(logvariance)
+        # else:
+        #     return loss, mu
 
     def train_step(self, data, prefix=None):
         x, y = data
@@ -88,11 +115,12 @@ class MVEWrapper(keras.Model):
         y_hat = self.out_mu(features)
 
         if return_risk:
-            logvariance = self.out_logvar(features)
-            variance = tf.exp(logvariance)
-            # https://github.com/themis-ai/capsa/pull/13#discussion_r921336509
-            # but need this to computel loss inside the callback
-            # mu = self.out_mu(features)
-            return (y_hat, variance)
+            logsigma = self.out_logvar(features)
+            sigma = tf.nn.softplus(logsigma) + 1e-6
+            return (y_hat, sigma)
+
+            # logvariance = self.out_logvar(features)
+            # variance = tf.exp(logvariance)
+            # return (y_hat, variance)
         else:
             return y_hat
