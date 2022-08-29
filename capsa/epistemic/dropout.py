@@ -7,46 +7,49 @@ class DropoutWrapper(keras.Model):
     dropout layers after dense layers (or spatial dropout layers after conv layers).
     """
 
-    def __init__(self, base_model, p=0.1, is_standalone=True):
+    def __init__(self, base_model, p=0.0, is_standalone=True, add_dropout=True):
         super(DropoutWrapper, self).__init__()
 
         self.metric_name = "DropoutWrapper"
         self.is_standalone = is_standalone
 
-        inputs = base_model.layers[0].input
-        for i in range(len(base_model.layers)):
-            cur_layer = base_model.layers[i]
-            # We do not add dropouts after the input or final layers to preserve stability
-            if i == 0:
-                x = cur_layer(inputs)
-            elif i == len(base_model.layers) - 1:
-                x = base_model.layers[i](x)
-            else:
-                next_layer = base_model.layers[i + 1]
-                x = cur_layer(x)
-                # We do not repeat dropout layers if they're already added
-                if (
-                    type(cur_layer) == tf.keras.layers.Dense
-                    and type(next_layer) != tf.keras.layers.Dropout
-                ):
-                    x = tf.keras.layers.Dropout(rate=p)(x)
-                elif (
-                    type(cur_layer) == tf.keras.layers.Conv1D
-                    and type(next_layer) != tf.keras.layers.SpatialDropout1D
-                ):
-                    x = tf.keras.layers.SpatialDropout1D(rate=p)(x)
-                elif (
-                    type(cur_layer) == tf.keras.layers.Conv2D
-                    and type(next_layer) != tf.keras.layers.SpatialDropout2D
-                ):
-                    x = tf.keras.layers.SpatialDropout2D(rate=0.25)(x)
-                elif (
-                    type(cur_layer) == tf.keras.layers.Conv3D
-                    and type(next_layer) != tf.keras.layers.SpatialDropout3D
-                ):
-                    x = tf.keras.layers.SpatialDropout1D(rate=0.25)(x)
+        if add_dropout:
+            inputs = base_model.layers[0].input
+            for i in range(len(base_model.layers)):
+                cur_layer = base_model.layers[i]
+                # We do not add dropouts after the input or final layers to preserve stability
+                if i == 0:
+                    x = cur_layer(inputs)
+                elif i == len(base_model.layers) - 1:
+                    x = base_model.layers[i](x)
+                else:
+                    next_layer = base_model.layers[i + 1]
+                    x = cur_layer(x)
+                    # We do not repeat dropout layers if they're already added
+                    if (
+                        type(cur_layer) == tf.keras.layers.Dense
+                        and type(next_layer) != tf.keras.layers.Dropout
+                    ):
+                        x = tf.keras.layers.Dropout(rate=p)(x)
+                    elif (
+                        type(cur_layer) == tf.keras.layers.Conv1D
+                        and type(next_layer) != tf.keras.layers.SpatialDropout1D
+                    ):
+                        x = tf.keras.layers.SpatialDropout1D(rate=p)(x)
+                    elif (
+                        type(cur_layer) == tf.keras.layers.Conv2D
+                        and type(next_layer) != tf.keras.layers.SpatialDropout2D
+                    ):
+                        x = tf.keras.layers.SpatialDropout2D(rate=0.25)(x)
+                    elif (
+                        type(cur_layer) == tf.keras.layers.Conv3D
+                        and type(next_layer) != tf.keras.layers.SpatialDropout3D
+                    ):
+                        x = tf.keras.layers.SpatialDropout1D(rate=0.25)(x)
 
-            self.new_model = tf.keras.Model(inputs, x)
+                self.new_model = tf.keras.Model(inputs, x)
+        else:
+            self.new_model = base_model
 
     def loss_fn(self, x, y, features=None):
         y_hat = self.new_model(x, training=True)

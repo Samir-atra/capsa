@@ -11,9 +11,9 @@ from debug_minimal import DebugWrappar
 import config
 from run_utils import setup
 from losses import MSE
-from models import unet, AutoEncoder, get_encoder, get_decoder
+from models import unet, VAE, AutoEncoder, get_encoder, get_decoder
 from callbacks import VisCallback, MVEVisCallback, get_checkpoint_callback
-from capsa import Wrapper, MVEWrapper, EnsembleWrapper, VAEWrapper
+from capsa import Wrapper, MVEWrapper, EnsembleWrapper, VAEWrapper, DropoutWrapper
 from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
     visualize_depth_map, plot_loss
 
@@ -68,6 +68,32 @@ def train_base_model():
     # visualize_depth_map(their_model, ds_val, vis_path, 'val', False)
     visualize_depth_map(their_model, ds_test, vis_path, 'test', False)
     visualize_depth_map(their_model, ds_ood, vis_path, 'ood', False)
+
+def train_dropout_wrapper():
+    model_name = 'dropout'
+
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='-initial')
+    logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+
+    their_model = unet(drop_prob=0.1)
+    model = DropoutWrapper(their_model, add_dropout=False)
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+        loss=MSE,
+    )
+
+    # checkpoint_callback = get_checkpoint_callback(logs_path)
+    vis_callback = VisCallback(checkpoints_path, logs_path, model_name, ds_train, ds_test)
+    history = model.fit(ds_train, epochs=config.EP,
+        validation_data=ds_test,
+        callbacks=[vis_callback, logger], #checkpoint_callback
+        verbose=0,
+    )
+    plot_loss(history, plots_path)
+    visualize_depth_map(model, ds_train, vis_path, 'train')
+    # visualize_depth_map(model, ds_val, vis_path, 'val')
+    visualize_depth_map(model, ds_test, vis_path, 'test')
+    visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
 def train_ensemble_wrapper():
     model_name = 'ensemble'
@@ -209,10 +235,10 @@ def train_vae_wrapper():
 
 
 # train_base_model()
-# train_dropout_wrapper()
-train_ensemble_wrapper()
+train_dropout_wrapper()
+# train_ensemble_wrapper()
 # train_mve_wrapper()
 # train_vae(is_vae=False) # AE
-train_vae(is_vae=True)
+# train_vae(is_vae=True)
 # train_vae_wrapper()
 # train_debug()

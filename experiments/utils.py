@@ -11,8 +11,8 @@ from debug_minimal import DebugWrappar
 
 import config
 from losses import MSE
-from capsa import Wrapper, MVEWrapper, EnsembleWrapper
-from models import unet
+from capsa import Wrapper, MVEWrapper, EnsembleWrapper, DropoutWrapper
+from models import unet, AutoEncoder
 
 # https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/train_depth.py#L34
 def load_depth_data():
@@ -189,6 +189,14 @@ def load_model(path, model_name, ds, opts=None):
 
         their_model = unet()
         model = EnsembleWrapper(their_model, num_members=num_members)
+        model.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+            loss=MSE,
+        )
+
+    elif model_name in ['dropout', 'notebook_dropout']:
+        their_model = unet(drop_prob=0.1)
+        model = DropoutWrapper(their_model, add_dropout=False)
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=config.LR),
             loss=MSE,
