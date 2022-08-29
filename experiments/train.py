@@ -121,56 +121,59 @@ def train_mve_wrapper():
     visualize_depth_map(model, ds_test, vis_path, 'test')
     visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
-# def train_vae():
-#     model_name = 'vae'
+def train_vae(is_vae=True):
+    model_name = 'vae_model' if is_vae else 'ae_model'
 
-#     path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
-#     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='-bottleneck8')
+    logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-#     model = AutoEncoder()
-#     model.compile(
-#         optimizer=keras.optimizers.Adam(learning_rate=config.LR), #1e-4
-#         run_eagerly=True
-#     )
+    model = VAE() if is_vae else AutoEncoder()
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+        loss=MSE,
+        # run_eagerly=True,
+    )
 
-#     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
-#     history = model.fit(ds_train, epochs=config.EP,
-#         validation_data=ds_test,
-#         callbacks=[logger, checkpoint_callback],
-#         verbose=0,
-#     )
-#     plot_loss(history, plots_path)
-#     visualize_depth_map(model, ds_train, vis_path, 'train')
-#     visualize_depth_map(model, ds_val, vis_path, 'val')
-#     visualize_depth_map(model, ds_test, vis_path, 'test')
-#     visualize_depth_map(model, ds_ood, vis_path, 'ood')
+    # checkpoint_callback = get_checkpoint_callback(checkpoints_path)
+    vis_callback = VisCallback(checkpoints_path, logs_path, model_name, ds_train, ds_test)
+    history = model.fit(ds_train, epochs=config.EP,
+        validation_data=ds_test,
+        callbacks=[vis_callback, logger], #checkpoint_callback
+        verbose=1,
+    )
+    plot_loss(history, plots_path)
+    visualize_depth_map(model, ds_train, vis_path, 'train')
+    # visualize_depth_map(model, ds_val, vis_path, 'val')
+    visualize_depth_map(model, ds_test, vis_path, 'test')
+    visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
-# def train_vae_wrapper():
-#     model_name = 'vae'
+def train_vae_wrapper():
+    model_name = 'vae'
 
-#     path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
-#     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
+    logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
-#     model = VAEWrapper(
-#         get_encoder(),
-#         decoder = get_decoder((8, 10, 256)),
-#     )
-#     model.compile(
-#         optimizer=keras.optimizers.Adam(learning_rate=config.LR), #1e-4
-#         loss=MSE,
-#     )
+    model = VAEWrapper(
+        get_encoder(),
+        decoder = get_decoder((8, 10, 256)),
+    )
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+        loss=MSE,
+    )
 
-#     checkpoint_callback = get_checkpoint_callback(checkpoints_path)
-#     history = model.fit(ds_train, epochs=config.EP,
-#         validation_data=ds_test,
-#         callbacks=[logger, checkpoint_callback],
-#         verbose=0,
-#     )
-#     plot_loss(history, plots_path)
-#     visualize_depth_map(model, ds_train, vis_path, 'train')
-#     visualize_depth_map(model, ds_val, vis_path, 'val')
-#     visualize_depth_map(model, ds_test, vis_path, 'test')
-#     visualize_depth_map(model, ds_ood, vis_path, 'ood')
+    # checkpoint_callback = get_checkpoint_callback(checkpoints_path)
+    vis_callback = VisCallback(checkpoints_path, logs_path, model_name, ds_train, ds_test)
+    history = model.fit(ds_train, epochs=config.EP,
+        validation_data=ds_test,
+        callbacks=[vis_callback, logger], #checkpoint_callback
+        verbose=0,
+    )
+    plot_loss(history, plots_path)
+    visualize_depth_map(model, ds_train, vis_path, 'train')
+    # visualize_depth_map(model, ds_val, vis_path, 'val')
+    visualize_depth_map(model, ds_test, vis_path, 'test')
+    visualize_depth_map(model, ds_ood, vis_path, 'ood')
 
 # def train_debug():
 #     model_name = 'debug'
@@ -207,7 +210,8 @@ def train_mve_wrapper():
 
 # train_base_model()
 # train_ensemble_wrapper()
-train_mve_wrapper()
-# train_vae()
+# train_mve_wrapper()
+# train_vae(is_vae=False) # AE
+train_vae(is_vae=True)
 # train_vae_wrapper()
 # train_debug()

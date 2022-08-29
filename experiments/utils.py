@@ -75,6 +75,35 @@ def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True, 
     else:
         plt.close()
 
+# todo-low: reduce code duplication, combine with 'visualize_depth_map'
+def visualize_vae_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True, is_show=False):
+    cmap = plt.cm.jet
+    cmap.set_bad(color='black')
+    col = 3 if plot_uncertainty else 2
+    fig, ax = plt.subplots(6, col, figsize=(16, 20))
+
+    x, y = iter(ds).get_next()
+    if plot_uncertainty:
+        pred, uncertainty = model(x, training=True)
+    else:
+        pred = model(x, training=True)
+
+    for i in range(6):
+        ax[i, 0].imshow(x[i])
+        ax[i, 1].imshow(tf.clip_by_value(pred[i], clip_value_min=0, clip_value_max=1))
+        if plot_uncertainty:
+            ax[i, 2].imshow(uncertainty[i, :, :, 0], cmap=cmap)
+
+    plt.savefig(f'{vis_path}/{name}.pdf', bbox_inches='tight', format='pdf')
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
+
+# plt.savefig(f'{vis_path}/{name}.pdf', bbox_inches='tight', format='pdf')
+# plt.close()
+plt.show()
+
 # # todo-med: plot_multiple
 # # todo-med: normalize tougher
 # def plot_multiple(model, x_train, y_train, x_test_ood, y_test_ood, vis_path):
