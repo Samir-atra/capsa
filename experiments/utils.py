@@ -1,4 +1,5 @@
 import os
+import glob
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,6 +10,7 @@ from tensorflow import keras
 from debug_minimal import DebugWrappar
 
 import config
+from losses import MSE
 from capsa import Wrapper, MVEWrapper, EnsembleWrapper
 from models import unet
 
@@ -48,17 +50,17 @@ def plot_loss(history, plots_path, name='loss'):
     plt.savefig(f'{plots_path}/{name}.pdf', bbox_inches='tight', format='pdf')
     plt.close()
 
-def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True):
+def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True, is_show=False):
     cmap = plt.cm.jet
     cmap.set_bad(color='black')
     col = 4 if plot_uncertainty else 3
-    fig, ax = plt.subplots(6, col, figsize=(50, 50))
+    fig, ax = plt.subplots(6, col, figsize=(20, 20))
 
     x, y = iter(ds).get_next()
     if plot_uncertainty:
-        pred, uncertainty = model(x)
+        pred, uncertainty = model(x, training=True)
     else:
-        pred = model(x)
+        pred = model(x, training=True)
 
     for i in range(6):
         ax[i, 0].imshow(x[i])
@@ -68,7 +70,10 @@ def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True):
             ax[i, 3].imshow(uncertainty[i, :, :, 0], cmap=cmap)
 
     plt.savefig(f'{vis_path}/{name}.pdf', bbox_inches='tight', format='pdf')
-    plt.close()
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
 
 # # todo-med: plot_multiple
 # # todo-med: normalize tougher
@@ -92,36 +97,92 @@ def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True):
 #         visualize_depth_map_uncertainty(model, ds_train, vis_path, f'{i}_iid.png')
 #         visualize_depth_map_uncertainty(model, ds_ood, vis_path, f'{i}_ood.png')
 
-def load_model(path, ds):
+def select_best_checkpoint(model_path):
+    checkpoints_path = os.path.join(model_path, 'checkpoints')
+    model_name = model_path.split('/')[-2]
+
+    l = sorted(glob.glob(os.path.join(checkpoints_path, '*.tf*')))
+    # l = [i.split('/')[-1].split('.')[0] for i in l]
+    # >>> ['ep_128_weights', 'ep_77_weights', 'ep_103_weights']
+
+    # -1.702vloss_100iter.tf.data-00000-of-00001
+    # l = [i.split('/')[-1].split('.')[1] for i in l]
+    # >>> ['190vloss_900iter', '317vloss_6700iter', '386vloss_1900iter']
+    l_split = [float(i.split('/')[-1].split('vloss')[0]) for i in l]
+    # >>> ['-0.155', '-1.183', '0.951']
+
+    # weights_names = list(set(l_split))
+    # for i, name in enumerate(sorted(weights_names)):
+    #     path = f'{checkpoints_path}/{name}.tf'
+    #     model = load_model(path, ds_train)
+
+    # select lowest loss
+    min_loss = min(l_split)
+    # represent same model
+    model_paths = [i for i in l if str(min_loss) in i]
+    path = model_paths[0].split('.tf')[0]
+    return f'{path}.tf', model_name
+
+def load_model(path, model_name, ds):
     # path = tf.train.latest_checkpoint(checkpoints_path)
 
+    # d = {
+    #     'base' : unet,
+    #     'mve' : MVEWrapper,
+    #     'vae' : AutoEncoder,
+    #     # 'ensemble' : EnsembleWrapper,
+    # }
 
+    if model_name == 'base':
+        model = unet()
+        model.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+            loss=MSE,
+        )
 
-    # their_model = unet()
-    # # todo-med: make work with other wrappers
-    # model = EnsembleWrapper(their_model, num_members=1) # MVEWrapper(their_model)
-    # model.compile(
-    #     optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-    #     loss=keras.losses.MeanSquaredError(),
-    # )
+    elif model_name == 'mve':
+        their_model = unet()
+        model = MVEWrapper(their_model) # EnsembleWrapper(their_model, num_members=1)
+        model.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+            loss=MSE,
+        )
 
+    elif model_name == 'ae_model':
+        model = AutoEncoder()
+        model.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+            loss=MSE,
+        )
 
-
-    model = unet()
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-        loss=keras.losses.MeanSquaredError(),
-    )
-
-
+    elif model_name == 'ensemble':
+        their_model = unet()
+        model = EnsembleWrapper(their_model, num_members=1)
+        model.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+            loss=MSE,
+        )
 
     # https://github.com/tensorflow/tensorflow/issues/33150#issuecomment-574517363
     _ = model.fit(ds, epochs=1, verbose=0)
-    x, y = iter(ds).get_next()
-    # _, _ = model(x[:config.BS])
-    _ = model(x[:config.BS])
-
     load_status = model.load_weights(path)
     # used as validation that all variable values have been restored from the checkpoint
     load_status.assert_consumed()
     print(f'Successfully loaded weights from {path}.')
     return model
+
+def notebook_select_gpu(idx):
+    # # https://www.tensorflow.org/guide/gpu#using_a_single_gpu_on_a_multi-gpu_system
+    # tf.config.set_soft_device_placement(True)
+    # tf.debugging.set_log_device_placement(True)
+
+    gpus = tf.config.list_physical_devices('GPU')
+    if gpus:
+        # Restrict TensorFlow to only use the first GPU
+        try:
+            tf.config.set_visible_devices(gpus[idx], 'GPU')
+            logical_gpus = tf.config.list_logical_devices('GPU')
+            print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPU")
+        except RuntimeError as e:
+            # Visible devices must be set before GPUs have been initialized
+            print(e)
