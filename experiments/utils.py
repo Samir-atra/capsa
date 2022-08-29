@@ -162,22 +162,22 @@ def load_model(path, model_name, ds):
     #     # 'ensemble' : EnsembleWrapper,
     # }
 
-    if model_name == 'base':
+    if model_name in ['base', 'notebook_base']:
         model = unet()
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=config.LR),
             loss=MSE,
         )
 
-    elif model_name == 'mve':
+    elif model_name in ['mve', 'notebook_mve']:
         their_model = unet()
-        model = MVEWrapper(their_model) # EnsembleWrapper(their_model, num_members=1)
+        model = MVEWrapper(their_model)
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=config.LR),
             loss=MSE,
         )
 
-    elif model_name == 'ae_model':
+    elif model_name in ['ae_model', 'notebook_ae_model']:
         model = AutoEncoder()
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=config.LR),
@@ -195,8 +195,11 @@ def load_model(path, model_name, ds):
     # https://github.com/tensorflow/tensorflow/issues/33150#issuecomment-574517363
     _ = model.fit(ds, epochs=1, verbose=0)
     load_status = model.load_weights(path)
-    # used as validation that all variable values have been restored from the checkpoint
-    load_status.assert_consumed()
+
+    # base mode tires to load optimizer as well, so load_status gives error
+    if model_name not in ['base', 'notebook_base']:
+        # used as validation that all variable values have been restored from the checkpoint
+        load_status.assert_consumed()
     print(f'Successfully loaded weights from {path}.')
     return model
 
