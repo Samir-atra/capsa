@@ -64,7 +64,11 @@ def test_bias_chained():
     their_model = get_user_model()
     ds_train, _, x_val, y_val = get_data_v2(batch_size=256)
 
+<<<<<<< HEAD
     model = HistogramWrapper(their_model, metric_wrapper=VAEWrapper)
+=======
+    model = VAEWrapper(their_model, epistemic=False)
+>>>>>>> 7ed987f... new commit
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
         loss=tf.keras.losses.MeanSquaredError(),
@@ -189,9 +193,16 @@ def test_bias_with_wrap(complexity):
         plt.show()
 
 
+<<<<<<< HEAD
 test_bias_with_wrap(complexity=4)
 
 test_bias(use_case=1)
 test_bias(use_case=2)
+=======
+# test_bias_with_wrap(complexity=4)
+
+#test_bias(use_case=1)
+# test_bias(use_case=2)
+>>>>>>> 7ed987f... new commit
 test_bias_chained()
 

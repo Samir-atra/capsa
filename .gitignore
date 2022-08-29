@@ -130,3 +130,9 @@ dmypy.json
 aaai_23_submission/
 logs/
 save/
+
+# NYU depth data
+aaai_23_submission/data/nyu_depth/
+aaai_23_submission/*
+# All model files
+*.h5

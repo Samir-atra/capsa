@@ -14,7 +14,11 @@ def test_vae(use_case=None):
 
     ### use case 1 - user can interact with a MetricWrapper directly
     if use_case == 1:
+<<<<<<< HEAD
         model = VAEWrapper(their_model)
+=======
+        model = VAEWrapper(their_model, bias=False, kl_weight=4)
+>>>>>>> 7ed987f... new commit
         model.compile(
             optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
             loss=tf.keras.losses.MeanSquaredError(),
@@ -22,7 +26,10 @@ def test_vae(use_case=None):
         history = model.fit(ds_train, epochs=30)
 
         plt.plot(history.history["loss"])
+<<<<<<< HEAD
         plt.show()
+=======
+>>>>>>> 7ed987f... new commit
 
         y_pred, recon_loss = model(x_val)
 
@@ -57,8 +64,16 @@ def test_vae(use_case=None):
     axs[1].scatter(x_val, recon_loss, s=0.5, label="recon loss")
     plt_vspan()
     plt.legend()
+<<<<<<< HEAD
     plt.show()
 
 
 test_vae(use_case=1)
 test_vae(use_case=2)
+=======
+    plt.savefig("vae")
+
+
+test_vae(use_case=1)
+#test_vae(use_case=2)
+>>>>>>> 7ed987f... new commit
