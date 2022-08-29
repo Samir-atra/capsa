@@ -4,7 +4,6 @@ from tensorflow import keras
 from ..wrapper import Wrapper
 from ..utils import copy_layer
 import tensorflow_probability as tfp
-from ..epistemic import VAEWrapper
 
 
 

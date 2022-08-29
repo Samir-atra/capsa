@@ -20,7 +20,7 @@ def wrap(model, bias=True, aleatoric=True, epistemic=True, *args, **kwargs):
         for i in bias:
             out = _check_bias_compatibility(i, model)
             metric_wrappers.append(i)
-            if type(i) == VAEWrapper
+            if type(i) == VAEWrapper:
                 vae = i
     else:
         out = _check_bias_compatibility(bias)
@@ -34,9 +34,7 @@ def wrap(model, bias=True, aleatoric=True, epistemic=True, *args, **kwargs):
         pass
     elif type(aleatoric) == list:
         out = [_check_aleatoric_compatibility(i) for i in aleatoric]
-        metric_wrappers.extend(
-            [i(model, is_standalone=False) for i in out if type(i) == type]
-        )
+        metric_wrappers.extend(out)
     else:
         out = _check_aleatoric_compatibility(aleatoric)
         if type(out) == type:
@@ -49,15 +47,18 @@ def wrap(model, bias=True, aleatoric=True, epistemic=True, *args, **kwargs):
     elif epistemic == False:
         pass
     elif type(epistemic) == list:
-        out = [_check_epistemic_compatibility(i, bias) for i in epistemic]
+        out = [_check_epistemic_compatibility(i, model) for i in epistemic]
         for i in out:
             if type(i) == VAEWrapper and vae is not None:
-                
+                vae.epistemic = True
+            else:
+                metric_wrappers.append(i)
     else:
         out = _check_epistemic_compatibility(epistemic)
-        if type(out) == type:
-            out = out(model, is_standalone=False)
-        metric_wrappers.append(out)
+        if type(out) == VAEWrapper and vae is not None:
+                vae.epistemic = True
+        else:
+            metric_wrappers.append(out)
 
     return Wrapper(model, metrics=metric_wrappers)
 
@@ -94,7 +95,7 @@ def _check_aleatoric_compatibility(aleatoric, model):
         )
 
 
-def _check_epistemic_compatibility(epistemic, bias, model):
+def _check_epistemic_compatibility(epistemic, model):
     epistemic_named_wrappers = {
         "DropoutWrapper": DropoutWrapper,
         "EnsembleWrapper": EnsembleWrapper,

@@ -17,10 +17,10 @@ def MLP(in_dim, emb_dim, trainable=True):
     )
 
 
-def get_user_model():
+def get_user_model(input_shape=(1,)):
     return tf.keras.Sequential(
         [
-            tf.keras.Input(shape=(1,)),
+            tf.keras.Input(shape=input_shape),
             layers.Dense(16, "relu"),
             layers.Dense(32, "relu"),
             layers.Dense(64, "relu"),
@@ -95,8 +95,8 @@ class Sampling(layers.Layer):
     def call(self, inputs):
         z_mean, z_log_var = inputs
         batch = tf.shape(z_mean)[0]
-        dim = tf.shape(z_mean)[1:]
-        epsilon = tf.keras.backend.random_normal(shape=tf.shape(z_log_var))
+        dim = tf.shape(z_mean)[1]
+        epsilon = tf.keras.backend.random_normal(shape=(batch, dim))
         return z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
 
@@ -167,6 +167,8 @@ def reverse_layer(layer, output_shape=None):
             return layers.Conv2DTranspose.from_config(config)
         elif layer_type == layers.Conv3D:
             return layers.Conv3DTranspose.from_config(config)
+    elif layer_type == layers.Flatten:
+        return layers.Reshape(output_shape[1:])
     else:
         raise NotImplementedError()
 
