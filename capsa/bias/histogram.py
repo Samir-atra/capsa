@@ -7,16 +7,6 @@ import tensorflow_probability as tfp
 from ..epistemic import VAEWrapper
 
 
-class HistogramCallback(tf.keras.callbacks.Callback):
-    def on_epoch_begin(self, epoch, logs=None):
-        if epoch > 0:
-            if type(self.model) == HistogramWrapper:
-                self.model.histogram_layer.update_state()
-            elif type(self.model) == Wrapper:
-                for name, m in self.model.metric_compiled.items():
-                    if name == "HistogramWrapper":
-                        m.histogram_layer.update_state()
-
 
 class HistogramWrapper(keras.Model):
     """
@@ -198,12 +188,14 @@ class HistogramLayer(tf.keras.layers.Layer):
             indices = tf.stack([bin_indices, second_element], axis=2)
 
             probabilities = tf.gather_nd(hist_probs, indices)
-            bias = tf.reduce_prod(probabilities, axis=1)
-            return bias
+            logits = tf.reduce_sum(tf.math.log(probabilities), axis=1)
+            logits = logits - np.mean(logits)
+            if softmax:
+                return tf.math.softmax(logits)
+            return logits
 
     def update_state(self):
         self.edges.assign(tf.linspace(self.minimums, self.maximums, self.num_bins + 1))
-
         self.minimums.assign(tf.zeros(self.feature_dim))
         self.maximums.assign(tf.zeros(self.feature_dim))
 

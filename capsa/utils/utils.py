@@ -107,7 +107,7 @@ def reverse_model(model, latent_dim):
         if i == len(model.layers) - 1:
             x = reverse_layer(model.layers[i])(inputs)
         else:
-            if type(model.layers[i - 1]) == layers.InputLayer:
+            if type(model.layers[i - 1]) == layers.InputLayer or type(model.layers[i]) == layers.Flatten:
                 original_input = model.layers[i - 1].input_shape
                 x = reverse_layer(model.layers[i], original_input)(x)
             else:
