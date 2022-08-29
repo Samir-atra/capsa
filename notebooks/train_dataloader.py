@@ -64,3 +64,6 @@ class TrainingDatasetLoader(tf.keras.utils.Sequence):
 
     def get_all_train_faces(self):
         return self.images[self.pos_train_inds]
+    
+    def return_sample_batch(self):
+        return self.__getitem__(0)
