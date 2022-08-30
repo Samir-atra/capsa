@@ -52,11 +52,14 @@ def plot_loss(history, plots_path, name='loss'):
     plt.savefig(f'{plots_path}/{name}.pdf', bbox_inches='tight', format='pdf')
     plt.close()
 
-def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True, is_show=False):
+def visualize_depth_map(model, ds, vis_path, name='map', title='', plot_uncertainty=True, is_show=True):
     cmap = plt.cm.jet
     cmap.set_bad(color='black')
+
     col = 4 if plot_uncertainty else 3
-    fig, ax = plt.subplots(6, col, figsize=(20, 20))
+    fgsize = (14, 21) if plot_uncertainty else (10, 17)
+    fig, ax = plt.subplots(6, col, figsize=fgsize) # (5, 10)
+    fig.suptitle(title, fontsize=16, y=0.92, x=0.5)
 
     x, y = iter(ds).get_next()
     if plot_uncertainty:
@@ -71,6 +74,16 @@ def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True, 
         if plot_uncertainty:
             ax[i, 3].imshow(uncertainty[i, :, :, 0], cmap=cmap)
 
+    # name columns
+    ax[0, 0].set_title('x')
+    ax[0, 1].set_title('y')
+    ax[0, 2].set_title('y_hat')
+    if plot_uncertainty:
+        ax[0, 3].set_title('uncertainty')
+    
+    # turn off axis
+    [ax.set_axis_off() for ax in ax.ravel()]
+
     plt.savefig(f'{vis_path}/{name}.pdf', bbox_inches='tight', format='pdf')
     if is_show:
         plt.show()
@@ -78,23 +91,30 @@ def visualize_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True, 
         plt.close()
 
 # todo-low: reduce code duplication, combine with 'visualize_depth_map'
-def visualize_vae_depth_map(model, ds, vis_path, name='map', plot_uncertainty=True, is_show=False):
+def visualize_vae_depth_map(model, ds, vis_path, name='map', title='', is_show=False):
     cmap = plt.cm.jet
     cmap.set_bad(color='black')
-    col = 3 if plot_uncertainty else 2
-    fig, ax = plt.subplots(6, col, figsize=(16, 20))
+
+    col = 3
+    fgsize = (10, 17)
+    fig, ax = plt.subplots(6, col, figsize=fgsize) # (5, 10)
+    fig.suptitle(title, fontsize=16, y=0.92, x=0.5)
 
     x, y = iter(ds).get_next()
-    if plot_uncertainty:
-        pred, uncertainty = model(x, training=True)
-    else:
-        pred = model(x, training=True)
+    pred, uncertainty = model(x, training=True)
 
     for i in range(6):
         ax[i, 0].imshow(x[i])
         ax[i, 1].imshow(tf.clip_by_value(pred[i], clip_value_min=0, clip_value_max=1))
-        if plot_uncertainty:
-            ax[i, 2].imshow(uncertainty[i, :, :, 0], cmap=cmap)
+        ax[i, 2].imshow(uncertainty[i, :, :, 0], cmap=cmap)
+
+    # name columns
+    ax[0, 0].set_title('x')
+    ax[0, 1].set_title('y')
+    ax[0, 2].set_title('y_hat')
+    
+    # turn off axis
+    [ax.set_axis_off() for ax in ax.ravel()]
 
     plt.savefig(f'{vis_path}/{name}.pdf', bbox_inches='tight', format='pdf')
     if is_show:
@@ -263,6 +283,7 @@ def gen_ood_comparison(ds_test, ds_ood, model):
     N = min(iid.shape[0], ood.shape[0])
     df = pd.DataFrame({'ID: NYU Depth v2': iid[:N], 'OOD: ApolloScapes' : ood[:N]})
 
+    fig, ax = plt.subplots(figsize=(8, 5))
     plot = sns.histplot(data=df, kde=True, bins=50, alpha=0.6);
     plot.set(xlabel='Epistemic Uncertainty', ylabel='PDF');
     plot.set(xticklabels=[]);
