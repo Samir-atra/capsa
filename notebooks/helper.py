@@ -32,3 +32,10 @@ def plot_percentile(imgs):
         ax.yaxis.set_visible(False)
         img_to_show = imgs[img]
         ax.imshow(img_to_show, interpolation="nearest")
+
+def plot_frequencies():
+    arr = [-1, 1]
+    frequencies = [175573, 10345]
+    plt.bar(arr, frequencies, tick_label=["Female", "Male"], )
+    plt.title("Gender imbalance in the Celeb-A dataset")
+    plt.show()
