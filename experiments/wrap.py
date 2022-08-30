@@ -8,7 +8,7 @@ from tensorflow import keras
 
 from losses import MSE
 from capsa import Wrapper, MVEWrapper, EnsembleWrapper
-from utils import notebook_select_gpu, load_depth_data, load_apollo_data, get_normalized_ds
+from utils import load_depth_data, load_apollo_data, get_normalized_ds
 
 import notebooks.configs.demo as config
 
@@ -28,4 +28,5 @@ def EpistemicWrapper(user_model):
     )
     return model
 
-notebook_select_gpu(0)
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 

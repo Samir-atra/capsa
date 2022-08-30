@@ -1,6 +1,8 @@
 import os
 import glob
 import h5py
+import seaborn as sns
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -241,3 +243,27 @@ def get_datasets():
     _, (x_ood, y_ood) = load_apollo_data()
     ds_ood = get_normalized_ds(x_ood, y_ood)
     return ds_train, ds_test, ds_ood
+
+def gen_ood_comparison(ds_test, ds_ood, model):
+    def _itter_and_cat(ds, model):
+        ds_itter = ds.as_numpy_iterator()
+        l = []
+        for x, y in ds_itter: # (32, 128, 160, 3), (32, 128, 160, 1)
+            y_hat, epistemic = model(x) # (32, 128, 160, 1)
+            per_sample_means = tf.reduce_mean(epistemic, axis=[1,2,3])
+            l.append(per_sample_means)
+        cat = tf.concat(l, axis=0)
+
+        return cat
+
+    iid = _itter_and_cat(ds_test, model)
+    ood = _itter_and_cat(ds_ood, model)
+
+    # make num of elements the same
+    N = min(iid.shape[0], ood.shape[0])
+    df = pd.DataFrame({'ID: NYU Depth v2': iid[:N], 'OOD: ApolloScapes' : ood[:N]})
+
+    plot = sns.histplot(data=df, kde=True, bins=50, alpha=0.6);
+    plot.set(xlabel='Epistemic Uncertainty', ylabel='PDF');
+    plot.set(xticklabels=[]);
+    plot.set(yticklabels=[]);
