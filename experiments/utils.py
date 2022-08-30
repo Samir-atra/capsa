@@ -57,7 +57,7 @@ def visualize_depth_map(model, ds, vis_path, name='map', title='', plot_uncertai
     cmap.set_bad(color='black')
 
     col = 4 if plot_uncertainty else 3
-    fgsize = (14, 21) if plot_uncertainty else (10, 17)
+    fgsize = (14, 21) if plot_uncertainty else (10, 17) # (12, 18) if plot_uncertainty else (8, 14)
     fig, ax = plt.subplots(6, col, figsize=fgsize) # (5, 10)
     fig.suptitle(title, fontsize=16, y=0.92, x=0.5)
 
