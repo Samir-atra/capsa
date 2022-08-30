@@ -23,21 +23,26 @@ class TrainingDatasetLoader(tf.keras.utils.Sequence):
         self.images = self.cache["images"][:]
         self.labels = self.cache["labels"][:].astype(np.float32)
         self.image_dims = self.images.shape
+
         total_train_samples = self.image_dims[0]
-
+        train_inds = np.arange(len(self.images))
+        pos_train_inds = train_inds[self.labels[train_inds, 0] == 1.0]
+        neg_train_inds = train_inds[self.labels[train_inds, 0] != 1.0]
         if training:
-            n_train_samples = np.arange(int(0.7 * total_train_samples))
+            self.pos_train_inds = pos_train_inds[:int(0.7 * len(pos_train_inds))]
+            self.neg_train_inds = neg_train_inds[:int(0.7 * len(neg_train_inds))]
         else:
-            n_train_samples = int(0.7 * total_train_samples) + np.arange(int(0.3 * total_train_samples))
+            self.pos_train_inds = pos_train_inds[-1 * int(0.3 * len(pos_train_inds)) :]
+            self.neg_train_inds = neg_train_inds[-1 * int(0.3 * len(neg_train_inds)) :]
+        
+        np.random.shuffle(self.pos_train_inds)
+        np.random.shuffle(self.neg_train_inds)
 
-        self.train_inds = np.random.permutation(n_train_samples)
-
-        self.pos_train_inds = self.train_inds[self.labels[self.train_inds, 0] == 1.0]
-        self.neg_train_inds = self.train_inds[self.labels[self.train_inds, 0] != 1.0]
+        self.train_inds = np.concatenate((self.pos_train_inds, self.neg_train_inds))
         self.batch_size = batch_size
 
     def get_train_size(self):
-        return self.train_inds.shape[0]
+        return self.pos_train_inds.shape[0] + self.neg_train_inds.shape[0]
 
     def __len__(self):
         return int(np.floor(self.get_train_size() / self.batch_size))
@@ -54,8 +59,8 @@ class TrainingDatasetLoader(tf.keras.utils.Sequence):
         sorted_inds = np.sort(selected_inds)
         train_img = (self.images[sorted_inds, :, :, ::-1] / 255.0).astype(np.float32)
         train_label = self.labels[sorted_inds, ...]
-
-        return np.array(train_img), np.array(train_label)
+        inds = np.random.permutation(np.arange(len(train_img)))
+        return np.array(train_img[inds]), np.array(train_label[inds])
 
     def get_n_most_prob_faces(self, prob, n):
         idx = np.argsort(prob)[::-1]

@@ -1,0 +1,2 @@
+model_checkpoint_path: "wrapped_model_bias_and_epistemic_shuffled_0"
+all_model_checkpoint_paths: "wrapped_model_bias_and_epistemic_shuffled_0"
