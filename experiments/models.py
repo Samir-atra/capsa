@@ -5,10 +5,12 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, \
     UpSampling2D, Cropping2D, concatenate, ZeroPadding2D, SpatialDropout2D
 import functools
 
-
 ############# U-net #############
 
-def unet(input_shape=(128, 160, 3), drop_prob=0.0, reg=None, activation=tf.nn.relu, num_class=1):
+import notebooks.configs.demo as config_demo
+from losses import MSE
+
+def unet(input_shape=(128, 160, 3), drop_prob=0.0, reg=None, activation=tf.nn.relu, num_class=1, compile=False):
 
     concat_axis = 3
     inputs = tf.keras.layers.Input(shape=input_shape)
@@ -72,7 +74,17 @@ def unet(input_shape=(128, 160, 3), drop_prob=0.0, reg=None, activation=tf.nn.re
     conv10 = Conv2D(num_class, (1, 1))(conv9)
 
     # conv10 = tf.multiply(conv10, 255.)
-    return tf.keras.models.Model(inputs=inputs, outputs=conv10)
+    model = tf.keras.models.Model(inputs=inputs, outputs=conv10)
+
+    if not compile:
+        return model
+    # for demo
+    else:
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(learning_rate=config_demo.LR),
+            loss=MSE,
+        )
+        return model
 
 def get_crop_shape(target, refer):
     # width, the 3rd dimension

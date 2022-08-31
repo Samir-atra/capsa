@@ -152,7 +152,7 @@ def select_best_checkpoint(model_path):
     path = model_paths[0].split('.tf')[0]
     return f'{path}.tf', model_name
 
-def load_model(path, model_name, ds, opts=None):
+def load_model(path, model_name, ds, opts={'num_members':3}, quite=True):
     # path = tf.train.latest_checkpoint(checkpoints_path)
 
     # d = {
@@ -210,10 +210,11 @@ def load_model(path, model_name, ds, opts=None):
     if model_name not in ['base', 'notebook_base']:
         # used as validation that all variable values have been restored from the checkpoint
         load_status.assert_consumed()
-    print(f'Successfully loaded weights from {path}.')
+    if not quite:
+        print(f'Successfully loaded weights from {path}.')
     return model
 
-def notebook_select_gpu(idx):
+def notebook_select_gpu(idx, quite=True):
     # # https://www.tensorflow.org/guide/gpu#using_a_single_gpu_on_a_multi-gpu_system
     # tf.config.set_soft_device_placement(True)
     # tf.debugging.set_log_device_placement(True)
@@ -224,7 +225,19 @@ def notebook_select_gpu(idx):
         try:
             tf.config.set_visible_devices(gpus[idx], 'GPU')
             logical_gpus = tf.config.list_logical_devices('GPU')
-            print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPU")
+            if not quite:
+                print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPU")
         except RuntimeError as e:
             # Visible devices must be set before GPUs have been initialized
             print(e)
+
+# used for the demo
+def get_datasets():
+    (x_train, y_train), (x_test, y_test) = load_depth_data()
+
+    ds_train = get_normalized_ds(x_train[:config.N_TRAIN], y_train[:config.N_TRAIN])
+    ds_test = get_normalized_ds(x_test, y_test)
+
+    _, (x_ood, y_ood) = load_apollo_data()
+    ds_ood = get_normalized_ds(x_ood, y_ood)
+    return ds_train, ds_test, ds_ood
