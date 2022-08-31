@@ -59,7 +59,7 @@ def wrap(model, bias=True, aleatoric=True, epistemic=True, *args, **kwargs):
                 vae.epistemic = True
         else:
             metric_wrappers.append(out)
-
+    print("wrapping with:", metric_wrappers)
     return Wrapper(model, metrics=metric_wrappers)
 
 

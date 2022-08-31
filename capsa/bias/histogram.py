@@ -149,7 +149,7 @@ class HistogramLayer(tf.keras.layers.Layer):
 
             probabilities = tf.gather_nd(hist_probs, indices)
             logits = tf.reduce_sum(tf.math.log(probabilities), axis=1)
-            logits = logits - np.mean(logits)
+            logits = logits - tf.math.reduce_mean(logits)
             if softmax:
                 return tf.math.softmax(logits)
             return logits

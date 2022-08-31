@@ -116,7 +116,7 @@ class VAEWrapper(keras.Model):
             tf.gradients(loss, features),
         )
 
-    def call(self, x, training=False, return_risk=True, features=None, softmax=False):
+    def call(self, x, training=False, return_risk=True, features=None, softmax=False, per_pixel=False):
         if self.is_standalone:
             features = self.feature_extractor(x, training=training)
 
@@ -129,6 +129,11 @@ class VAEWrapper(keras.Model):
             outs.append(out)
             if self.epistemic:
                 outs.append(self.reconstruction_loss(mu, log_std, x))
+                pixel_wise_outs = []
+                if per_pixel:
+                    for _ in range(20):
+                        pixel_wise_outs.append(self.decoder(self.sampling_layer([mu, log_std])))
+                    outs.append(tf.math.reduce_variance(pixel_wise_outs, axis=0))
             if self.bias:
                 outs.append(self.histogram_layer(mu, training=training, softmax=softmax))
             return tuple(outs)

@@ -37,8 +37,8 @@ class Wrapper(keras.Model):
             if type(m) == type:
                 m = m(self.base_model, is_standalone=False)
             # else already 'initialized' e.g., EnsambleWrapper(), VAEWrapper()
-            metric = metrics[i] if metrics is not None else [metrics]
-            m.compile(optimizer=optimizer[i], loss=loss[i], metrics=metric)
+            # metric = metrics[i] if metrics is not None else [metrics]
+            m.compile(optimizer=optimizer[i], loss=loss[i], metrics=metrics)
             self.metric_compiled[m.metric_name] = m
 
     @tf.function
