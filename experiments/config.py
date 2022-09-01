@@ -14,7 +14,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 # # mve
 BS = 32
-EP = 40 # 70
+EP = 20 # 70
 LR = 5e-5
 
 # # vae
@@ -27,8 +27,8 @@ N_VAL = 4096 #2684 #1024 #1024 #1024
 NUM_PLOTS = 10
 
 # logs, plots, visualizations, checkpoints, etc. will be saved there
-LOGS_PATH = '/home/sadhanalolla/results' #'/data/capsa/depth'
+LOGS_PATH = '/home/iaroslavelistratov/results' #'/data/capsa/depth'
 # source code path for logging
-SOURCE_PATH = '/home/sadhanalolla/capsa'
+SOURCE_PATH = '/home/iaroslavelistratov/capsa'
 # optional, used only in check_saved_weights.py
-MODEL_PATH = '/home/sadhanalolla/results/mve/job_07/tensorboard/save/20220825-105053_depth_mve_'
+MODEL_PATH = '/home/iaroslavelistratov/results/base/job_01'
