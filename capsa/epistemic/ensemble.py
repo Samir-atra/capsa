@@ -130,6 +130,7 @@ class EnsembleWrapper(keras.Model):
         y_hat = tf.math.reduce_mean(preds, 0)
 
         if return_risk:
-            return y_hat, tf.math.reduce_std(preds, 0)
+            # https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/gen_depth_results.py#L445-L446
+            return y_hat, tf.sqrt(tf.math.reduce_variance(preds, 0))
         else:
             return y_hat

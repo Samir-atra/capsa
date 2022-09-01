@@ -16,11 +16,11 @@ SOURCE_PATH = '/home/iaroslavelistratov/capsa'
 # # logs, plots, visualizations, checkpoints, etc. will be saved there
 # LOGS_PATH = '/home/iaroslavelistratov/results'
 # # load model from
-# MODEL_PATH = '/home/iaroslavelistratov/results/ensemble/20220829-172414-3members'
+MODEL_PATH = '/home/iaroslavelistratov/results/ensemble/20220902-115749-4members'
 
 # logs, plots, visualizations, checkpoints, etc. will be saved there
 LOGS_PATH = '/data/capsa/depth/results'
 # load model from
-MODEL_PATH = '/data/capsa/depth/results/ensemble/20220829-172414-3members'
+# MODEL_PATH = '/data/capsa/depth/results/ensemble/20220829-172414-3members'
 
 timedelta = 3 # 3 for Iaro, 0 for ET
