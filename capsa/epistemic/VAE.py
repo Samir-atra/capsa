@@ -128,12 +128,13 @@ class VAEWrapper(keras.Model):
             outs = []
             outs.append(out)
             if self.epistemic:
-                outs.append(self.reconstruction_loss(mu, log_std, x))
-                pixel_wise_outs = []
                 if per_pixel:
+                    pixel_wise_outs = []
                     for _ in range(20):
                         pixel_wise_outs.append(self.decoder(self.sampling_layer([mu, log_std])))
                     outs.append(tf.math.reduce_variance(pixel_wise_outs, axis=0))
+                else:
+                    outs.append(self.reconstruction_loss(mu, log_std, x))
             if self.bias:
                 outs.append(self.histogram_layer(mu, training=training, softmax=softmax))
             return tuple(outs)
