@@ -11,7 +11,7 @@ from debug_minimal import DebugWrappar
 import config
 from run_utils import setup
 from losses import MSE
-from models import unet, VAE, AutoEncoder, get_encoder, get_decoder
+from models import unet, VAE, AutoEncoder, get_encoder, get_vae_encoder, get_decoder
 from callbacks import VisCallback, MVEVisCallback, get_checkpoint_callback
 from capsa import Wrapper, MVEWrapper, EnsembleWrapper, VAEWrapper, DropoutWrapper
 from utils import load_depth_data, load_apollo_data, get_normalized_ds, \
@@ -175,18 +175,16 @@ def train_vae(is_vae=True):
 def train_vae_wrapper():
     model_name = 'vae'
 
-    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name)
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='fix-loss-dims2')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     model = VAEWrapper(
-        # get_encoder(),
-        # decoder = get_decoder((8, 10, 256)),
-        get_encoder(),
-        get_decoder((8, 10, 16), num_class=3),
+        get_vae_encoder((128, 160, 3), is_reshape=False), # (B, 8, 10, 4) or (B, 320)
+        get_decoder((8, 10, 4), num_class=3), # (B, 8, 10, 4) -> (B, 128, 160, 3)
     )
     model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-        loss=MSE,
+        # loss=MSE,
     )
 
     # checkpoint_callback = get_checkpoint_callback(checkpoints_path)
@@ -194,7 +192,7 @@ def train_vae_wrapper():
     history = model.fit(ds_train, epochs=config.EP,
         validation_data=ds_test,
         callbacks=[vis_callback, logger], #checkpoint_callback
-        verbose=1,
+        verbose=0,
     )
     plot_loss(history, plots_path)
     visualize_depth_map(model, ds_train, vis_path, 'train')
@@ -240,6 +238,6 @@ def train_vae_wrapper():
 # train_ensemble_wrapper()
 # train_mve_wrapper()
 # train_vae(is_vae=False) # AE
-train_vae(is_vae=True)
-# train_vae_wrapper()
+# train_vae(is_vae=True)
+train_vae_wrapper()
 # train_debug()

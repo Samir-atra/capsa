@@ -13,8 +13,8 @@ from debug_minimal import DebugWrappar
 
 import config
 from losses import MSE
-from capsa import Wrapper, MVEWrapper, EnsembleWrapper, DropoutWrapper
-from models import unet, AutoEncoder, VAE
+from capsa import Wrapper, MVEWrapper, EnsembleWrapper, DropoutWrapper, VAEWrapper
+from models import unet, AutoEncoder, get_vae_encoder, get_decoder, VAE
 
 # https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/train_depth.py#L34
 def load_depth_data():
@@ -101,9 +101,13 @@ def visualize_vae_depth_map(model, ds, vis_path, name='map', title='', is_show=F
     fig.suptitle(title, fontsize=16, y=0.92, x=0.5)
 
     x, _ = iter(ds).get_next()
-
-    pred, _, _ = model(x, training=False)
-    uncertainty = (x - pred)**2
+    
+    try:
+        pred, _, _ = model(x, training=False)
+    except:
+        pred, _ = model(x, training=False)
+    # (x - pred)**2
+    uncertainty = tf.reduce_sum(tf.math.square(x - pred), axis=-1, keepdims=True) # (B, 128, 160, 1)
 
     for i in range(6):
         ax[i, 0].imshow(x[i])
@@ -210,6 +214,16 @@ def load_model(path, model_name, ds, opts={'num_members':3}, quite=True):
 
     elif model_name in ['vae_model', 'notebook_vae_model']:
         model = VAE()
+        model.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=config.LR),
+            # loss=MSE,
+        )
+
+    elif model_name in ['vae', 'notebook_vae']:
+        model = VAEWrapper(
+            get_vae_encoder((128, 160, 3), is_reshape=False), # (B, 8, 10, 4) or (B, 320)
+            get_decoder((8, 10, 4), num_class=3), # (B, 8, 10, 4) -> (B, 128, 160, 3)
+        )
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=config.LR),
             # loss=MSE,

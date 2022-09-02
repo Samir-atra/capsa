@@ -52,7 +52,11 @@ class BaseCallback(tf.keras.callbacks.Callback):
 
     def save_summary(self, loss, x, y, y_hat):
         # x (32, 128, 160, 3), y (32, 128, 160, 1)
-        tf.summary.scalar('loss', loss, step=self.iter)
+
+        for k, v in loss.items():
+            # both plot val and train losses on the same card in tfboard -- val_mse_loss -> mse_loss
+            k = k if 'val_' not in k else k.replace('val_', '')
+            tf.summary.scalar(k, v, step=self.iter)
 
         idx = np.random.choice(int(tf.shape(x)[0]), 9)
         tf.summary.image('x', [gallery(tf.gather(x, idx).numpy())], max_outputs=1, step=self.iter)
@@ -88,19 +92,19 @@ class VisCallback(BaseCallback):
 
         val_loss_names = [i for i in logs if i.startswith("val_")]
         loss_names = [i for i in logs if i not in val_loss_names]
-        # note: asumes only one keras metric is present
-        loss = logs[loss_names[0]]
-
+        loss = {k: v for k, v in logs.items() if k in loss_names}
         with self.train_bs_summary_writer.as_default():
-            tf.summary.scalar('loss', loss, step=self.iter)
+            for k, v in loss.items():
+                tf.summary.scalar(k, v, step=self.iter)
 
         self.iter += 1
 
     def on_epoch_end(self, epoch, logs=None):
         val_loss_names = [i for i in logs if i.startswith("val_")]
         loss_names = [i for i in logs if i not in val_loss_names]
-        # note: asumes only one keras metric is present
-        loss, vloss = logs[loss_names[0]], logs[val_loss_names[0]]
+        # dicts
+        loss = {k: v for k, v in logs.items() if k in loss_names}
+        vloss = {k: v for k, v in logs.items() if k in val_loss_names}
 
         x_input_batch, y_input_batch = self.get_batch(self.x_train, self.y_train, config.BS)
         if self.model_name == 'base':
@@ -122,8 +126,9 @@ class VisCallback(BaseCallback):
         with self.val_summary_writer.as_default():
             self.save_summary(vloss, x_test_batch, y_test_batch, y_hat)
 
-        if vloss < self.min_vloss:
-            self.min_vloss = vloss.numpy() if isinstance(vloss, np.ndarray) else vloss
+        total_val_loss = vloss['val_loss']
+        if total_val_loss < self.min_vloss:
+            self.min_vloss = vloss.numpy() if isinstance(total_val_loss, np.ndarray) else total_val_loss
             self.save("{:0.3f}vloss_{}iter.tf".format(self.min_vloss, self.iter))
 
 class MVEVisCallback(BaseCallback):
@@ -163,8 +168,9 @@ class MVEVisCallback(BaseCallback):
             with self.val_summary_writer.as_default():
                 self.save_summary(vloss, x_test_batch, y_test_batch, y_hat, var)
 
-            if vloss < self.min_vloss:
-                self.min_vloss = vloss.numpy()
+            total_val_loss = vloss['val_loss']
+            if total_val_loss < self.min_vloss:
+                self.min_vloss = total_val_loss.numpy()
                 self.save("{:0.3f}vloss_{}iter.tf".format(self.min_vloss, self.iter))
 
         self.iter += 1
