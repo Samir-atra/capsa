@@ -10,6 +10,7 @@ import functools
 import notebooks.configs.demo as config_demo
 from losses import MSE
 
+
 def unet(input_shape=(128, 160, 3), drop_prob=0.0, reg=None, activation=tf.nn.relu, num_class=1, compile=False):
 
     concat_axis = 3
@@ -182,6 +183,37 @@ def get_decoder(input_shape=(8, 10, 4), num_class=3):
     model = tf.keras.models.Model(inputs=inputs, outputs=conv10, name="decoder")
     return model
 
+def get_vae_encoder(input_shape=(128, 160, 3), is_reshape=False):
+
+    inputs = tf.keras.layers.Input(shape=input_shape)
+
+    conv1 = Conv2D_(32, (3, 3))(inputs)
+    conv1 = Conv2D_(32, (3, 3))(conv1)
+    pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
+
+    conv2 = Conv2D_(64, (3, 3))(pool1)
+    conv2 = Conv2D_(64, (3, 3))(conv2)
+    pool2 = MaxPooling2D(pool_size=(2, 2))(conv2)
+
+    conv3 = Conv2D_(128, (3, 3))(pool2)
+    conv3 = Conv2D_(128, (3, 3))(conv3)
+    pool3 = MaxPooling2D(pool_size=(2, 2))(conv3)
+
+    conv4 = Conv2D_(256, (3, 3))(pool3)
+    conv4 = Conv2D_(256, (3, 3))(conv4)
+    pool4 = MaxPooling2D(pool_size=(2, 2))(conv4) # (B, 8, 10, 256)
+
+    ### bottleneck
+    x = tf.keras.layers.Flatten()(pool4) # (B, 8 * 10 * 256) -> (B, 20480)
+    x = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
+    x = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
+    out = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
+    if is_reshape:
+        out = tf.keras.layers.Reshape((8, 10, 4))(out)
+
+    model = tf.keras.models.Model(inputs=inputs, outputs=out)
+    return model
+
 ### check dims
 # import numpy as np
 # x = np.ones((1, 128, 160, 3), dtype=np.float32)
@@ -257,48 +289,53 @@ class VAE(tf.keras.Model):
     def __init__(self):
         super(VAE, self).__init__()
 
-        self.enc = get_encoder((128, 160, 3))
-        self.bottleneck = get_bottleneck((8, 10, 256))
-        self.out_mu = Conv2D_(16, (3, 3))
-        self.out_logvar = Conv2D_(16, (3, 3))
-        self.dec = get_decoder((8, 10, 16), num_class=3)
+        self.enc = get_encoder((128, 160, 3)) # (B, 8, 10, 256)
+        self.bottleneck = get_bottleneck_flat((8, 10, 256), is_reshape=False) #(B, 8, 10, 4)
 
-    def reparameterize(self, mu, logvar, training):
+        # after sampling (using both out_mu and out_logvar) z has ch 4
+        self.out_mu = tf.keras.layers.Dense(320) # (B, 8, 10, 4)
+        self.out_logvar = tf.keras.layers.Dense(320) # (B, 8, 10, 4)
+
+        self.dec = get_decoder((8, 10, 4), num_class=3) # (B, 128, 160, 3)
+
+    @staticmethod
+    def reparameterize(z_mean, z_log_var, training):
         # noise -- normal multivariate gaussian distribution with 0 mean and identity covariance matrix
         # used in re-parameterization trick
-
         if training:
-            std = tf.exp(logvar * 0.5)
-            eps = tf.keras.backend.random_normal(shape=tf.shape(mu))
-            return eps * std + mu # (B, 8, 10, 16)
+            batch = tf.shape(z_mean)[0]
+            dim = tf.shape(z_mean)[1]
+            epsilon = tf.keras.backend.random_normal(shape=(batch, dim))
+            return z_mean + tf.exp(0.5 * z_log_var) * epsilon
         else:
             # if we're not in the train loop don't do sampling, just return mu (the best value that the encoder can give)
-            return mu
+            return z_mean
 
-    def loss_fn(self, y, y_hat, mu, logvar, beta=1):
-        mse = tf.reduce_mean(
-            self.compiled_loss(y, y_hat, regularization_losses=self.losses),
-        )
-        # torch.sum()
-        kld = 0.5 * tf.reduce_mean(tf.math.exp(logvar) - logvar - 1 + mu**2)
-        # kld = 0.5 * tf.reduce_sum(tf.math.exp(logvar) - logvar - 1 + mu**2)
-
-        # kld = -0.5 * tf.reduce_mean(
-        #     1 + log_std - tf.math.square(mu) - tf.math.square(tf.math.exp(log_std)),
-        #     axis=-1,
+    def loss_fn(self, y, y_hat, z_mean, z_log_var):
+        # reconstruction_loss = tf.reduce_mean(
+        #     tf.reduce_sum((y - y_hat)**2, axis=[1, 2])
         # )
+        # kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+        # kl_loss = tf.reduce_mean(tf.reduce_sum(kl_loss, axis=1))
 
-        return mse + beta * kld
+        reconstruction_loss = tf.reduce_mean(
+            tf.reduce_sum(tf.math.square(y_hat - y), axis=-1)
+        )
+        kl_loss = -0.5 * tf.reduce_mean(
+            1 + z_log_var - tf.math.square(z_mean) - tf.math.square(tf.math.exp(z_log_var)),
+            axis=-1,
+        )
+
+        return reconstruction_loss + kl_loss
 
     def train_step(self, data):
         x, _ = data
         y = x
 
         with tf.GradientTape() as t:
-            y_hat, mu, logstd = self(x, training=True)
-            loss = self.loss_fn(y, y_hat, mu, logstd)
+            y_hat, z_mean, z_log_var = self(x, training=True)
+            loss = self.loss_fn(y, y_hat, z_mean, z_log_var)
 
-        # self.compiled_metrics.update_state(y, y_hat)
         trainable_vars = self.trainable_variables
         gradients = t.gradient(loss, trainable_vars)
         self.optimizer.apply_gradients(zip(gradients, trainable_vars))
@@ -308,22 +345,34 @@ class VAE(tf.keras.Model):
         x, _ = data
         y = x
 
-        y_hat, mu, logstd = self(x, training=False)
-        loss = self.loss_fn(y, y_hat, mu, logstd)
+        y_hat, z_mean, z_log_var = self(x, training=False)
+        loss = self.loss_fn(y, y_hat, z_mean, z_log_var)
         return {f'loss': loss}
 
     def call(self, x, training, return_risk=True):
-        h = self.enc(x) # (B, 128, 160, 3) -> (B, 8, 10, 256)
-        h = self.bottleneck(h) # (B, 8, 10, 256) -> (B, 8, 10, 16) 
-        mu = self.out_mu(h)
-        logstd = self.out_logvar(h)
-        z = self.reparameterize(mu, logstd, training)
-        y_hat = self.dec(z)
+        enc_out = self.enc(x) # (B, 128, 160, 3) -> (B, 8, 10, 256)
+        bottleneck_out = self.bottleneck(enc_out) # (B, 8, 10, 256) -> (B, 320)
 
-        assert h.shape == z.shape
+        z_mean = self.out_mu(bottleneck_out) # (B, 320) -> (B, 320)
+        z_log_var = self.out_logvar(bottleneck_out) # (B, 320) -> (B, 320)
+
+        z_ = self.reparameterize(z_mean, z_log_var, training) # (B, 320) and (B, 320) -> (B, 320)
+        B = tf.shape(z_)[0]
+        z = tf.reshape(z_, [B, 8, 10, 4]) # (B, 320) -> (B, 8, 10, 4)
+
+        y_hat = self.dec(z) # (B, 8, 10, 4) -> (B, 128, 160, 3)
+
+        # print('enc_out: ', enc_out.shape)
+        # print('bottleneck_out: ', bottleneck_out.shape)
+        # print('mu_out: ', mu.shape)
+        # print('logstd_out: ', logstd.shape)
+        # print('z: ', z.shape)
+        # print('dec_out: ', y_hat.shape)
+
+        assert bottleneck_out.shape == z_.shape
 
         if return_risk:
-            return y_hat, mu, tf.math.exp(logstd)
+            return y_hat, z_mean, z_log_var
         else:
             return y_hat
 

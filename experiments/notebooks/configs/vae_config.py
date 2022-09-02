@@ -21,6 +21,7 @@ SOURCE_PATH = '/home/iaroslavelistratov/capsa'
 # logs, plots, visualizations, checkpoints, etc. will be saved there
 LOGS_PATH = '/data/capsa/depth/results'
 # load model from
-MODEL_PATH = '/data/capsa/depth/results/ae_model/20220827-235857-bottleneck16'
+# MODEL_PATH = '/data/capsa/depth/results/ae_model/20220827-235857-bottleneck16'
+MODEL_PATH = '/home/iaroslavelistratov/results/vae_model/20220903-205117again'
 
 timedelta = 3 # 3 for Iaro, 0 for ET

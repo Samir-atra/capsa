@@ -98,11 +98,11 @@ def train_dropout_wrapper():
 def train_ensemble_wrapper():
     model_name = 'ensemble'
 
-    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='-3members')
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='-4members')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
-    model = EnsembleWrapper(their_model, num_members=3)
+    model = EnsembleWrapper(their_model, num_members=4)
     model.compile(
         optimizer=[keras.optimizers.Adam(learning_rate=config.LR)],
         loss=[MSE],
@@ -124,7 +124,7 @@ def train_ensemble_wrapper():
 def train_mve_wrapper():
     model_name = 'mve'
 
-    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='')
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='new')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     their_model = unet()
@@ -150,13 +150,13 @@ def train_mve_wrapper():
 def train_vae(is_vae=True):
     model_name = 'vae_model' if is_vae else 'ae_model'
 
-    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='-flatt-bottleneck-4xless')
+    path, checkpoints_path, vis_path, plots_path, logs_path = setup(model_name, tag_name='capsa-loss')
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     model = VAE() if is_vae else AutoEncoder()
     model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=config.LR),
-        loss=MSE,
+        # loss=MSE,
     )
 
     # checkpoint_callback = get_checkpoint_callback(checkpoints_path)
@@ -179,8 +179,10 @@ def train_vae_wrapper():
     logger = CSVLogger(f'{logs_path}/log.csv', append=True)
 
     model = VAEWrapper(
+        # get_encoder(),
+        # decoder = get_decoder((8, 10, 256)),
         get_encoder(),
-        decoder = get_decoder((8, 10, 256)),
+        get_decoder((8, 10, 16), num_class=3),
     )
     model.compile(
         optimizer=keras.optimizers.Adam(learning_rate=config.LR),
@@ -192,7 +194,7 @@ def train_vae_wrapper():
     history = model.fit(ds_train, epochs=config.EP,
         validation_data=ds_test,
         callbacks=[vis_callback, logger], #checkpoint_callback
-        verbose=0,
+        verbose=1,
     )
     plot_loss(history, plots_path)
     visualize_depth_map(model, ds_train, vis_path, 'train')
@@ -237,7 +239,7 @@ def train_vae_wrapper():
 # train_dropout_wrapper()
 # train_ensemble_wrapper()
 # train_mve_wrapper()
-train_vae(is_vae=False) # AE
-# train_vae(is_vae=True)
+# train_vae(is_vae=False) # AE
+train_vae(is_vae=True)
 # train_vae_wrapper()
 # train_debug()
