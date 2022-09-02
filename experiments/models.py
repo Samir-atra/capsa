@@ -250,3 +250,86 @@ class AutoEncoder(tf.keras.Model):
             return (y_hat, tf.expand_dims(epistemic, -1))
         else:
             return y_hat
+
+
+class VAE(tf.keras.Model):
+
+    def __init__(self):
+        super(VAE, self).__init__()
+
+        self.enc = get_encoder((128, 160, 3))
+        self.bottleneck = get_bottleneck((8, 10, 256))
+        self.out_mu = Conv2D_(16, (3, 3))
+        self.out_logvar = Conv2D_(16, (3, 3))
+        self.dec = get_decoder((8, 10, 16), num_class=3)
+
+    def reparameterize(self, mu, logvar, training):
+        # noise -- normal multivariate gaussian distribution with 0 mean and identity covariance matrix
+        # used in re-parameterization trick
+
+        if training:
+            std = tf.exp(logvar * 0.5)
+            eps = tf.keras.backend.random_normal(shape=tf.shape(mu))
+            return eps * std + mu # (B, 8, 10, 16)
+        else:
+            # if we're not in the train loop don't do sampling, just return mu (the best value that the encoder can give)
+            return mu
+
+    def loss_fn(self, y, y_hat, mu, logvar, beta=1):
+        mse = tf.reduce_mean(
+            self.compiled_loss(y, y_hat, regularization_losses=self.losses),
+        )
+        # torch.sum()
+        kld = 0.5 * tf.reduce_mean(tf.math.exp(logvar) - logvar - 1 + mu**2)
+        # kld = 0.5 * tf.reduce_sum(tf.math.exp(logvar) - logvar - 1 + mu**2)
+
+        # kld = -0.5 * tf.reduce_mean(
+        #     1 + log_std - tf.math.square(mu) - tf.math.square(tf.math.exp(log_std)),
+        #     axis=-1,
+        # )
+
+        return mse + beta * kld
+
+    def train_step(self, data):
+        x, _ = data
+        y = x
+
+        with tf.GradientTape() as t:
+            y_hat, mu, logstd = self(x, training=True)
+            loss = self.loss_fn(y, y_hat, mu, logstd)
+
+        # self.compiled_metrics.update_state(y, y_hat)
+        trainable_vars = self.trainable_variables
+        gradients = t.gradient(loss, trainable_vars)
+        self.optimizer.apply_gradients(zip(gradients, trainable_vars))
+        return {f'loss': loss}
+
+    def test_step(self, data):
+        x, _ = data
+        y = x
+
+        y_hat, mu, logstd = self(x, training=False)
+        loss = self.loss_fn(y, y_hat, mu, logstd)
+        return {f'loss': loss}
+
+    def call(self, x, training, return_risk=True):
+        h = self.enc(x) # (B, 128, 160, 3) -> (B, 8, 10, 256)
+        h = self.bottleneck(h) # (B, 8, 10, 256) -> (B, 8, 10, 16) 
+        mu = self.out_mu(h)
+        logstd = self.out_logvar(h)
+        z = self.reparameterize(mu, logstd, training)
+        y_hat = self.dec(z)
+
+        assert h.shape == z.shape
+
+        if return_risk:
+            return y_hat, mu, tf.math.exp(logstd)
+        else:
+            return y_hat
+
+# todo-high:
+# Generating a few samples
+# N = 16
+# z = torch.randn((N, d)).to(device)
+# sample = model.decoder(z)
+# display_images(None, sample, N // 4, count=True)

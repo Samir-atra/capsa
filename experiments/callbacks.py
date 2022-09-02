@@ -105,6 +105,8 @@ class VisCallback(BaseCallback):
         x_input_batch, y_input_batch = self.get_batch(self.x_train, self.y_train, config.BS)
         if self.model_name == 'base':
             y_hat = self.model(x_input_batch, training=True)
+        elif self.model_name == 'vae_model':
+            y_hat, _, _ = self.model(x_input_batch, training=True)
         else:
             y_hat, _ = self.model(x_input_batch, training=True)
         with self.train_summary_writer.as_default():
@@ -113,6 +115,8 @@ class VisCallback(BaseCallback):
         x_test_batch, y_test_batch = self.get_batch(self.x_test, self.y_test, min(100, self.x_test.shape[0]))
         if self.model_name == 'base':
             y_hat = self.model(x_test_batch, training=True)
+        elif self.model_name == 'vae_model':
+            y_hat, _, _ = self.model(x_test_batch, training=True)
         else:
             y_hat, _ = self.model(x_test_batch, training=True)
         with self.val_summary_writer.as_default():
