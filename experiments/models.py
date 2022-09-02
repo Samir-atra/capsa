@@ -145,7 +145,7 @@ def get_bottleneck(input_shape=(8, 10, 256)):
     model = tf.keras.models.Model(inputs=inputs, outputs=conv5)
     return model
 
-def get_decoder(input_shape=(8, 10, 256), num_class=3):
+def get_decoder(input_shape=(8, 10, 16), num_class=3):
 
     inputs = tf.keras.layers.Input(shape=input_shape)
 
@@ -170,18 +170,20 @@ def get_decoder(input_shape=(8, 10, 256), num_class=3):
     model = tf.keras.models.Model(inputs=inputs, outputs=conv10, name="decoder")
     return model
 
-# # check dims
-# print('x_train:', x_train.shape)
+### check dims
+# import numpy as np
+# x = np.ones((1, 128, 160, 3), dtype=np.float32)
+# print('x_train:', x.shape)
 
 # enc = get_encoder((128, 160, 3))
-# enc_out = enc(x_train[:32])
+# enc_out = enc(x)
 # print('enc_out: ', enc_out.shape)
 
 # bottleneck = get_bottleneck((8, 10, 256))
 # bot_out = bottleneck(enc_out)
 # print('bot_out: ', bot_out.shape)
 
-# dec = get_decoder((8, 10, 16), num_class=3)
+# dec = get_decoder((8, 10, 128), num_class=3)
 # dec_out = dec(bot_out)
 # print('dec_out: ', dec_out.shape)
 
@@ -195,18 +197,21 @@ class AutoEncoder(tf.keras.Model):
         self.bottleneck = get_bottleneck((8, 10, 256))
         self.dec = get_decoder((8, 10, 16), num_class=3)
 
-    def loss_fn(self, y_hat, y):
+    def loss_fn(self, y, y_hat):
         loss = tf.reduce_mean(
-            self.compiled_loss(y_hat, y, regularization_losses=self.losses),
+            self.compiled_loss(y, y_hat, regularization_losses=self.losses),
         )
+
         return loss
 
     def train_step(self, data):
-        x, y = data
+        x, _ = data
+        y = x
 
         with tf.GradientTape() as t:
+            # interesting interpretation: vae whose variance is set to 0
             y_hat = self(x, return_risk=False)
-            loss = self.loss_fn(y_hat, y)
+            loss = self.loss_fn(y, y_hat)
 
         # self.compiled_metrics.update_state(y, y_hat)
         trainable_vars = self.trainable_variables
@@ -214,16 +219,18 @@ class AutoEncoder(tf.keras.Model):
         self.optimizer.apply_gradients(zip(gradients, trainable_vars))
         return {f'loss': loss}
 
-    # def test_step(self, data):
-    #     x, y = data
-    #     loss, y_hat = self.loss_fn(x, y, training=False)
-    #     prefix = self.metric_name
-    #     return {f'{prefix}_loss': loss}
+    def test_step(self, data):
+        x, _ = data
+        y = x
+
+        y_hat = self(x, return_risk=False)
+        loss = self.loss_fn(y, y_hat)
+        return {f'loss': loss}
 
     def call(self, x, return_risk=True):
         h = self.enc(x) # (B, 128, 160, 3) -> (B, 8, 10, 256)
-        h = self.bottleneck(h) # (B, 8, 10, 512)
-        y_hat = self.dec(h) # (B, 128, 160, 3)
+        h = self.bottleneck(h) # (B, 8, 10, 256) -> (B, 8, 10, 16) 
+        y_hat = self.dec(h) # (B, 8, 10, 16) -> (B, 128, 160, 3)
 
         if return_risk:
             epistemic = tf.keras.metrics.mean_squared_error(x, y_hat)
