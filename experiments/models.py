@@ -140,12 +140,24 @@ def get_encoder(input_shape=(128, 160, 3), drop_prob=0.0):
 
 def get_bottleneck(input_shape=(8, 10, 256)):
     inputs = tf.keras.layers.Input(shape=input_shape)
-    conv5 = Conv2D_(16, (3, 3))(inputs)
-    conv5 = Conv2D_(16, (3, 3))(conv5)
+    conv5 = Conv2D_(4, (3, 3))(inputs)
+    conv5 = Conv2D_(4, (3, 3))(conv5)
     model = tf.keras.models.Model(inputs=inputs, outputs=conv5)
     return model
 
-def get_decoder(input_shape=(8, 10, 16), num_class=3):
+def get_bottleneck_flat(input_shape=(8, 10, 256), is_reshape=True):
+    inputs = tf.keras.layers.Input(shape=input_shape)
+    x = tf.keras.layers.Flatten()(inputs) # (8 * 10 * 256 = 20480, 320)
+    x = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
+    flat_shape = tf.shape(x)
+    x = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
+    out = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
+    if is_reshape:
+        out = tf.keras.layers.Reshape((8, 10, 4))(out)
+    model = tf.keras.models.Model(inputs=inputs, outputs=out)
+    return model
+
+def get_decoder(input_shape=(8, 10, 4), num_class=3):
 
     inputs = tf.keras.layers.Input(shape=input_shape)
 
@@ -194,8 +206,9 @@ class AutoEncoder(tf.keras.Model):
         super(AutoEncoder, self).__init__()
 
         self.enc = get_encoder((128, 160, 3))
-        self.bottleneck = get_bottleneck((8, 10, 256))
-        self.dec = get_decoder((8, 10, 16), num_class=3)
+        # self.bottleneck = get_bottleneck((8, 10, 256))
+        self.bottleneck = get_bottleneck_flat((8, 10, 256)) # todo-high: note
+        self.dec = get_decoder((8, 10, 4), num_class=3)
 
     def loss_fn(self, y, y_hat):
         loss = tf.reduce_mean(
@@ -229,8 +242,8 @@ class AutoEncoder(tf.keras.Model):
 
     def call(self, x, return_risk=True):
         h = self.enc(x) # (B, 128, 160, 3) -> (B, 8, 10, 256)
-        h = self.bottleneck(h) # (B, 8, 10, 256) -> (B, 8, 10, 16) 
-        y_hat = self.dec(h) # (B, 8, 10, 16) -> (B, 128, 160, 3)
+        h = self.bottleneck(h) # (B, 8, 10, 256) -> (B, 8, 10, 4) 
+        y_hat = self.dec(h) # (B, 8, 10, 4) -> (B, 128, 160, 3)
 
         if return_risk:
             epistemic = tf.keras.metrics.mean_squared_error(x, y_hat)
