@@ -93,11 +93,12 @@ class Sampling(layers.Layer):
     """Uses (z_mean, z_log_var) to sample z, the vector encoding a digit."""
 
     def call(self, inputs):
-        z_mean, z_log_var = inputs
+        z_mean, z_log_std = inputs
         batch = tf.shape(z_mean)[0]
         dim = tf.shape(z_mean)[1]
         epsilon = tf.keras.backend.random_normal(shape=(batch, dim))
-        return z_mean + tf.exp(0.5 * z_log_var) * epsilon
+        
+        return z_mean + tf.exp(z_log_std) * epsilon
 
 
 def reverse_model(model, latent_dim):
@@ -109,14 +110,18 @@ def reverse_model(model, latent_dim):
         else:
             if type(model.layers[i - 1]) == layers.InputLayer or type(model.layers[i]) == layers.Flatten:
                 original_input = model.layers[i - 1].input_shape
-                x = reverse_layer(model.layers[i], original_input)(x)
+                if i == 1:
+                    layer = reverse_layer(model.layers[i], original_input, override_activation="linear")
+                    x = layer(x)
+                else:
+                    x = reverse_layer(model.layers[i], original_input)(x)
             else:
                 x = reverse_layer(model.layers[i])(x)
         i = i - 1
     return tf.keras.Model(inputs, x)
 
 
-def reverse_layer(layer, output_shape=None):
+def reverse_layer(layer, output_shape=None, override_activation=None):
     config = layer.get_config()
     layer_type = type(layer)
     unchanged_layers = [layers.Activation, layers.BatchNormalization, layers.Dropout]

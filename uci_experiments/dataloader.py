@@ -25,7 +25,7 @@ def generate_cubic(x, noise=False):
 # individual data files             #
 #####################################
 vb_dir   = os.path.dirname(__file__)
-data_dir = "/home/sadhanalolla/capsa/aaai_23_submission/data/uci/"
+data_dir = "/home/sadhanalolla/uci/"
 
 def _load_boston():
     """

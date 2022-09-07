@@ -13,7 +13,7 @@ class VAEWrapper(keras.Model):
         is_standalone=True,
         decoder=None,
         latent_dim=None,
-        kl_weight=0.0005,
+        kl_weight=0.05,
         bias=True,
         epistemic=True,
     ):
@@ -30,18 +30,22 @@ class VAEWrapper(keras.Model):
         )
 
         # Add layers for the mean and variance of the latent space
+    
         if latent_dim is None:
             latent_dim = _get_out_dim(self.feature_extractor)[-1]
 
-        self.mean_layer = tf.keras.layers.Dense(latent_dim)
-        self.log_std_layer = tf.keras.layers.Dense(latent_dim)
+        self.mean_layer = tf.keras.layers.Dense(latent_dim, name='mean')
+        
+        self.log_std_layer = tf.keras.layers.Dense(latent_dim, name='std')
+        
         self.sampling_layer = Sampling()
         if self.bias:
             self.histogram_layer = HistogramLayer()
 
         last_layer = base_model.layers[-1]
         self.output_layer = copy_layer(last_layer)  # duplicate last layer
-
+        
+        
         # Reverse model if we can, accept user decoder if we cannot
         if hasattr(self.feature_extractor, "layers") and decoder is None:
             self.decoder = reverse_model(self.feature_extractor, latent_dim=latent_dim)
@@ -52,6 +56,7 @@ class VAEWrapper(keras.Model):
                 )
             else:
                 self.decoder = decoder
+        
 
     def reconstruction_loss(self, mu, log_std, x, training=True):
         # Calculates the VAE reconstruction loss by sampling and then feeding the latent vector through the decoder.
@@ -71,6 +76,7 @@ class VAEWrapper(keras.Model):
             tf.exp(log_std) + tf.square(mu) - 1.0 - log_std, axis=1
         )
         return mse_loss + self.kl_weight * kl_loss
+        #return kl_loss
 
     def loss_fn(self, x, y, extractor_out=None):
         if extractor_out is None:
@@ -81,13 +87,16 @@ class VAEWrapper(keras.Model):
         compiled_loss = (
             self.compiled_loss(y, predictor_y, regularization_losses=self.losses),
         )
-
+        
         mu = self.mean_layer(extractor_out)
+        
         log_std = self.log_std_layer(extractor_out)
+        
         if self.bias:
             self.histogram_layer(mu, training=True)
         recon_loss = self.reconstruction_loss(mu=mu, log_std=log_std, x=x)
-        return tf.reduce_mean(recon_loss + compiled_loss), predictor_y
+        
+        return tf.reduce_mean(compiled_loss + recon_loss), predictor_y
 
     def train_step(self, data=None, x=None, y=None):
         if data is not None:
@@ -121,7 +130,7 @@ class VAEWrapper(keras.Model):
             features = self.feature_extractor(x, training=training)
 
         out = self.output_layer(features, training=training)
-
+        
         if return_risk:
             mu = self.mean_layer(features, training=training)
             log_std = self.log_std_layer(features, training=training)
@@ -132,11 +141,15 @@ class VAEWrapper(keras.Model):
                     pixel_wise_outs = []
                     for _ in range(20):
                         pixel_wise_outs.append(self.decoder(self.sampling_layer([mu, log_std])))
-                    outs.append(tf.math.reduce_variance(pixel_wise_outs, axis=0))
+                    var = tf.math.reduce_variance(pixel_wise_outs, axis=0)
+                    outs.append(tf.math.reduce_mean(var, axis=-1))
                 else:
-                    outs.append(self.reconstruction_loss(mu, log_std, x))
+                    outs.append(self.reconstruction_loss(mu, log_std, x, training=False))
+
             if self.bias:
                 outs.append(self.histogram_layer(mu, training=training, softmax=softmax))
             return tuple(outs)
         else:
             return out
+        
+        #return out, out
