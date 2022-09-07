@@ -71,9 +71,9 @@ def get_toy_model(input_shape=(1,)):
 model = get_toy_model()
 (x_train, y_train), (orig_x_test, y_test) = gen_cubic_data()
 
-wrapped_model = HistogramWrapper(model)
-wrapped_model.compile(optimizer='adam', loss=tf.keras.losses.MeanSquaredError())
-wrapped_model.fit(x_train, y_train, batch_size=64, epochs=7, validation_data=(orig_x_test, y_test), callbacks=[HistogramCallback()])
+wrapped_model = EnsembleWrapper(model, num_members=5)
+wrapped_model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.MeanSquaredError())
+wrapped_model.fit(x_train, y_train, batch_size=64, epochs=70, validation_data=(orig_x_test, y_test), callbacks=[HistogramCallback()])
 
 '''
 x_test_x = np.linspace(-1.5, 2.5, 50)
@@ -87,8 +87,9 @@ x_test = np.asarray(all_x_test)
 _, std_linspace = wrapped_model(x_test)
 '''
 
-y_pred, std = wrapped_model(orig_x_test, softmax=True)
-print(std.numpy())
+preds = wrapped_model(orig_x_test)
+y_pred = tf.reduce_mean(preds, axis=0)
+std = tf.math.reduce_std(preds, axis=0)
 #plt.scatter(x_test[:, 0], x_test[:, 1], c=std_linspace)
 #plt.scatter(orig_x_test[:, 0], orig_x_test[:, 1], c=std)
 
@@ -100,9 +101,9 @@ plt.savefig("data.png")
 
 plt.clf()
 #plt.scatter(orig_x_test, std.numpy())
-plt.bar(np.squeeze(orig_x_test), std.numpy())
-plt.savefig("bias.pdf")
-plt.savefig("bias.png")
+plt.scatter(np.squeeze(orig_x_test), std.numpy())
+plt.savefig("ensemble.pdf")
+plt.savefig("ensemble.png")
 
 plt.clf()
 plt.hist(orig_x_test)
