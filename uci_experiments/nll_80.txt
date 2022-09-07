@@ -1,2 +1,2 @@
-ensemble boston 3.2061725 +/- 0.0
-dropout boston 3.7707257 +/- 0.0
+ensemble yacht 1.9529583 +/- 0.0
+dropout yacht 4.315003 +/- 0.0

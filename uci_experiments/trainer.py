@@ -31,7 +31,7 @@ def get_model(model_type, inp_shape, dataset):
     model = get_toy_model(inp_shape, dropout_rate=0.0)
     latent_dim = inp_shape[0] // 2
     if model_type == "ensemble":
-        return EnsembleWrapper(model, num_members=10)
+        return EnsembleWrapper(model, num_members=5)
     elif model_type == "ensemble + mve":
         return EnsembleWrapper(model, metric_wrapper=MVEWrapper, num_members=5)
     elif model_type == "dropout":
@@ -78,7 +78,7 @@ all_nll= {}
 all_rmse = {}
 for m in model_types:
     print(m)
-    nll, rmse = train(m, ["boston"])
+    nll, rmse = train(m, ["yacht"])
     all_nll[m] = nll
     all_rmse[m] = rmse
 print("***NLL****")

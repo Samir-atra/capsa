@@ -34,7 +34,7 @@ class LossCallback(tf.keras.callbacks.Callback):
         if self.model_type == "ensemble":
             preds = self.model(test_batch_x)
             print(tf.math.reduce_variance(preds, 0)[:5])
-            return tf.math.reduce_mean(preds, 0), tf.math.reduce_variance(preds, 0)
+            return tf.math.reduce_mean(preds, 0), tf.math.reduce_std(preds, 0)
         elif self.model_type == "ensemble + mve":
             preds = self.model(test_batch_x)
             return self.gen_mixture_model_preds(preds)
