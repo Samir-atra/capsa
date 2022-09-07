@@ -1,0 +1,6 @@
+ensemble boston 20.643322+/-22.140518
+ensemble + mve boston 2.6453476+/-0.21782653
+dropout boston 3.9106324+/-0.019802822
+vae boston 6.016768+/-1.9326217
+vae + dropout boston 3.3212967+/-0.3967034
+vae + dropout + mve boston 3.2598922+/-1.1921004

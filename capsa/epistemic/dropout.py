@@ -74,7 +74,7 @@ class DropoutWrapper(keras.Model):
         result = self.train_step((x, y))
         return {prefix + k: v for k, v in result.items()}
 
-    def call(self, x, training=False, return_risk=True, features=None, T=20):
+    def call(self, x, training=False, return_risk=True, features=None, T=5):
         y_hat = self.new_model(x, training=training)
 
         if return_risk:

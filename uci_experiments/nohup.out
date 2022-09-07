@@ -1,0 +1,48 @@
+2022-09-07 11:43:29.937669: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:29.942295: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:29.943184: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:29.944232: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-09-07 11:43:29.949565: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:29.950428: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:29.951271: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:31.677754: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:31.678662: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:31.679517: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-07 11:43:31.680350: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1532] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 16300 MB memory:  -> device: 0, name: NVIDIA RTX A5000, pci bus id: 0000:01:00.0, compute capability: 8.6
+2022-09-07 11:43:33.159868: I tensorflow/stream_executor/cuda/cuda_blas.cc:1786] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+ensemble + mve
+ensemble + mve ds boston trial 0 nll 0.97638893 rmse 2.7385538
+ensemble + mve ds boston trial 1 nll 0.76628554 rmse 2.5037253
+ensemble + mve ds boston trial 2 nll 0.8229883 rmse 2.4852457
+ensemble + mve ds boston trial 3 nll 1.0789903 rmse 2.6291912
+ensemble + mve ds boston trial 4 nll 1.1575869 rmse 2.7436433
+ensemble + mve ds power-plant trial 0 nll 1.0335431 rmse 4.2889776
+ensemble + mve ds power-plant trial 1 nll 1.0295552 rmse 4.264517
+ensemble + mve ds power-plant trial 2 nll 1.0600207 rmse 4.3196964
+ensemble + mve ds power-plant trial 3 nll 1.0852102 rmse 4.337646
+ensemble + mve ds power-plant trial 4 nll 1.0308039 rmse 4.26974
+Traceback (most recent call last):
+  File "/home/sadhanalolla/capsa/uci_experiments/trainer.py", line 81, in <module>
+    nll, rmse = train(m)
+  File "/home/sadhanalolla/capsa/uci_experiments/trainer.py", line 68, in train
+    wrapped_model.fit(X_train, y_train, epochs=40, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=loss_c, verbose=0)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/utils/traceback_utils.py", line 64, in error_handler
+    return fn(*args, **kwargs)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/engine/training.py", line 1409, in fit
+    tmp_logs = self.train_function(iterator)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/tensorflow/python/util/traceback_utils.py", line 150, in error_handler
+    return fn(*args, **kwargs)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/tensorflow/python/eager/def_function.py", line 915, in __call__
+    result = self._call(*args, **kwds)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/tensorflow/python/eager/def_function.py", line 947, in _call
+    return self._stateless_fn(*args, **kwds)  # pylint: disable=not-callable
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/tensorflow/python/eager/function.py", line 2453, in __call__
+    return graph_function._call_flat(
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/tensorflow/python/eager/function.py", line 1860, in _call_flat
+    return self._build_call_outputs(self._inference_function.call(
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/tensorflow/python/eager/function.py", line 497, in call
+    outputs = execute.execute(
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/tensorflow/python/eager/execute.py", line 54, in quick_execute
+    tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,
+KeyboardInterrupt

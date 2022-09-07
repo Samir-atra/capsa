@@ -302,7 +302,7 @@ def load_dataset(name, split_seed=0, test_fraction=.1, return_as_tensor=False):
                   "depth"              : _load_depth,
                   "song"              : _load_song}
 
-    print("Loading dataset {}....".format(name))
+    #print("Loading dataset {}....".format(name))
     if name == "depth":
         (X_train, y_train), (X_test, y_test) = load_funs[name]()
         y_scale = np.array([[1.0]])
@@ -358,7 +358,7 @@ def load_dataset(name, split_seed=0, test_fraction=.1, return_as_tensor=False):
         y_train = tf.convert_to_tensor(y_train, tf.float32)
         y_test = tf.convert_to_tensor(y_test, tf.float32)
 
-    print("Done loading dataset {}".format(name))
+    #print("Done loading dataset {}".format(name))
     return (X_train, y_train), (X_test, y_test), y_train_scale
 
 

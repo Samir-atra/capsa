@@ -1,0 +1,15 @@
+vae
+vae ds yacht trial 0 nll -1.4154556 rmse 0.9780902
+vae ds yacht trial 1 nll -2.255761 rmse 0.59372634
+vae ds yacht trial 2 nll -1.5622728 rmse 0.9524225
+vae + dropout
+vae + dropout ds yacht trial 0 nll -0.04348159 rmse 0.7992333
+vae + dropout ds yacht trial 1 nll 0.022759438 rmse 0.66498977
+vae + dropout ds yacht trial 2 nll 0.038936377 rmse 0.6769274
+vae + dropout + mve
+vae + dropout + mve ds yacht trial 0 nll 0.3979435 rmse 0.74698484
+vae + dropout + mve ds yacht trial 1 nll 0.5757203 rmse 0.9269925
+vae + dropout + mve ds yacht trial 2 nll 0.5739484 rmse 0.9163996
+***NLL****
+{'vae': {'yacht': {'mean': -1.7444963, 'std': 0.3664536}}, 'vae + dropout': {'yacht': {'mean': 0.0060714087, 'std': 0.03565621}}, 'vae + dropout + mve': {'yacht': {'mean': 0.51587075, 'std': 0.08339029}}}
+{'vae': {'yacht': {'mean': 0.841413, 'std': 0.17545412}}, 'vae + dropout': {'yacht': {'mean': 0.7137168, 'std': 0.06066536}}, 'vae + dropout + mve': {'yacht': {'mean': 0.86345893, 'std': 0.08247311}}}

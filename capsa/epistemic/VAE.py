@@ -96,7 +96,7 @@ class VAEWrapper(keras.Model):
             self.histogram_layer(mu, training=True)
         recon_loss = self.reconstruction_loss(mu=mu, log_std=log_std, x=x)
         
-        return tf.reduce_mean(compiled_loss + recon_loss), predictor_y
+        return tf.reduce_mean(compiled_loss + recon_loss, keepdims=True), predictor_y
 
     def train_step(self, data=None, x=None, y=None):
         if data is not None:
@@ -139,10 +139,10 @@ class VAEWrapper(keras.Model):
             if self.epistemic:
                 if per_pixel:
                     pixel_wise_outs = []
-                    for _ in range(20):
+                    for _ in range(5):
                         pixel_wise_outs.append(self.decoder(self.sampling_layer([mu, log_std])))
                     var = tf.math.reduce_variance(pixel_wise_outs, axis=0)
-                    outs.append(tf.math.reduce_mean(var, axis=-1))
+                    outs.append(tf.math.reduce_mean(var, axis=-1, keepdims=True))
                 else:
                     outs.append(self.reconstruction_loss(mu, log_std, x, training=False))
 
