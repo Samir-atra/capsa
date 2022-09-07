@@ -54,7 +54,7 @@ class VAEWrapper(keras.Model):
         assert(x.shape[1:] == (128, 160, 3))
         assert(reconstruction.shape[1:] == (128, 160, 3))
 
-        mse_loss = tf.math.square(reconstruction - x) # (B, 8, 10, 4)
+        mse_loss = tf.math.square(x - reconstruction) # (B, 8, 10, 4)
         mse_loss = tf.reduce_sum(mse_loss, axis=[1, 2, 3]) # (B, 8, 10, 4) -> (B, ) 
         mse_loss = tf.reduce_mean(mse_loss) # (B, ) -> (, )
 
@@ -115,6 +115,6 @@ class VAEWrapper(keras.Model):
             reconstruction = self.decoder(mu, training=False)
 
         if return_risk:
-            return reconstruction, tf.reduce_sum(tf.math.square(reconstruction - x), axis=-1)
+            return reconstruction, tf.reduce_sum(tf.math.square(x - reconstruction), axis=-1)
         else:
             return reconstruction

@@ -319,7 +319,7 @@ class VAE(tf.keras.Model):
         # kl_loss = tf.reduce_mean(tf.reduce_sum(kl_loss, axis=1))
 
         reconstruction_loss = tf.reduce_mean(
-            tf.reduce_sum(tf.math.square(y_hat - y), axis=-1)
+            tf.reduce_sum(tf.math.square(y - y_hat), axis=-1)
         )
         kl_loss = -0.5 * tf.reduce_mean(
             1 + z_log_var - tf.math.square(z_mean) - tf.math.square(tf.math.exp(z_log_var)),
