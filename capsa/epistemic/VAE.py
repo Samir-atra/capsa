@@ -25,8 +25,8 @@ class VAEWrapper(keras.Model):
         )
 
         # after sampling (using both out_mu and out_logvar) z has ch 4
-        self.mean_layer = tf.keras.layers.Dense(320) # (B, 8, 10, 4)
-        self.log_std_layer = tf.keras.layers.Dense(320) # (B, 8, 10, 4)
+        self.mean_layer = tf.keras.layers.Dense(80, activation=None)
+        self.log_std_layer = tf.keras.layers.Dense(80, activation=None)
         self.sampling_layer = Sampling()
 
         # last_layer = base_model.layers[-1]
@@ -35,39 +35,32 @@ class VAEWrapper(keras.Model):
         self.decoder = decoder
 
     def reconstruction_loss(self, mu, log_std, x, training=True):
-        B = tf.shape(x)[0]
-
         # Calculates the VAE reconstruction loss by sampling and then feeding the latent vector through the decoder.
         if training:
-            sampled_latent_vector = self.sampling_layer([mu, log_std])
-            sampled_latent_vector = tf.reshape(sampled_latent_vector, [B, 8, 10, 4]) # (B, 320) -> (B, 8, 10, 4)
-            reconstruction = self.decoder(sampled_latent_vector, training=True)
+            sampled_latent_vector = self.sampling_layer([mu, log_std]) # (B, 80)
+            reconstruction = self.decoder(sampled_latent_vector, training=True) # (B, 128, 160, 3)
         else:
-            mu = tf.reshape(mu, [B, 8, 10, 4]) # (B, 320) -> (B, 8, 10, 4)
             reconstruction = self.decoder(mu, training=False) # (B, 128, 160, 3)
 
-        mu = tf.reshape(mu, [B, 320]) # (B, 320) -> (B, 320)
-        log_std = tf.reshape(log_std, [B, 320]) # (B, 320) -> (B, 320)
-
-        assert(mu.shape[1:] == (320))
-        assert(log_std.shape[1:] == (320))
+        assert(mu.shape[1:] == (80))
+        assert(log_std.shape[1:] == (80))
         assert(x.shape[1:] == (128, 160, 3))
         assert(reconstruction.shape[1:] == (128, 160, 3))
 
-        mse_loss = tf.math.square(x - reconstruction) # (B, 8, 10, 4)
-        mse_loss = tf.reduce_sum(mse_loss, axis=[1, 2, 3]) # (B, 8, 10, 4) -> (B, ) 
-        mse_loss = tf.reduce_mean(mse_loss) # (B, ) -> (, )
+        mse_loss = tf.math.square(x - reconstruction) # (B, 8, 10, 1)
+        mse_loss = tf.reduce_sum(mse_loss, axis=[1, 2, 3]) # (B, ) 
+        mse_loss = tf.reduce_mean(mse_loss) # (, )
 
         # https://keras.io/examples/generative/vae/
-        kl_loss = -0.5 * (1 + log_std - tf.square(mu) - tf.exp(log_std)) # (B, 320)
-        kl_loss = tf.reduce_sum(kl_loss, axis=1) # (B, 320) -> (B, ) 
-        kl_loss = tf.reduce_mean(kl_loss) # (B, ) -> (, )
+        kl_loss = -0.5 * (1 + log_std - tf.square(mu) - tf.exp(log_std)) # (B, 80)
+        kl_loss = tf.reduce_sum(kl_loss, axis=1) # (B, ) 
+        kl_loss = tf.reduce_mean(kl_loss) # (, )
 
         loss = mse_loss + kl_loss
         return loss, mse_loss, kl_loss, reconstruction
 
     def loss_fn(self, x):
-        extractor_out = self.feature_extractor(x, training=True) # (B, 320)
+        extractor_out = self.feature_extractor(x, training=True)
 
         # predictor_y = self.output_layer(extractor_out)
 
@@ -75,8 +68,8 @@ class VAEWrapper(keras.Model):
         #     self.compiled_loss(y, predictor_y, regularization_losses=self.losses),
         # )
 
-        mu = self.mean_layer(extractor_out) # (B, 320)
-        log_std = self.log_std_layer(extractor_out) # (B, 320)
+        mu = self.mean_layer(extractor_out) # (B, 80)
+        log_std = self.log_std_layer(extractor_out) # (B, 80)
 
         loss, mse_loss, kl_loss, _ = self.reconstruction_loss(mu=mu, log_std=log_std, x=x)
         # return tf.reduce_mean(loss + compiled_loss), predictor_y
@@ -100,19 +93,15 @@ class VAEWrapper(keras.Model):
         return {'loss':loss, 'mse_loss':mse_loss, 'kl_loss':kl_loss}
 
     def call(self, x, training=False, return_risk=True):
-        features = self.feature_extractor(x, training=training)
-        mu = self.mean_layer(features, training=training)
-        log_std = self.log_std_layer(features, training=training)
+        features = self.feature_extractor(x, training=training) # (B, 80)
+        mu = self.mean_layer(features, training=training) # (B, 80)
+        log_std = self.log_std_layer(features, training=training) # (B, 80)
 
         if training:
-            sampled_latent_vector = self.sampling_layer([mu, log_std])
-            B = tf.shape(sampled_latent_vector)[0]
-            sampled_latent_vector = tf.reshape(sampled_latent_vector, [B, 8, 10, 4]) # (B, 320) -> (B, 8, 10, 4)
-            reconstruction = self.decoder(sampled_latent_vector, training=True)
+            sampled_latent_vector = self.sampling_layer([mu, log_std]) # (B, 80)
+            reconstruction = self.decoder(sampled_latent_vector, training=True) # (B, 128, 160, 3)
         else:
-            B = tf.shape(mu)[0]
-            mu = tf.reshape(mu, [B, 8, 10, 4]) # (B, 320) -> (B, 8, 10, 4)
-            reconstruction = self.decoder(mu, training=False)
+            reconstruction = self.decoder(mu, training=False) # (B, 128, 160, 3)
 
         if return_risk:
             return reconstruction, tf.reduce_sum(tf.math.square(x - reconstruction), axis=-1)

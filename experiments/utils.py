@@ -14,7 +14,7 @@ from debug_minimal import DebugWrappar
 import config
 from losses import MSE
 from capsa import Wrapper, MVEWrapper, EnsembleWrapper, DropoutWrapper, VAEWrapper
-from models import unet, AutoEncoder, get_vae_encoder, get_decoder, VAE
+from models import unet, AutoEncoder, get_vae_encoder, get_vae_decoder, VAE
 
 # https://github.com/aamini/evidential-deep-learning/blob/main/neurips2020/train_depth.py#L34
 def load_depth_data():
@@ -221,8 +221,8 @@ def load_model(path, model_name, ds, opts={'num_members':3}, quite=True):
 
     elif model_name in ['vae', 'notebook_vae']:
         model = VAEWrapper(
-            get_vae_encoder((128, 160, 3), is_reshape=False), # (B, 8, 10, 4) or (B, 320)
-            get_decoder((8, 10, 4), num_class=3), # (B, 8, 10, 4) -> (B, 128, 160, 3)
+            get_vae_encoder((128, 160, 3), is_reshape=False), # (B, 8, 10, 1) or (B, 80)
+            get_vae_decoder((80), num_class=3), # (B, 80) -> (B, 128, 160, 3)
         )
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=config.LR),

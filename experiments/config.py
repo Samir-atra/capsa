@@ -14,7 +14,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 # # mve
 BS = 32
-EP = 20 # 70
+EP = 70 # 70
 LR = 5e-5
 
 # # vae
@@ -31,6 +31,6 @@ LOGS_PATH = '/home/iaroslavelistratov/results' #'/data/capsa/depth'
 # source code path for logging
 SOURCE_PATH = '/home/iaroslavelistratov/capsa'
 # optional, used only in check_saved_weights.py
-MODEL_PATH = '/home/iaroslavelistratov/results/base/20220827-051408'
+MODEL_PATH = '/home/iaroslavelistratov/results/mve/20220902-121744new'
 
 timedelta = 3 # 3 for Iaro, 0 for ET

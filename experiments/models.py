@@ -150,7 +150,6 @@ def get_bottleneck_flat(input_shape=(8, 10, 256), is_reshape=True):
     inputs = tf.keras.layers.Input(shape=input_shape)
     x = tf.keras.layers.Flatten()(inputs) # (8 * 10 * 256 = 20480, 320)
     x = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
-    flat_shape = tf.shape(x)
     x = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
     out = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
     if is_reshape:
@@ -205,13 +204,41 @@ def get_vae_encoder(input_shape=(128, 160, 3), is_reshape=False):
 
     ### bottleneck
     x = tf.keras.layers.Flatten()(pool4) # (B, 8 * 10 * 256) -> (B, 20480)
-    x = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
-    x = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
-    out = tf.keras.layers.Dense(320, activation='relu')(x) # (B, 320)
+    x = tf.keras.layers.Dense(80, activation='relu')(x) # (B, 80)
+    x = tf.keras.layers.Dense(80, activation='relu')(x) # (B, 80)
+    out = tf.keras.layers.Dense(80, activation='relu')(x) # (B, 80)
     if is_reshape:
-        out = tf.keras.layers.Reshape((8, 10, 4))(out)
+        out = tf.keras.layers.Reshape((8, 10, 1))(out)
 
     model = tf.keras.models.Model(inputs=inputs, outputs=out)
+    return model
+
+def get_vae_decoder(input_shape=(40), num_class=3):
+
+    inputs = tf.keras.layers.Input(shape=input_shape)
+
+    x = tf.keras.layers.Dense(80, activation=None)(inputs) # (B, 40) -> (B, 80)
+    x = tf.keras.layers.Reshape((8, 10, 1))(x)
+
+    up_conv5 = UpSampling2D(size=(2, 2))(x)
+    conv6 = Conv2D_(256, (3, 3))(up_conv5)
+    conv6 = Conv2D_(256, (3, 3))(conv6)
+
+    up_conv6 = UpSampling2D(size=(2, 2))(conv6)
+    conv7 = Conv2D_(128, (3, 3))(up_conv6)
+    conv7 = Conv2D_(128, (3, 3))(conv7)
+
+    up_conv7 = UpSampling2D(size=(2, 2))(conv7)
+    conv8 = Conv2D_(64, (3, 3))(up_conv7)
+    conv8 = Conv2D_(64, (3, 3))(conv8)
+
+    up_conv8 = UpSampling2D(size=(2, 2))(conv8)
+    conv9 = Conv2D_(32, (3, 3))(up_conv8)
+    conv9 = Conv2D_(32, (3, 3))(conv9)
+
+    conv10 = Conv2D(num_class, (1, 1))(conv9)
+
+    model = tf.keras.models.Model(inputs=inputs, outputs=conv10, name="decoder")
     return model
 
 ### check dims
@@ -293,8 +320,8 @@ class VAE(tf.keras.Model):
         self.bottleneck = get_bottleneck_flat((8, 10, 256), is_reshape=False) #(B, 8, 10, 4)
 
         # after sampling (using both out_mu and out_logvar) z has ch 4
-        self.out_mu = tf.keras.layers.Dense(320) # (B, 8, 10, 4)
-        self.out_logvar = tf.keras.layers.Dense(320) # (B, 8, 10, 4)
+        self.out_mu = tf.keras.layers.Dense(320, activation=None) # (B, 8, 10, 4)
+        self.out_logvar = tf.keras.layers.Dense(320, activation=None) # (B, 8, 10, 4)
 
         self.dec = get_decoder((8, 10, 4), num_class=3) # (B, 128, 160, 3)
 

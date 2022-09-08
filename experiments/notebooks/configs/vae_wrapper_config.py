@@ -22,6 +22,6 @@ SOURCE_PATH = '/home/iaroslavelistratov/capsa'
 LOGS_PATH = '/data/capsa/depth/results'
 # load model from
 # MODEL_PATH = '/data/capsa/depth/results/ae_model/20220827-235857-bottleneck16'
-MODEL_PATH = '/home/iaroslavelistratov/results/vae/20220906-111146fix-loss-dims2'
+MODEL_PATH = '/home/iaroslavelistratov/results/vae/20220908-144919latent-80'
 
 timedelta = 3 # 3 for Iaro, 0 for ET
