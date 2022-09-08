@@ -22,9 +22,9 @@ def gen_data(noise=True):
 
     # mask = np.random.choice(2, y.shape, p=[0.5, 0.5])
     if noise:
-        random_variable = ss.multivariate_normal([-0.7, 0.75], [[0.03, 0.0], [0.0, 0.05]])
+        random_variable = ss.multivariate_normal([-0.7, 0.8], [[0.03, 0.0], [0.0, 0.05]])
         p_flip = random_variable.pdf(x)
-        p_flip = p_flip / (2 * p_flip.max())
+        p_flip = p_flip / (3 * p_flip.max())
         flip = p_flip > np.random.rand(p_flip.shape[0])
 
         y[flip] = 1 - y[flip]
@@ -57,7 +57,7 @@ grid = np.stack([xx, yy], axis=-1)
 
 # Naive model: no capsa, deterministic network. Plot the decision boundary
 if args.naive:
-    model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.MeanSquaredError())
+    model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.BinaryCrossentropy())
     model.fit(x_train, y_train, batch_size=64, epochs=4, validation_data=(x_test, y_test))
     grid_pred = model(grid).numpy()
 
@@ -82,7 +82,7 @@ if args.bias:
 # Epistemic: Ensemble variance between predicted outputs of model members
 if args.epistemic:
     epistemic_model = EnsembleWrapper(model, num_members=5)
-    epistemic_model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.MeanSquaredError())
+    epistemic_model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.BinaryCrossentropy())
     epistemic_model.fit(x_train, y_train, batch_size=64, epochs=10, validation_data=(x_test, y_test))
 
     ### Getting error: TypeError: compile() got an unexpected keyword
@@ -93,7 +93,7 @@ if args.epistemic:
 # Aleatoric: MVE wrapper
 if args.aleatoric:
     aleatoric_model = MVEWrapper(model)
-    aleatoric_model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.MeanSquaredError())
+    aleatoric_model.compile(optimizer=tf.keras.optimizers.Adam(), loss=tf.keras.losses.BinaryCrossentropy())
     aleatoric_model.fit(x_train, y_train, batch_size=64, epochs=10, validation_data=(x_test, y_test))
 
     ### Getting error: ValueError: Error when checking model target: the list
