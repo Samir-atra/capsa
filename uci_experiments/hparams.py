@@ -1,5 +1,5 @@
 h_params = {
-    'yacht': {'learning_rate': 5e-4, 'batch_size': 1, "kl-weight": 0.005},
+    'yacht': {'learning_rate': 5e-4, 'batch_size': 1, "kl-weight": 0.05},
     'naval': {'learning_rate': 5e-4, 'batch_size': 32, "kl-weight": 0.5},
     'concrete': {'learning_rate': 5e-3, 'batch_size': 1, "kl-weight": 0.07},
     'energy-efficiency': {'learning_rate': 2e-3, 'batch_size': 1, "kl-weight": 0.05},

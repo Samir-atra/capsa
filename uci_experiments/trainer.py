@@ -35,19 +35,19 @@ def get_model(model_type, inp_shape, dataset):
     elif model_type == "ensemble + mve":
         return EnsembleWrapper(model, metric_wrapper=MVEWrapper, num_members=5)
     elif model_type == "dropout":
-        return get_toy_model(inp_shape, dropout_rate=0.1)
+        return get_toy_model(inp_shape, dropout_rate=0.05)
     elif model_type == "vae":
         decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.0)
         return VAEWrapper(model, decoder=decoder, bias=False, latent_dim=latent_dim, kl_weight=h_params[dataset]["kl-weight"])
     elif model_type == "vae + dropout":
-        decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.1)
+        decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.0)
         return VAEWrapper(get_toy_model(inp_shape, dropout_rate=0.1), bias=False, latent_dim=latent_dim, decoder=decoder, kl_weight=h_params[dataset]["kl-weight"])
     else:
         model = get_toy_model(inp_shape, dropout_rate=0.1)
         decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.1)
         return Wrapper(model, metrics=[VAEWrapper(model, bias=False, decoder=decoder, latent_dim=latent_dim, kl_weight=h_params[dataset]["kl-weight"]), MVEWrapper])
 
-def train(model_type, dataset=None, trials=1):
+def train(model_type, dataset=None, trials=3):
     nll = {}
     rmse = {}
     if dataset is None:
@@ -63,9 +63,9 @@ def train(model_type, dataset=None, trials=1):
             wrapped_model = get_model(model_type, inp_shape, ds)
             lr = h_params[ds]['learning_rate']
             batch_size = h_params[ds]['batch_size']
-            wrapped_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr),loss=tf.keras.losses.MeanSquaredError(),)
+            wrapped_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr),loss=tf.keras.losses.MeanSquaredError())
             loss_c = LossCallback(X_test, y_test, y_scale, model_type)
-            wrapped_model.fit(X_train, y_train, epochs=6, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=loss_c, verbose=0)
+            wrapped_model.fit(X_train, y_train, epochs=80, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=loss_c)
             print(model_type, "ds", ds, "trial", t, "nll", loss_c.min_nll.numpy(), "rmse", loss_c.min_rmse.numpy())
             nlls.append(loss_c.min_nll.numpy())
             rmses.append(loss_c.min_rmse.numpy())
@@ -73,7 +73,7 @@ def train(model_type, dataset=None, trials=1):
         rmse[ds] = {"mean" : np.mean(rmses), "std": np.std(rmses)}
     return nll, rmse
 
-model_types = ["ensemble", "dropout"]
+model_types = ["vae", "vae + dropout"]
 all_nll= {}
 all_rmse = {}
 for m in model_types:

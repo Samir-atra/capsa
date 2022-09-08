@@ -17,7 +17,7 @@ class EnsembleWrapper(keras.Model):
         self.num_members = num_members
         self.metrics_compiled = {}
 
-    def compile(self, optimizer, loss, metrics=[None]):
+    def compile(self, optimizer, loss, metrics=[None], **kwargs):
         super(EnsembleWrapper, self).compile()
 
         # if user passes only 1 optimizer and loss_fn yet they specified e.g. num_members=3,
@@ -59,7 +59,7 @@ class EnsembleWrapper(keras.Model):
                 if self.metric_wrapper is None
                 else f"{m.metric_name}_{i}"
             )
-            m.compile(optimizer[i], loss[i], metrics[i])
+            m.compile(optimizer[i], loss[i], metrics[i], **kwargs)
             self.metrics_compiled[m_name] = m
 
     def train_step(self, data):
