@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
-from keras import optimizers as optim
+from tensorflow.keras import optimizers as optim
 
 
 class EnsembleWrapper(keras.Model):

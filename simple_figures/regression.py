@@ -5,7 +5,13 @@ import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 
-def gen_cubic_data():
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--gui", action="store_true", help="show plots using a gui")
+args = parser.parse_args()
+
+
+def gen_data():
     np.random.seed(0)
     x_train = np.random.normal(1.5,4, (10000, 1))
     x_train = np.expand_dims(x_train[np.abs(x_train) < 4], 1)
@@ -14,46 +20,20 @@ def gen_cubic_data():
 
     y_train = x_train **3 / 10
     y_test = x_test ** 3/10
-    
+
     y_train += np.random.normal(0, 0.2, (len(x_train), 1))
     y_test += np.random.normal(0, 0.2, (len(x_test), 1))
-    
+
     x_train = np.concatenate((x_train, np.random.normal(1.5, 0.3, 4096)[:, np.newaxis]), 0)
     y_train = np.concatenate((y_train, np.random.normal(1.5, 0.6, 4096)[:, np.newaxis]), 0)
 
     x_test = np.concatenate((x_test, np.random.normal(1.5, 0.3, 256)[:, np.newaxis]), 0)
     y_test = np.concatenate((y_test, np.random.normal(1.5, 0.6, 256)[:, np.newaxis]), 0)
-    
+
     return (x_train, y_train), (x_test, y_test)
 
-def gen_moons_data(noise=True):
-    x, y = datasets.make_moons(n_samples=60000, noise=0.1)
 
-    mask = np.random.choice(2, y.shape, p=[0.5, 0.5])
-    if noise:
-        for i in range(len(x)):
-            if -0.5 < x[i][0] < 0.0 and x[i][1] > 0.8 and mask[i]:
-                y[i] = 1
-
-    x = x.astype(float)
-    y = y.astype(float)
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.30)
-    return (x_train, y_train), (x_test, y_test)
-    
-
-def get_toy_model_classification(input_shape=(2,), dropout_rate=0.1):
-    return tf.keras.Sequential(
-        [
-            tf.keras.Input(shape=input_shape),
-            tf.keras.layers.Dense(64, "relu"),
-            tf.keras.layers.Dense(32, "relu"),
-            tf.keras.layers.Dense(16, "relu"),
-            tf.keras.layers.Dense(8, "relu"),
-            tf.keras.layers.Dense(1, "sigmoid"),
-        ]
-    )
-
-def get_toy_model(input_shape=(1,)):
+def get_model(input_shape=(1,)):
     return tf.keras.Sequential(
         [
             tf.keras.Input(shape=input_shape),
@@ -65,7 +45,7 @@ def get_toy_model(input_shape=(1,)):
         ]
     )
 
-    
+
 
 
 model = get_toy_model()
