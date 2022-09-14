@@ -10,6 +10,8 @@ def get_toy_model(input_shape=(1,), dropout_rate=0.1):
             tf.keras.Input(shape=input_shape),
             tf.keras.layers.Dense(50, "relu"),
             tf.keras.layers.Dropout(rate=dropout_rate),
+            #tf.keras.layers.Dense(10, "relu"),
+            #tf.keras.layers.Dropout(rate=dropout_rate),
             tf.keras.layers.Dense(1, None),
         ]
     )
@@ -18,9 +20,9 @@ def get_decoder(input_shape, latent_dim, dropout_rate=0.1):
     return tf.keras.Sequential(
         [
             tf.keras.Input(shape=(latent_dim, )),
-            #tf.keras.layers.Dense(50, "relu"),
+            tf.keras.layers.Dense(10, "relu"),
             tf.keras.layers.Dropout(rate=dropout_rate),
-            tf.keras.layers.Dense(50, "linear"),
+            tf.keras.layers.Dense(10, "linear"),
             tf.keras.layers.Dense(input_shape[0], None),
         ]
     )
@@ -40,7 +42,7 @@ def get_model(model_type, inp_shape, dataset):
         decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.0)
         return VAEWrapper(model, decoder=decoder, bias=False, latent_dim=latent_dim, kl_weight=h_params[dataset]["kl-weight"])
     elif model_type == "vae + dropout":
-        decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.0)
+        decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.1)
         return VAEWrapper(get_toy_model(inp_shape, dropout_rate=0.1), bias=False, latent_dim=latent_dim, decoder=decoder, kl_weight=h_params[dataset]["kl-weight"])
     else:
         model = get_toy_model(inp_shape, dropout_rate=0.1)
@@ -63,9 +65,9 @@ def train(model_type, dataset=None, trials=3):
             wrapped_model = get_model(model_type, inp_shape, ds)
             lr = h_params[ds]['learning_rate']
             batch_size = h_params[ds]['batch_size']
-            wrapped_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr),loss=tf.keras.losses.MeanSquaredError())
+            wrapped_model.compile(optimizer=[tf.keras.optimizers.Adam(learning_rate=lr) for _ in range(5)],loss=[tf.keras.losses.MeanSquaredError() for _ in range(5)])
             loss_c = LossCallback(X_test, y_test, y_scale, model_type)
-            wrapped_model.fit(X_train, y_train, epochs=80, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=loss_c)
+            wrapped_model.fit(X_train, y_train, epochs=40, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=loss_c, verbose=0)
             print(model_type, "ds", ds, "trial", t, "nll", loss_c.min_nll.numpy(), "rmse", loss_c.min_rmse.numpy())
             nlls.append(loss_c.min_nll.numpy())
             rmses.append(loss_c.min_rmse.numpy())
@@ -73,7 +75,7 @@ def train(model_type, dataset=None, trials=3):
         rmse[ds] = {"mean" : np.mean(rmses), "std": np.std(rmses)}
     return nll, rmse
 
-model_types = ["vae", "vae + dropout"]
+model_types = ["ensemble + mve", "vae", "vae + dropout"]
 all_nll= {}
 all_rmse = {}
 for m in model_types:

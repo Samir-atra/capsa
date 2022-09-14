@@ -38,14 +38,15 @@ class MVEWrapper(keras.Model):
         #mu = self.out_mu(features)
         logvariance = self.out_logvar(features)
         
-        
+        '''
         loss = tf.reduce_mean(
             self.compiled_loss(y, y_hat, regularization_losses=self.losses),
         )
+        '''
         
         # tf.print('mse', tf.convert_to_tensor(loss))
 
-        loss += tf.reduce_mean(
+        loss = tf.reduce_mean(
             self.neg_log_likelihood(y, y_hat, logvariance)
         ) # (N_SAMPLES, 128, 160, 1) -> ( )
         # # tf.print('gaussian_nll', tf.reduce_mean(self.neg_log_likelihood(y, mu, logvariance)))

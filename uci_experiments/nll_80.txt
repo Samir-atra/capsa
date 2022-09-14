@@ -1,2 +1,3 @@
-vae yacht 0.8364989 +/- 0.018057354
-vae + dropout yacht 0.9726953 +/- 0.06884327
+ensemble yacht 0.37285972 +/- 0.17529196
+vae yacht 0.93024606 +/- 0.01689322
+vae + dropout yacht 1.0648208 +/- 0.023752306
