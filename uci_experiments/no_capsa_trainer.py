@@ -11,7 +11,7 @@ class LoggingCallback(tf.keras.callbacks.Callback):
                 tf.print("\n Min RMSE: ", self.model.min_RMSE, "Min NLL: ", self.model.min_NLL)
 
 class Ensemble(tf.keras.Model):
-        def __init__(self, input_shape, lr, num_ensembles=5):
+        def __init__(self, input_shape, lr,  y_scale, num_ensembles=5,):
                 super(Ensemble, self).__init__()
                 self.models = [self.get_toy_model(input_shape) for _ in range(num_ensembles)]
                 self.optimizers = [tf.keras.optimizers.Adam(learning_rate=lr) for _ in range(num_ensembles)]
@@ -19,6 +19,7 @@ class Ensemble(tf.keras.Model):
                 self.NLL = tf.keras.metrics.Mean(name='NLL')
                 self.min_RMSE = float('inf')
                 self.min_NLL = float('inf')
+                self.y_scale = y_scale
         
         def get_toy_model(self, input_shape=(1,)):
                 inputs = tf.keras.Input(shape=input_shape)
@@ -66,7 +67,9 @@ class Ensemble(tf.keras.Model):
                 final_mu = tf.math.reduce_mean(preds, axis=0)
                 var = tf.reduce_mean(all_sigmas**2 + tf.square(preds), axis=0) - tf.square(final_mu)
                 nll = self.nll_loss(y, final_mu, tf.math.sqrt(var))
+                nll += np.log(self.y_scale[0,0])
                 rmse = tf.sqrt(tf.reduce_mean((y - final_mu)**2))
+                rmse *= self.y_scale[0,0]
 
                 if nll < self.min_NLL:
                         self.min_NLL = nll
@@ -82,9 +85,9 @@ class Ensemble(tf.keras.Model):
 ds = "boston"
 inp_shape = datasets_and_input_shapes[ds]
 lr = h_params[ds]['learning_rate']
-ensemble = Ensemble(inp_shape, lr)
-ensemble.compile('adam', tf.keras.losses.MeanSquaredError(), run_eagerly=True)
 (X_train, y_train), (X_test, y_test), y_scale = load_dataset(ds)
 batch_size = h_params[ds]['batch_size']
+ensemble = Ensemble(inp_shape, lr, y_scale)
+ensemble.compile('adam', tf.keras.losses.MeanSquaredError(), run_eagerly=True)
 
-ensemble.fit(X_train, y_train, epochs=10, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=[LoggingCallback()])
+ensemble.fit(X_train, y_train, epochs=40, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=[LoggingCallback()])
