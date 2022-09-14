@@ -32,23 +32,7 @@ class Ensemble(tf.keras.Model):
 
                 logprob = -tf.math.log(sigma) - 0.5*tf.math.log(2*np.pi) - 0.5*((y-mu)/sigma)**2
                 loss = tf.reduce_mean(-logprob, axis=ax)
-                return tf.reduce_mean(loss) if reduce else loss
-        
-        def each_model_train_step(self, data, model, optimizer):
-                # Unpack the data. Its structure depends on your model and
-                # on what you pass to `fit()`.
-                x, y = data
-                with tf.GradientTape() as tape:
-                        y_pred, logsigma = model(x, training=True)  # Forward pass
-                        loss = self.nll_loss(y, y_pred, tf.nn.softplus(logsigma) + 1e-6)
-                        
-                # Compute gradients
-                trainable_vars = model.trainable_variables
-                gradients = tape.gradient(loss, trainable_vars)
-                # Update weights
-                optimizer.apply_gradients(zip(gradients, trainable_vars))
-                # Update metrics (includes the metric that tracks the loss)
-                return loss, tf.sqrt(tf.reduce_mean((y_pred - y)**2))
+                return tf.reduce_mean(loss) if reduce else loss 
 
         
         def train_step(self, data):
