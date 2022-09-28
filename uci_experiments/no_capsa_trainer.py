@@ -11,12 +11,13 @@ class LoggingCallback(tf.keras.callbacks.Callback):
                 tf.print("\n Min RMSE: ", self.model.min_RMSE, "Min NLL: ", self.model.min_NLL)
 
 class Ensemble(tf.keras.Model):
-        def __init__(self, input_shape, lr,  y_scale, num_ensembles=5,):
+        def __init__(self, input_shape, lr,  y_scale, num_ensembles=1,):
                 super(Ensemble, self).__init__()
                 self.models = [self.get_toy_model(input_shape) for _ in range(num_ensembles)]
                 self.optimizers = [tf.keras.optimizers.Adam(learning_rate=lr) for _ in range(num_ensembles)]
                 self.RMSE = tf.keras.metrics.Mean(name='RMSE')
                 self.NLL = tf.keras.metrics.Mean(name='NLL')
+                self.loss_metric = tf.keras.metrics.Mean(name='loss')
                 self.min_RMSE = float('inf')
                 self.min_NLL = float('inf')
                 self.y_scale = y_scale
@@ -49,7 +50,7 @@ class Ensemble(tf.keras.Model):
                         gradients = tape.gradient(loss, trainable_vars)
                         optimizer.apply_gradients(zip(gradients, trainable_vars))
                         rmses.append(tf.math.sqrt(tf.math.reduce_mean((y_pred - y)**2)))
-                self.NLL.update_state(losses)
+                self.loss_metric.update_state(losses)
                 self.RMSE.update_state(rmses)
                 # Return a dict mapping metric names to current value
                 return {m.name: m.result() for m in self.metrics}
@@ -58,8 +59,10 @@ class Ensemble(tf.keras.Model):
                 x, y = data
                 preds = []
                 all_sigmas = []
+                losses = []
                 for i, model in enumerate(self.models):
                         y_pred, logsigma = model(x, training=False)
+                        losses.append(self.nll_loss(y, y_pred, tf.nn.softplus(logsigma) + 1e-6))
                         preds.append(y_pred)
                         all_sigmas.append(tf.nn.softplus(logsigma) + 1e-6)
                 preds = tf.stack(preds)
@@ -76,13 +79,13 @@ class Ensemble(tf.keras.Model):
                 
                 if rmse < self.min_RMSE:
                         self.min_RMSE = rmse
-                
                 self.NLL.update_state([nll])
                 self.RMSE.update_state([rmse])
+                self.loss_metric.update_state([losses])
                 return {m.name: m.result() for m in self.metrics}
                 
 
-ds = "boston"
+ds = "yacht"
 inp_shape = datasets_and_input_shapes[ds]
 lr = h_params[ds]['learning_rate']
 (X_train, y_train), (X_test, y_test), y_scale = load_dataset(ds)
@@ -90,4 +93,4 @@ batch_size = h_params[ds]['batch_size']
 ensemble = Ensemble(inp_shape, lr, y_scale)
 ensemble.compile('adam', tf.keras.losses.MeanSquaredError(), run_eagerly=True)
 
-ensemble.fit(X_train, y_train, epochs=40, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=[LoggingCallback()])
+ensemble.fit(X_train, y_train, epochs=80, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=[LoggingCallback()])

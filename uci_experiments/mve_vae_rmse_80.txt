@@ -1,0 +1,16 @@
+vae boston 2.2034154 +/- 0.12586625
+vae power-plant 4.226143 +/- 0.024661053
+vae yacht 1.1926106 +/- 0.2485781
+vae concrete 5.9264026 +/- 0.4519853
+vae naval 0.006555212 +/- 4.1322204e-05
+vae energy-efficiency 1.3420395 +/- 0.12169481
+vae kin8nm 0.079556815 +/- 0.0004197688
+vae protein 4.285153 +/- 0.024569836
+ensemble + mve boston 2.2182443 +/- 0.15838991
+ensemble + mve power-plant 4.1443157 +/- 0.006486804
+ensemble + mve yacht 0.7037032 +/- 0.050564907
+ensemble + mve concrete 5.5352035 +/- 0.00040467613
+ensemble + mve naval 0.0061641033 +/- 8.796996e-05
+ensemble + mve energy-efficiency 1.0538692 +/- 0.06092398
+ensemble + mve kin8nm 0.06869001 +/- 0.0008269401
+ensemble + mve protein 4.2920837 +/- 0.030950775

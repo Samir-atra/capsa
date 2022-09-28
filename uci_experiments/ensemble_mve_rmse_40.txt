@@ -1,0 +1,8 @@
+ensemble + mve boston 2.487213 +/- 0.251412
+ensemble + mve power-plant 4.2031984 +/- 0.013983584
+ensemble + mve yacht 0.84911984 +/- 0.07589968
+ensemble + mve concrete 5.6534743 +/- 0.1704733
+ensemble + mve naval 0.0071055293 +/- 0.00013592633
+ensemble + mve energy-efficiency 1.22948 +/- 0.07420644
+ensemble + mve kin8nm 0.0710926 +/- 0.00042691274
+ensemble + mve protein 4.280854 +/- 0.015958909

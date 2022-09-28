@@ -1,0 +1,8 @@
+dropout boston 2.2951834 +/- 0.011885103
+dropout power-plant 2.8707743 +/- 0.0025842732
+dropout yacht 2.428061 +/- 0.014056231
+dropout concrete 3.3736382 +/- 0.047887973
+dropout naval 0.9769127 +/- 0.66745174
+dropout energy-efficiency 2.1203077 +/- 0.021885006
+dropout kin8nm -1.0125115 +/- 0.0062124766
+dropout protein 4.6775804 +/- 0.10038138

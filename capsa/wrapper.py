@@ -51,11 +51,13 @@ class Wrapper(keras.Model):
         scalar = 1 / len(self.metric)
 
         for name, wrapper in self.metric_compiled.items():
+            '''
             if name != "DropoutWrapper":
                 keras_metric, grad = wrapper.wrapped_train_step(x, y, features, name)
                 accum_grads += tf.scalar_mul(scalar, grad[0])
             else:
-                keras_metric = wrapper.wrapped_train_step(x, y, features, name)
+            '''
+            keras_metric = wrapper.train_step(x, y)
             keras_metrics.update(keras_metric)
 
         trainable_vars = self.feature_extractor.trainable_variables

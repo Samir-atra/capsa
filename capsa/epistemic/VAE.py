@@ -1,6 +1,7 @@
 from random import sample
 import tensorflow as tf
 from tensorflow import keras
+import numpy as np
 
 from ..utils import Sampling, copy_layer, reverse_model, _get_out_dim
 from ..bias.histogram import HistogramLayer
@@ -44,6 +45,11 @@ class VAEWrapper(keras.Model):
 
         last_layer = base_model.layers[-1]
         self.output_layer = copy_layer(last_layer)  # duplicate last layer
+
+        self.drop_prob = 0.1
+        self.lam = 1e-3
+        self.l = 0.2
+        self.tau = self.l**2 * (1-self.drop_prob) / (2 * self.lam)
         
         
         # Reverse model if we can, accept user decoder if we cannot
@@ -124,8 +130,48 @@ class VAEWrapper(keras.Model):
             {f"{prefix}_{m.name}": m.result() for m in self.metrics},
             tf.gradients(loss, features),
         )
+    
+    def composability_method_1(self, x, T = 20):
+        dropout_outs = []
+        feature_outs = []
+        for _ in range(T):
+            features = self.feature_extractor(x, training=True)
+            feature_outs.append(features)
+            dropout_outs.append(self.output_layer(features, training=True))
+        dropout_var = tf.math.reduce_mean(tf.math.reduce_variance(feature_outs, axis=0), axis=-1, keepdims=False) + self.tau**-1
+        
+        final_features = tf.math.reduce_mean(feature_outs, axis=0)
+        mu = self.mean_layer(final_features)
+        x_hat = self.decoder(mu)
 
-    def call(self, x, training=False, return_risk=True, features=None, softmax=False, per_pixel=False):
+        mse = tf.math.reduce_mean((x_hat - x) ** 2, axis=-1)
+        #print(dropout_var, mse)
+        return tf.math.reduce_mean(dropout_outs, axis=0), 0.5 * (dropout_var + self.tau**-1 + mse)
+    
+    def composability_method_3(self, x, T = 5):
+        mus = []
+        sigmas = []
+        for _ in range(T):
+            features = self.feature_extractor(x, training=True)
+            mu = self.mean_layer(features)
+            logsigma = self.log_std_layer(features)
+            decoder_outs = []
+            for _ in range(T):
+                decoder_out = self.decoder(self.sampling_layer([mu, logsigma]))
+                decoder_outs.append(decoder_out)
+            mus.append(tf.math.reduce_mean(decoder_outs, axis=0))
+            sigmas.append(tf.math.reduce_std(decoder_outs, axis=0))
+        
+        sigmas = np.array(sigmas)
+        mus = np.array(mus)
+        all_mu = tf.math.reduce_mean(mus, axis=0)
+        all_var = tf.reduce_mean(np.array(sigmas) ** 2 + np.array(mus)**2, axis=0) - all_mu ** 2
+
+        features = self.feature_extractor(x, training=False)
+        y_hat = self.output_layer(features)
+        return y_hat, tf.math.reduce_mean(all_var)
+
+    def call(self, x, training=False, return_risk=True, features=None, softmax=False, per_pixel=False, composed=None):
         if self.is_standalone:
             features = self.feature_extractor(x, training=training)
 
@@ -137,14 +183,20 @@ class VAEWrapper(keras.Model):
             outs = []
             outs.append(out)
             if self.epistemic:
-                if per_pixel:
-                    pixel_wise_outs = []
-                    for _ in range(5):
-                        pixel_wise_outs.append(self.decoder(self.sampling_layer([mu, log_std])))
-                    var = tf.math.reduce_variance(pixel_wise_outs, axis=0)
-                    outs.append(tf.math.reduce_mean(var, axis=-1, keepdims=True))
+                if composed == 1:
+                    return self.composability_method_1(x)
+                elif composed == 3:
+                    return self.composability_method_3(x)
                 else:
-                    outs.append(self.reconstruction_loss(mu, log_std, x, training=False))
+                    if per_pixel:
+                        pixel_wise_outs = []
+                        for _ in range(20):
+                            pixel_wise_outs.append(self.decoder(self.sampling_layer([mu, log_std])))
+                        var = tf.math.reduce_variance(pixel_wise_outs, axis=0)
+                        outs.append(tf.math.reduce_mean(var, axis=-1, keepdims=True))
+                    else:
+                        outs.append(self.reconstruction_loss(mu, log_std, x, training=False))
+                
 
             if self.bias:
                 outs.append(self.histogram_layer(mu, training=training, softmax=softmax))

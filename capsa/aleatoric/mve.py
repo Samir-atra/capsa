@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 from ..utils import MLP, _get_out_dim, copy_layer
-
+import numpy as np
 
 class MVEWrapper(keras.Model):
 
@@ -21,35 +21,27 @@ class MVEWrapper(keras.Model):
         output_layer = base_model.layers[-1]
         self.out_y = copy_layer(output_layer)
         self.out_mu = copy_layer(output_layer, override_activation="linear")
-        self.out_logvar = copy_layer(output_layer, override_activation="linear")
+        self.out_logsigma = copy_layer(output_layer, override_activation="linear")
 
     @staticmethod
-    def neg_log_likelihood(y, mu, logvariance):
-        variance = tf.exp(logvariance)
-        sigma = tf.math.sqrt(variance)
-        loss = tf.math.log(sigma) + (y-mu)**2 / (2 * variance)
-        return loss
+    def nll_loss(y, mu, sigma, reduce=True):
+        ax = list(range(1, len(y.shape)))
+
+        logprob = -tf.math.log(sigma) - 0.5*tf.math.log(2*np.pi) - 0.5*((y-mu)/sigma)**2
+        loss = tf.reduce_mean(-logprob, axis=ax)
+        return tf.reduce_mean(loss) if reduce else loss 
 
     def loss_fn(self, x, y, features=None):
         if self.is_standalone:
             features = self.feature_extractor(x, training=True)
 
         y_hat = self.out_y(features)
-        #mu = self.out_mu(features)
-        logvariance = self.out_logvar(features)
+        logsigma = self.out_logsigma(features)
         
-        '''
-        loss = tf.reduce_mean(
-            self.compiled_loss(y, y_hat, regularization_losses=self.losses),
-        )
-        '''
-        
-        # tf.print('mse', tf.convert_to_tensor(loss))
 
         loss = tf.reduce_mean(
-            self.neg_log_likelihood(y, y_hat, logvariance)
+            self.nll_loss(y, y_hat, tf.nn.softplus(logsigma) + 1e-6)
         ) # (N_SAMPLES, 128, 160, 1) -> ( )
-        # # tf.print('gaussian_nll', tf.reduce_mean(self.neg_log_likelihood(y, mu, logvariance)))
 
         return loss, y_hat
 
@@ -97,8 +89,8 @@ class MVEWrapper(keras.Model):
         y_hat = self.out_y(features)
 
         if return_risk:
-            logvariance = self.out_logvar(features)
-            variance = tf.exp(logvariance)
-            return (y_hat, variance)
+            logsigma = self.out_logsigma(features)
+            std = tf.nn.softplus(logsigma) + 1e-6
+            return (y_hat, std**2)
         else:
             return y_hat

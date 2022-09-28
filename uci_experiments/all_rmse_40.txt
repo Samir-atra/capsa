@@ -1,0 +1,24 @@
+dropout boston 2.4156804 +/- 0.09909951
+dropout power-plant 4.4290166 +/- 0.019974137
+dropout yacht 1.7850769 +/- 0.114504956
+dropout concrete 6.777124 +/- 0.23471019
+dropout naval 0.0069896826 +/- 0.00013993989
+dropout energy-efficiency 1.8269885 +/- 0.089077175
+dropout kin8nm 0.09174243 +/- 0.00184914
+dropout protein 4.434857 +/- 0.0144997835
+vae + dropout boston 2.277981 +/- 0.11338167 (updated)
+vae + dropout power-plant 4.322614 +/- 0.017428348 (updated)
+vae + dropout yacht 1.6300306 +/- 0.2410575 (updated) 
+vae + dropout concrete 6.488981 +/- 0.06685637
+vae + dropout naval 0.0070333965 +/- 8.53701e-05
+vae + dropout energy-efficiency 1.6534151 +/- 0.19543189
+vae + dropout kin8nm 0.086711675 +/- 0.0020231605
+vae + dropout protein 4.468899 +/- 0.025091678
+vae boston 2.322699 +/- 0.11694513
+vae power-plant 4.2856336 +/- 0.011987364
+vae yacht 1.4184735 +/- 0.22229888
+vae concrete 6.3824186 +/- 0.10119145
+vae naval 0.0071422076 +/- 8.371765e-05
+vae energy-efficiency 1.3768476 +/- 0.09083489
+vae kin8nm 0.082592994 +/- 0.0011479412
+vae protein 4.360513 +/- 0.015574472

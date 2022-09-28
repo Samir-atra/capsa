@@ -3,26 +3,28 @@ from dataloader import *
 from hparams import h_params
 from callbacks import LossCallback
 from capsa import Wrapper, EnsembleWrapper, VAEWrapper, MVEWrapper 
+import time
 
-def get_toy_model(input_shape=(1,), dropout_rate=0.1):
+reg = 1e-3
+
+def get_toy_model(input_shape=(1,), dropout_rate=0.0):
     return tf.keras.Sequential(
         [
             tf.keras.Input(shape=input_shape),
-            tf.keras.layers.Dense(50, "relu"),
+            tf.keras.layers.Dense(50, "relu", kernel_regularizer=tf.keras.regularizers.L2(reg)),
             tf.keras.layers.Dropout(rate=dropout_rate),
-            #tf.keras.layers.Dense(10, "relu"),
-            #tf.keras.layers.Dropout(rate=dropout_rate),
-            tf.keras.layers.Dense(1, None),
+            tf.keras.layers.Dense(10, "relu"),
+            tf.keras.layers.Dropout(rate=dropout_rate),
+            tf.keras.layers.Dense(1, None, kernel_regularizer=tf.keras.regularizers.L2(reg)),
         ]
     )
 
-def get_decoder(input_shape, latent_dim, dropout_rate=0.1):
+def get_decoder(input_shape, latent_dim):
     return tf.keras.Sequential(
         [
             tf.keras.Input(shape=(latent_dim, )),
             tf.keras.layers.Dense(10, "relu"),
-            tf.keras.layers.Dropout(rate=dropout_rate),
-            tf.keras.layers.Dense(10, "linear"),
+            tf.keras.layers.Dense(50, "relu"),
             tf.keras.layers.Dense(input_shape[0], None),
         ]
     )
@@ -33,25 +35,26 @@ def get_model(model_type, inp_shape, dataset):
     model = get_toy_model(inp_shape, dropout_rate=0.0)
     latent_dim = inp_shape[0] // 2
     if model_type == "ensemble":
-        return EnsembleWrapper(model, num_members=5)
+        return EnsembleWrapper(model, num_members=4)
     elif model_type == "ensemble + mve":
-        return EnsembleWrapper(model, metric_wrapper=MVEWrapper, num_members=5)
+        return EnsembleWrapper(model, metric_wrapper=MVEWrapper, num_members=4)
     elif model_type == "dropout":
-        return get_toy_model(inp_shape, dropout_rate=0.05)
+        return get_toy_model(inp_shape, dropout_rate=0.1)
     elif model_type == "vae":
-        decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.0)
+        decoder = get_decoder(inp_shape, latent_dim)
         return VAEWrapper(model, decoder=decoder, bias=False, latent_dim=latent_dim, kl_weight=h_params[dataset]["kl-weight"])
     elif model_type == "vae + dropout":
-        decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.1)
-        return VAEWrapper(get_toy_model(inp_shape, dropout_rate=0.1), bias=False, latent_dim=latent_dim, decoder=decoder, kl_weight=h_params[dataset]["kl-weight"])
+        decoder = get_decoder(inp_shape, latent_dim)
+        return VAEWrapper(get_toy_model(inp_shape, dropout_rate=0.1), bias=False, latent_dim=latent_dim, decoder=decoder, kl_weight=h_params[dataset]["kl-weight-dropout"])
     else:
         model = get_toy_model(inp_shape, dropout_rate=0.1)
-        decoder = get_decoder(inp_shape, latent_dim, dropout_rate=0.1)
+        decoder = get_decoder(inp_shape, latent_dim)
         return Wrapper(model, metrics=[VAEWrapper(model, bias=False, decoder=decoder, latent_dim=latent_dim, kl_weight=h_params[dataset]["kl-weight"]), MVEWrapper])
 
-def train(model_type, dataset=None, trials=3):
+def train(model_type, dataset=None, trials=5):
     nll = {}
     rmse = {}
+    time_taken = {}
     if dataset is None:
         dataset = datasets_and_input_shapes.keys()
     for ds in dataset:
@@ -59,40 +62,55 @@ def train(model_type, dataset=None, trials=3):
         rmse[ds] = {}
         nlls = []
         rmses = []
+        times = []
         for t in range(trials):
+            tic = time.time()
             inp_shape = datasets_and_input_shapes[ds]
             (X_train, y_train), (X_test, y_test), y_scale = load_dataset(ds)
             wrapped_model = get_model(model_type, inp_shape, ds)
             lr = h_params[ds]['learning_rate']
             batch_size = h_params[ds]['batch_size']
-            wrapped_model.compile(optimizer=[tf.keras.optimizers.Adam(learning_rate=lr) for _ in range(5)],loss=[tf.keras.losses.MeanSquaredError() for _ in range(5)])
+            wrapped_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr),loss=tf.keras.losses.MeanSquaredError())
             loss_c = LossCallback(X_test, y_test, y_scale, model_type)
-            wrapped_model.fit(X_train, y_train, epochs=40, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=loss_c, verbose=0)
+            wrapped_model.fit(X_train, y_train, epochs=40, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=loss_c)
             print(model_type, "ds", ds, "trial", t, "nll", loss_c.min_nll.numpy(), "rmse", loss_c.min_rmse.numpy())
+            toc = time.time()
+            times.append(toc - tic)
             nlls.append(loss_c.min_nll.numpy())
             rmses.append(loss_c.min_rmse.numpy())
         nll[ds] = {"mean" : np.mean(nlls), "std": np.std(nlls)}
         rmse[ds] = {"mean" : np.mean(rmses), "std": np.std(rmses)}
-    return nll, rmse
+        time_taken[ds] = {"mean" : np.mean(times), "std" : np.std(times)}
+    return nll, rmse, time_taken
 
-model_types = ["ensemble + mve", "vae", "vae + dropout"]
+model_types = ["dropout"]
 all_nll= {}
 all_rmse = {}
+all_times = {}
 for m in model_types:
     print(m)
-    nll, rmse = train(m, ["yacht"])
+    nll, rmse, times = train(m)
     all_nll[m] = nll
     all_rmse[m] = rmse
-print("***NLL****")
-with open("nll_80.txt", "w") as f:
-    for model_type, v in all_nll.items():
-        for dataset, results in v.items():
-                f.write(model_type + " " + dataset + " " + str(results["mean"]) + " +/- " + str(results["std"]) + "\n") 
+    all_times[m] = times
 
-with open("rmse_80.txt", "w") as f:
-    for model_type, v in all_rmse.items():
-        for dataset, results in v.items():
-                f.write(model_type + " " + dataset + " " + str(results["mean"]) + " +/- " + str(results["std"]) + "\n") 
-print(all_nll)
-print(all_rmse)
-    
+log = True
+if log:
+    print("***NLL****")
+    with open("dropout_40.txt", "w") as f:
+        for model_type, v in all_nll.items():
+            for dataset, results in v.items():
+                    f.write(model_type + " " + dataset + " " + str(results["mean"]) + " +/- " + str(results["std"]) + "\n") 
+
+    with open("dropout_rmse_40.txt", "w") as f:
+        for model_type, v in all_rmse.items():
+            for dataset, results in v.items():
+                    f.write(model_type + " " + dataset + " " + str(results["mean"]) + " +/- " + str(results["std"]) + "\n") 
+
+    with open("dropout_times_40.txt", "w") as f:
+        for model_type, v in all_times.items():
+            for dataset, results in v.items():
+                    f.write(model_type + " " + dataset + " " + str(results["mean"]) + " +/- " + str(results["std"]) + "\n") 
+
+print("NLL", all_nll)
+print("RMSE", all_rmse)

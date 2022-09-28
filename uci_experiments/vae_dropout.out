@@ -1,0 +1,425 @@
+2022-09-27 01:40:50.144749: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:50.149820: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:50.150708: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:50.152071: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-09-27 01:40:50.157778: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:50.158665: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:50.159574: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:51.189968: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:51.191028: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:51.191995: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-09-27 01:40:51.192873: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1532] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 16262 MB memory:  -> device: 0, name: NVIDIA RTX A5000, pci bus id: 0000:61:00.0, compute capability: 8.6
+2022-09-27 01:40:53.948717: I tensorflow/stream_executor/cuda/cuda_blas.cc:1786] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+
+ 3.1608877 5.4624553
+
+ 2.895916 4.267708
+
+ 2.7720766 3.5747075
+
+ 2.7645497 3.2343698
+
+ 2.7450123 3.198965
+
+ 2.698573 3.2272694
+
+ 2.6678116 3.0248392
+
+ 2.5953038 2.7050328
+
+ 2.6653044 2.8055139
+
+ 2.6254754 2.602105
+
+ 2.5934372 2.7149432
+
+ 2.57274 2.6108093
+
+ 2.5750885 2.572133
+
+ 2.5823586 2.611922
+
+ 2.559936 2.4213254
+
+ 2.5511467 2.392456
+
+ 2.551409 2.4903853
+
+ 2.5468013 2.3004751
+
+ 2.511735 2.3819308
+
+ 2.4946728 2.3377984
+
+ 2.4793487 2.3216739
+
+ 2.4867263 2.4145277
+
+ 2.4836793 2.2956681
+
+ 2.450224 2.3060803
+
+ 2.4147966 2.250151
+
+ 2.4791524 2.3098216
+
+ 2.45769 2.3189862
+
+ 2.4272861 2.1751692
+
+ 2.4272797 2.2453756
+
+ 2.442412 2.1942725
+
+ 2.4288697 2.0813746
+
+ 2.4422634 2.1784003
+
+ 2.4212766 2.284528
+
+ 2.3894756 2.1095939
+
+ 2.3797686 2.1065907
+
+ 2.3858337 2.1393714
+
+ 2.4106078 2.151334
+
+ 2.4361882 2.3523307
+
+ 2.3945363 2.204635
+
+ 2.403635 2.1993527
+NLL 2.3797686 RMSE 2.0813746
+
+ 3.3962255 6.4079375
+
+ 3.0072515 4.0258164
+
+ 2.851533 3.5427692
+
+ 2.785734 2.9466794
+
+ 2.7416353 2.9164815
+
+ 2.7014408 2.8204777
+
+ 2.681232 2.663757
+
+ 2.5767062 2.5134952
+
+ 2.6072989 2.573824
+
+ 2.6302156 2.5992854
+
+ 2.6141248 2.478109
+
+ 2.6018934 2.5857296
+
+ 2.5652468 2.506055
+
+ 2.5775735 2.4551795
+
+ 2.5482476 2.4354975
+
+ 2.5415466 2.392968
+
+ 2.5037892 2.4321892
+
+ 2.525803 2.413458
+
+ 2.518362 2.4268622
+
+ 2.491607 2.2837985
+
+ 2.4857645 2.269057
+
+ 2.4790883 2.3253386
+
+ 2.4841266 2.3496344
+
+ 2.4911156 2.321635
+
+ 2.4586296 2.3343055
+
+ 2.4462845 2.3036916
+
+ 2.460357 2.4416645
+
+ 2.4463027 2.25061
+
+ 2.4128337 2.2896454
+
+ 2.4668338 2.4315972
+
+ 2.4403105 2.3163533
+
+ 2.4252696 2.3501346
+
+ 2.425665 2.3777177
+
+ 2.4206517 2.2098136
+
+ 2.437404 2.3126736
+
+ 2.3947892 2.2928216
+
+ 2.4047399 2.273549
+
+ 2.3794265 2.1673298
+
+ 2.4358752 2.38807
+
+ 2.4118767 2.3483834
+NLL 2.3794265 RMSE 2.1673298
+
+ 3.083393 5.1828103
+
+ 2.8995872 3.858804
+
+ 2.756125 3.36098
+
+ 2.7884874 3.3776116
+
+ 2.6804233 3.0918345
+
+ 2.6875758 2.9803176
+
+ 2.7251775 2.9065375
+
+ 2.6084614 2.7858849
+
+ 2.5805576 2.8001125
+
+ 2.5959334 2.619882
+
+ 2.5734177 2.6474159
+
+ 2.6013508 2.6113737
+
+ 2.5566926 2.607404
+
+ 2.5618594 2.4864557
+
+ 2.508164 2.432662
+
+ 2.5502577 2.384184
+
+ 2.5252352 2.4477656
+
+ 2.5254114 2.5409572
+
+ 2.4973552 2.3569057
+
+ 2.4746711 2.3145041
+
+ 2.4670987 2.34088
+
+ 2.447139 2.28636
+
+ 2.4930284 2.3994226
+
+ 2.4656417 2.3643277
+
+ 2.4105268 2.1795542
+
+ 2.413592 2.1885393
+
+ 2.4424152 2.324927
+
+ 2.420337 2.2205648
+
+ 2.4338772 2.264359
+
+ 2.4356244 2.2964785
+
+ 2.4094756 2.1804404
+
+ 2.3958306 2.3367593
+
+ 2.4053645 2.2106225
+
+ 2.4046986 2.3085625
+
+ 2.3885114 2.272427
+
+ 2.391384 2.2431526
+
+ 2.3831646 2.1518776
+
+ 2.3842933 2.280583
+
+ 2.389021 2.2319496
+
+ 2.4291239 2.3178875
+NLL 2.3831646 RMSE 2.1518776
+
+ 3.4357426 6.680863
+
+ 3.1402016 5.168189
+
+ 2.8100219 4.141472
+
+ 2.7864928 3.8415265
+
+ 2.6963568 3.456663
+
+ 2.6909928 3.342023
+
+ 2.6843843 3.1926847
+
+ 2.616369 3.0144694
+
+ 2.6182203 3.0172315
+
+ 2.5832157 2.876104
+
+ 2.5915854 2.8076408
+
+ 2.562597 2.82139
+
+ 2.5261698 2.7148774
+
+ 2.526661 2.6909897
+
+ 2.4949014 2.572457
+
+ 2.4658327 2.5525737
+
+ 2.496648 2.647255
+
+ 2.4862065 2.5501924
+
+ 2.5057387 2.7036514
+
+ 2.448549 2.596542
+
+ 2.473435 2.5316944
+
+ 2.4774034 2.5073295
+
+ 2.4684036 2.5566087
+
+ 2.427758 2.4860184
+
+ 2.4264045 2.584068
+
+ 2.434631 2.4627907
+
+ 2.3935966 2.4299848
+
+ 2.4087381 2.4252203
+
+ 2.4369562 2.389753
+
+ 2.383336 2.2973673
+
+ 2.433532 2.4294457
+
+ 2.403507 2.3554018
+
+ 2.4015214 2.386081
+
+ 2.3766654 2.3283257
+
+ 2.3730981 2.3626056
+
+ 2.3914347 2.3288493
+
+ 2.3790915 2.3388855
+
+ 2.381642 2.3210456
+
+ 2.3734894 2.3131716
+
+ 2.3750682 2.2825863
+NLL 2.3730981 RMSE 2.2825863
+
+ 3.4225407 6.8378315
+
+ 3.0460672 4.9600434
+
+ 2.9420857 3.814804
+
+ 2.7928138 3.3263464
+
+ 2.7325172 3.1576943
+
+ 2.6888573 3.0528536
+
+ 2.6642528 2.941097
+
+ 2.5979252 2.9097803
+
+ 2.6361046 2.858792
+
+ 2.6162858 2.9265258
+
+ 2.5776017 2.8648322
+
+ 2.5934834 2.7262218
+
+ 2.5588646 2.7112916
+
+ 2.5594869 2.660169
+
+ 2.545585 2.704762
+
+ 2.5680144 2.7170167
+
+ 2.5647194 2.6764967
+
+ 2.5084682 2.6127515
+
+ 2.5362358 2.6842618
+
+ 2.5078695 2.587099
+
+ 2.4770203 2.6603796
+
+ 2.5100358 2.5849557
+
+ 2.4844022 2.6310978
+
+ 2.4574265 2.530707
+
+ 2.4378278 2.4867296
+
+ 2.468255 2.5670564
+
+ 2.4517963 2.5028806
+
+ 2.4631155 2.526733
+
+ 2.4690862 2.5441954
+
+ 2.4247167 2.4655468
+Traceback (most recent call last):
+  File "/home/sadhanalolla/capsa/uci_experiments/vae_dropout_wrapper.py", line 138, in <module>
+    model.fit(X_train, y_train, epochs=40, batch_size=batch_size, callbacks=[loss_c], verbose=0)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/utils/traceback_utils.py", line 64, in error_handler
+    return fn(*args, **kwargs)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/engine/training.py", line 1460, in fit
+    callbacks.on_epoch_end(epoch, epoch_logs)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/callbacks.py", line 416, in on_epoch_end
+    callback.on_epoch_end(epoch, logs)
+  File "/home/sadhanalolla/capsa/uci_experiments/vae_dropout_wrapper.py", line 98, in on_epoch_end
+    rmse, nll = self.model(self.x_test)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/utils/traceback_utils.py", line 64, in error_handler
+    return fn(*args, **kwargs)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/engine/training.py", line 490, in __call__
+    return super().__call__(*args, **kwargs)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/utils/traceback_utils.py", line 64, in error_handler
+    return fn(*args, **kwargs)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/engine/base_layer.py", line 1014, in __call__
+    outputs = call_fn(inputs, *args, **kwargs)
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/keras/utils/traceback_utils.py", line 92, in error_handler
+    return fn(*args, **kwargs)
+  File "/home/sadhanalolla/capsa/uci_experiments/vae_dropout_wrapper.py", line 80, in call
+    nll_run = self.calculate_nll(y_test, total_pred, tf.sqrt(total_var)) + np.log(self.y_scale[0,0])
+  File "/home/sadhanalolla/capsa/uci_experiments/vae_dropout_wrapper.py", line 14, in calculate_nll
+    logprob = -tf.math.log(sigma) - 0.5*tf.math.log(2*np.pi) - 0.5*((y-mu)/sigma)**2
+  File "/home/sadhanalolla/miniconda3/envs/tf/lib/python3.9/site-packages/tensorflow/python/ops/gen_math_ops.py", line 5466, in log
+    _result = pywrap_tfe.TFE_Py_FastPathExecute(
+KeyboardInterrupt

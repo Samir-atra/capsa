@@ -9,15 +9,17 @@ class LossCallback(tf.keras.callbacks.Callback):
         self.min_nll = float('inf')
         self.min_rmse = float('inf')
         self.scale = y_scale
-        self.drop_prob = 0.05
+        self.drop_prob = 0.1
         self.lam = 1e-3
-        self.l = 1e-2
-        self.tau = self.l**2 * (1-self.drop_prob) / (2. * self.lam)
+        self.l = 0.2
+        self.tau = self.l**2 * (1-self.drop_prob) / (2 * self.lam)
+        print(self.tau, 1/self.tau)
     
-    def calculate_nll(self, mu, var, y):            
-        sigma = tf.math.sqrt(var)
-        loss = tf.math.log(sigma) + (y-mu)**2 / (2 * var)
-        return tf.math.reduce_mean(loss)
+    def calculate_nll(self, y, mu, sigma, reduce=True):
+        ax = list(range(1, len(y.shape)))
+        logprob = -tf.math.log(sigma) - 0.5*tf.math.log(2*np.pi) - 0.5*((y-mu)/sigma)**2
+        loss = tf.reduce_mean(-logprob, axis=ax)
+        return tf.reduce_mean(loss) if reduce else loss 
     
     def calculate_rmse(self, mu, y):
         return tf.math.sqrt(tf.reduce_mean(
@@ -40,14 +42,13 @@ class LossCallback(tf.keras.callbacks.Callback):
             preds = self.model(test_batch_x)
             return self.gen_mixture_model_preds(preds)
         elif self.model_type == "dropout":
-            preds = tf.stack([self.model(test_batch_x, training=True) for _ in range(25)])
+            preds = tf.stack([self.model(test_batch_x, training=True) for _ in range(5)])
             var = tf.math.reduce_variance(preds, 0)
-            #var = tf.math.reduce_variance(preds, 0)
             return tf.math.reduce_mean(preds, 0), var + self.tau**-1
         elif self.model_type == "vae":
-            return self.model(test_batch_x, per_pixel=True)
+            return self.model(test_batch_x, per_pixel=False)
         elif self.model_type == "vae + dropout":
-            return self.model(test_batch_x, per_pixel=True, training=True)
+            return self.model(test_batch_x, per_pixel=False, training=True, composed=3)
         else:
             preds = tf.stack([self.model.metric_compiled["VAEWrapper"](test_batch_x, training=True, per_pixel=True) for _ in range(20)])
             return self.gen_mixture_model_preds(preds)
@@ -56,14 +57,18 @@ class LossCallback(tf.keras.callbacks.Callback):
         test_batch_x = self.x_test
         test_batch_y = self.y_test
         mu, var = self.gen_preds(test_batch_x)
-        nll = self.calculate_nll(mu, var, test_batch_y)
+        nll = self.calculate_nll(mu, test_batch_y, tf.sqrt(var))
         nll += np.log(self.scale[0,0])
+        
         if nll < self.min_nll:
             self.min_nll = nll
+        
         print("\nnll", nll.numpy())
         
         rmse = self.calculate_rmse(mu, test_batch_y)
         rmse *= self.scale[0,0]
+        
         if rmse < self.min_rmse:
             self.min_rmse = rmse
+        
         print("rmse", rmse.numpy())
