@@ -1,16 +1,17 @@
 import tensorflow as tf
 from tensorflow import keras
 
-from ..utils import MLP, _get_out_dim, copy_layer
+# from ..utils import MLP, _get_out_dim, copy_layer
 
 
 class MVEWrapper(keras.Model):
 
-    def __init__(self, base_model, is_standalone=True):
+    def __init__(self, base_model, is_standalone=True, classification=False):
         super(MVEWrapper, self).__init__()
 
         self.metric_name = 'mve'
         self.is_standalone = is_standalone
+        self.classification = classification
 
         if is_standalone:
             self.feature_extractor = keras.Model(
@@ -39,12 +40,21 @@ class MVEWrapper(keras.Model):
         loss = tf.reduce_mean(
             self.compiled_loss(y, y_hat, regularization_losses=self.losses),
         )
-        # tf.print('mse', tf.convert_to_tensor(loss))
 
-        loss += tf.reduce_mean(
-            self.neg_log_likelihood(y, mu, logvariance)
-        ) # (N_SAMPLES, 128, 160, 1) -> ( )
-        # # tf.print('gaussian_nll', tf.reduce_mean(self.neg_log_likelihood(y, mu, logvariance)))
+        if self.classification:
+            sigma = tf.sqrt(tf.exp(logvariance))
+            epsilon = tf.random.normal(sigma.shape)
+            stochastic_logits = mu + epsilon * sigma
+            loss += tf.reduce_mean(
+                self.compiled_loss(y, stochastic_logits,
+                regularization_losses=self.losses),
+            )
+
+        else:
+            loss += tf.reduce_mean(
+                self.neg_log_likelihood(y, mu, logvariance)
+            ) # (N_SAMPLES, 128, 160, 1) -> ( )
+            # # tf.print('gaussian_nll', tf.reduce_mean(self.neg_log_likelihood(y, mu, logvariance)))
 
         return loss, y_hat
 
