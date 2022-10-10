@@ -9,9 +9,9 @@ class LossCallback(tf.keras.callbacks.Callback):
         self.min_nll = float('inf')
         self.min_rmse = float('inf')
         self.scale = y_scale
-        self.drop_prob = 0.1
+        self.drop_prob = 0.05
         self.lam = 1e-3
-        self.l = 0.2
+        self.l = 0.5
         self.tau = self.l**2 * (1-self.drop_prob) / (2 * self.lam)
         print(self.tau, 1/self.tau)
     
@@ -50,8 +50,10 @@ class LossCallback(tf.keras.callbacks.Callback):
         elif self.model_type == "vae + dropout":
             return self.model(test_batch_x, per_pixel=False, training=True, composed=3)
         else:
-            preds = tf.stack([self.model.metric_compiled["VAEWrapper"](test_batch_x, training=True, per_pixel=True) for _ in range(20)])
+            
+            preds = tf.stack([self.model(test_batch_x, training=True) for _ in range(20)])
             return self.gen_mixture_model_preds(preds)
+
         
     def on_epoch_end(self, epoch, logs=None):
         test_batch_x = self.x_test

@@ -137,3 +137,5 @@ aaai_23_submission/*
 # All model files
 *.h5
 evidential_repo_mve/
+experiments/
+notebooks/

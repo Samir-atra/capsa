@@ -85,7 +85,7 @@ class MVEWrapper(keras.Model):
     def call(self, x, training=False, return_risk=True, features=None):
 
         if self.is_standalone:
-            features = self.feature_extractor(x, training)
+            features = self.feature_extractor(x, training=training)
         y_hat = self.out_y(features)
 
         if return_risk:

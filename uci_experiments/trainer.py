@@ -5,15 +5,14 @@ from callbacks import LossCallback
 from capsa import Wrapper, EnsembleWrapper, VAEWrapper, MVEWrapper 
 import time
 
-reg = 1e-3
-
 def get_toy_model(input_shape=(1,), dropout_rate=0.0):
+    reg = 1e-3
     return tf.keras.Sequential(
         [
             tf.keras.Input(shape=input_shape),
             tf.keras.layers.Dense(50, "relu", kernel_regularizer=tf.keras.regularizers.L2(reg)),
             tf.keras.layers.Dropout(rate=dropout_rate),
-            tf.keras.layers.Dense(10, "relu"),
+            tf.keras.layers.Dense(20, "relu", kernel_regularizer=tf.keras.regularizers.L2(reg)),
             tf.keras.layers.Dropout(rate=dropout_rate),
             tf.keras.layers.Dense(1, None, kernel_regularizer=tf.keras.regularizers.L2(reg)),
         ]
@@ -39,7 +38,7 @@ def get_model(model_type, inp_shape, dataset):
     elif model_type == "ensemble + mve":
         return EnsembleWrapper(model, metric_wrapper=MVEWrapper, num_members=4)
     elif model_type == "dropout":
-        return get_toy_model(inp_shape, dropout_rate=0.1)
+        return get_toy_model(inp_shape, dropout_rate=0.05)
     elif model_type == "vae":
         decoder = get_decoder(inp_shape, latent_dim)
         return VAEWrapper(model, decoder=decoder, bias=False, latent_dim=latent_dim, kl_weight=h_params[dataset]["kl-weight"])
@@ -48,8 +47,7 @@ def get_model(model_type, inp_shape, dataset):
         return VAEWrapper(get_toy_model(inp_shape, dropout_rate=0.1), bias=False, latent_dim=latent_dim, decoder=decoder, kl_weight=h_params[dataset]["kl-weight-dropout"])
     else:
         model = get_toy_model(inp_shape, dropout_rate=0.1)
-        decoder = get_decoder(inp_shape, latent_dim)
-        return Wrapper(model, metrics=[VAEWrapper(model, bias=False, decoder=decoder, latent_dim=latent_dim, kl_weight=h_params[dataset]["kl-weight"]), MVEWrapper])
+        return MVEWrapper(model)
 
 def train(model_type, dataset=None, trials=5):
     nll = {}
