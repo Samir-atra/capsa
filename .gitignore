@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+experiments/
+aaai_23_submission/
+evidential_repo_mve/
