@@ -14,7 +14,7 @@ def test_vae(use_case=None):
 
     ### use case 1 - user can interact with a MetricWrapper directly
     if use_case == 1:
-        model = VAEWrapper(their_model)
+        model = VAEWrapper(their_model, bias=False)
         model.compile(
             optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
             loss=tf.keras.losses.MeanSquaredError(),
@@ -46,9 +46,8 @@ def test_vae(use_case=None):
         )
 
         model.fit(ds_train, epochs=30)
-
-        metrics_out = model(x_val)[0]
-        y_pred, recon_loss = metrics_out
+        metrics_out = model(x_val)['vae_wrapper_1']
+        y_pred, recon_loss, _ = metrics_out
 
     fig, axs = plt.subplots(2)
     axs[0].scatter(x_val, y_val, s=0.5, label="gt")
@@ -57,6 +56,7 @@ def test_vae(use_case=None):
     axs[1].scatter(x_val, recon_loss, s=0.5, label="recon loss")
     plt_vspan()
     plt.legend()
+    plt.savefig("vae.png")
     plt.show()
 
 

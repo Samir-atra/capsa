@@ -9,28 +9,19 @@ from .wrapper import Wrapper
 def wrap(model, bias=True, aleatoric=True, epistemic=True):
     """Abstract away the Wrapper and most parameters to simplify the wrapping process for the user."""
     metric_wrappers = []
-    hist_with_vae = None
-    add_vae = False
+    add_bias_vae = False
     if bias == True:
-        add_vae = True
-        hist = HistogramWrapper(model, is_standalone=False)
-        metric_wrappers.append(hist)
-        hist_with_vae = hist
+       add_bias_vae = True
     elif bias == False:
         pass
     elif type(bias) == list:
-        add_vae = False
         for i in bias:
-            out, vae = _check_bias_compatibility(i)
-            add_vae = add_vae or vae
+            out = _check_bias_compatibility(i)
             if type(i) == type:
                 metric_wrappers.append(i(model, is_standalone=False))
             else:
                 metric_wrappers.append(i)
-            if type(i) == HistogramWrapper and type(i.metric_wrapper) != VAEWrapper:
-                hist_with_vae = i
     else:
-        out, add_vae = _check_bias_compatibility(bias)
         if type(out) == type:
             out = out(model, is_standalone=False)
         metric_wrappers.append(out)
@@ -70,12 +61,10 @@ def wrap(model, bias=True, aleatoric=True, epistemic=True):
     for i in metric_wrappers:
         if type(i) == VAEWrapper:
             vae_exists = True
-            if hist_with_vae is not None:
-                hist_with_vae.metric_wrapper = i
+            i.bias = add_bias_vae
 
-    if add_vae and not (vae_exists):
-        vae = VAEWrapper(model, is_standalone=False)
-        hist_with_vae.metric_wrapper = vae
+    if add_bias_vae and not (vae_exists):
+        vae = VAEWrapper(model, is_standalone=False, epistemic = False)
         metric_wrappers.append(vae)
 
     return Wrapper(model, metrics=metric_wrappers)
@@ -83,21 +72,14 @@ def wrap(model, bias=True, aleatoric=True, epistemic=True):
 
 def _check_bias_compatibility(bias):
     bias_named_wrappers = {
-        "HistogramWrapper": HistogramWrapper,
+        "HistogramWrapper": HistogramWrapper, "VAEWrapper" : VAEWrapper
     }
-    add_vae = False
     if type(bias) == str and bias in bias_named_wrappers.keys():
-        add_vae = bias == "HistogramWrapper"
-        return bias_named_wrappers[bias], add_vae
+        return bias_named_wrappers[bias]
     elif type(bias) == type and bias in bias_named_wrappers.values():
-        add_vae = bias == HistogramWrapper
-        return bias, add_vae
+        return bias
     elif type(bias) in bias_named_wrappers.values():
-        if type(bias) == HistogramWrapper:
-            if type(bias.metric_wrapper) == type:
-                return bias, add_vae
-            elif type(bias.metric_wrapper) == VAEWrapper:
-                return bias, bias.metric_wrapper
+        return bias
     else:
         raise ValueError(
             f"Must pass in either a string (one of {bias_named_wrappers.keys()}) or wrapper types (one of {bias_named_wrappers.values()}) or an instance of a wrapper type. Received {bias}"

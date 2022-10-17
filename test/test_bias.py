@@ -64,15 +64,14 @@ def test_bias_chained():
     their_model = get_user_model()
     ds_train, _, x_val, y_val = get_data_v2(batch_size=256)
 
-    model = HistogramWrapper(their_model, metric_wrapper=VAEWrapper)
+    model = VAEWrapper(their_model)
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
         loss=tf.keras.losses.MeanSquaredError(),
     )
     history = model.fit(ds_train, epochs=30, callbacks=[HistogramCallback()])
 
-    y_pred, bias = model(x_val)
-    y_pred, recon_loss = model.metric_wrapper(x_val)
+    y_pred, recon_loss, bias = model(x_val, softmax=True)
     fig, axs = plt.subplots(3)
     axs[0].scatter(x_val, y_val, s=0.5, label="gt")
     axs[0].scatter(x_val, y_pred, s=0.5, label="yhat")
@@ -81,6 +80,7 @@ def test_bias_chained():
     axs[2].scatter(x_val, recon_loss, s=0.5, label="recon loss")
     plt_vspan()
     plt.legend()
+    plt.savefig("chained.png")
     plt.show()
 
 
@@ -176,7 +176,7 @@ def test_bias_with_wrap(complexity):
         outputs = wrapped_model(x_val)
         y_pred, mve = outputs["mve_wrapper"]
         y_pred, dropout = outputs["dropout_wrapper"]
-        y_pred, recon_loss = outputs["vae_wrapper"]
+        y_pred, recon_loss, bias = outputs["vae_wrapper"]
         fig, axs = plt.subplots(4)
         axs[0].scatter(x_val, y_val, s=0.5, label="gt")
         axs[0].scatter(x_val, y_pred, s=0.5, label="yhat")
@@ -186,6 +186,7 @@ def test_bias_with_wrap(complexity):
         axs[3].scatter(x_val, mve, s=0.5, label="aleatoric")
         plt_vspan()
         plt.legend()
+        plt.savefig("4.png")
         plt.show()
 
 
@@ -193,5 +194,5 @@ test_bias_with_wrap(complexity=4)
 
 test_bias(use_case=1)
 test_bias(use_case=2)
-test_bias_chained()
+#test_bias_chained()
 
