@@ -190,9 +190,9 @@ def test_bias_with_wrap(complexity):
         plt.show()
 
 
-test_bias_with_wrap(complexity=4)
+test_bias_with_wrap(complexity=2)
 
 test_bias(use_case=1)
 test_bias(use_case=2)
-#test_bias_chained()
+test_bias_chained()
 
