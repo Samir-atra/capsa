@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 
+<<<<<<< HEAD
 from capsa import (
     Wrapper,
     MVEWrapper,
@@ -36,10 +37,22 @@ def test_regression(use_case=None):
 
     their_model = get_user_model()
     ds_train, ds_val, x_val, y_val = get_data_v2(batch_size=256)
+=======
+from capsa import ControllerWrapper, MVEWrapper, HistogramWrapper, HistogramCallback
+from capsa.utils import get_user_model, plot_loss, get_preds_names, plot_risk_2d
+from data import get_data_v2
+
+
+def test_regression(use_case):
+
+    user_model = get_user_model()
+    ds_train, ds_val, _, _, x_val, y_val = get_data_v2(batch_size=256, is_show=False)
+>>>>>>> 9c21c08ed2bca7491bcf18a9f3e4bf140deb00ef
 
     # user can interact with a MetricWrapper directly
     if use_case == 1:
-        model = MVEWrapper(their_model)
+        model = MVEWrapper(user_model)
+
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=2e-3),
             loss=keras.losses.MeanSquaredError(),
@@ -47,41 +60,39 @@ def test_regression(use_case=None):
         history = model.fit(ds_train, epochs=30)
         plot_loss(history)
 
-        y_pred, variance = model(x_val)
+        y_hat, risk = model(x_val)
 
-    # user can interact with a MetricWrapper through Wrapper (what we call a "controller wrapper")
+    # user can interact with a MetricWrapper through Wrapper (what we call a 'controller wrapper')
     elif use_case == 2:
-        model = Wrapper(their_model, metrics=[MVEWrapper],)
+        model = ControllerWrapper(user_model, metrics=[MVEWrapper])
 
         model.compile(
             # user needs to specify optim and loss for each metric
-            optimizer=[keras.optimizers.Adam(learning_rate=2e-3)],
-            # note reduction needs to be NONE, model reduces to mean under the hood
-            loss=[keras.losses.MeanSquaredError(reduction=keras.losses.Reduction.NONE)],
+            optimizer=keras.optimizers.Adam(learning_rate=2e-3),
+            loss=keras.losses.MeanSquaredError(),
         )
 
         history = model.fit(ds_train, epochs=30)
         plot_loss(history)
 
         metrics_out = model(x_val)
-        y_pred, variance = metrics_out[list(metrics_out.keys())[0]]
+        y_hat, risk = metrics_out["mve"]
 
     preds_names = get_preds_names(history)
-    plot_aleatoric(x_val, y_val, y_pred, variance, "mve_wrapper")
+    plot_risk_2d(x_val, y_val, y_hat, risk, preds_names[0])
 
 
 def test_regression_predict():
 
-    their_model = get_user_model()
-    ds_train, ds_val, _, _ = get_data_v2(batch_size=256)
+    user_model = get_user_model()
+    ds_train, ds_val, _, _, _, _ = get_data_v2(batch_size=256, is_show=False)
 
-    model = Wrapper(their_model, metrics=[MVEWrapper])
+    model = ControllerWrapper(user_model, metrics=[MVEWrapper])
 
     model.compile(
         # user needs to specify optim and loss for each metric
-        optimizer=[keras.optimizers.Adam(learning_rate=2e-3)],
-        # note reduction needs to be NONE, model reduces to mean under the hood
-        loss=[keras.losses.MeanSquaredError(reduction=keras.losses.Reduction.NONE)],
+        optimizer=keras.optimizers.Adam(learning_rate=2e-3),
+        loss=keras.losses.MeanSquaredError(),
     )
 
     history = model.fit(ds_train, epochs=30)
@@ -90,7 +101,11 @@ def test_regression_predict():
     # predict cats batch output to a single tensor under the hood
     # metrics_out is a list (of len 1) of tuples (x_val_batch, y_val_batch)
     metrics_out = model.predict(ds_val)
+<<<<<<< HEAD
     y_pred, variance = metrics_out[list(metrics_out.keys())[0]]
+=======
+    y_hat, risk = metrics_out["mve"]
+>>>>>>> 9c21c08ed2bca7491bcf18a9f3e4bf140deb00ef
 
     # need this for plotting -- cat all batches
     # list(ds_val) is a list (of len num of batches) of tuples (x_val_batch, y_val_batch)
@@ -98,61 +113,49 @@ def test_regression_predict():
     x_val, y_val = cat[0], cat[1]
 
     preds_names = get_preds_names(history)
+<<<<<<< HEAD
     plot_aleatoric(x_val, y_val, y_pred, variance, "mve_wrapper")
+=======
+    plot_risk_2d(x_val, y_val, y_hat, risk, "mve")
+>>>>>>> 9c21c08ed2bca7491bcf18a9f3e4bf140deb00ef
 
 
-def test_bias(use_case=None):
+# def test_bias(use_case):
 
-    their_model = get_user_model()
-    ds_train, ds_val, x_val, y_val = get_data_v2(batch_size=256)
+#     user_model = get_user_model()
+#     ds_train, ds_val, _, _, x_val, y_val = get_data_v2(batch_size=256, is_show=False)
 
-    ### use case 1 - user can interact with a MetricWrapper directly
-    if use_case == 1:
-        model = HistogramWrapper(their_model)
-        model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
-            loss=tf.keras.losses.MeanSquaredError(),
-        )
-        history = model.fit(ds_train, epochs=30, callbacks=[HistogramCallback()])
+#     ### use case 1 - user can interact with a MetricWrapper directly
+#     if use_case == 1:
+#         model = HistogramWrapper(user_model)
+#         model.compile(
+#             optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
+#             loss=tf.keras.losses.MeanSquaredError(),
+#         )
+#         history = model.fit(ds_train, epochs=30, callbacks=[HistogramCallback()])
 
-        plt.plot(history.history["loss"])
-        plt.show()
+#         plt.plot(history.history['loss'])
+#         plt.show()
 
-        y_pred, bias = model(x_val)
+#         y_hat, risk = model(x_val)
 
-    ### use case 2 - user can interact with a MetricWrapper through Wrapper (what we call a "controller wrapper")
-    elif use_case == 2:
+#     ### use case 2 - user can interact with a MetricWrapper through Wrapper (what we call a 'controller wrapper')
+#     elif use_case == 2:
 
-        # make 'controller' wrapper behave like a tf model, such that user can interact with it
-        # the same as they directly a any of the MetricWrappers (see 3 lines above)
-        # so in controller Wrapper implement compile() and fit() methods
-        model = Wrapper(their_model, metrics=[HistogramWrapper],)
+#         model = ControllerWrapper(user_model, metrics=[HistogramWrapper])
 
-        model.compile(
-            # user needs to specify optim and loss for each metric
-            optimizer=[tf.keras.optimizers.Adam(learning_rate=2e-3)],
-            # note reduction needs to be NONE, model reduces to mean under the hood
-            loss=[
-                tf.keras.losses.MeanSquaredError(
-                    reduction=tf.keras.losses.Reduction.NONE
-                )
-            ],
-            run_eagerly=True,
-        )
+#         model.compile(
+#             # user needs to specify optim and loss for each metric
+#             optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
+#             loss=tf.keras.losses.MeanSquaredError(),
+#         )
 
-        model.fit(ds_train, epochs=40, callbacks=[HistogramCallback()])
+#         model.fit(ds_train, epochs=40, callbacks=[HistogramCallback()])
 
-        metrics_out = model(x_val)
-        y_pred, bias = metrics_out[0]
+#         metrics_out = model(x_val)
+#         y_hat, risk = metrics_out['histogram']
 
-    fig, axs = plt.subplots(2)
-    axs[0].scatter(x_val, y_val, s=0.5, label="gt")
-    axs[0].scatter(x_val, y_pred, s=0.5, label="yhat")
-    plt_vspan()
-    axs[1].scatter(x_val, bias, s=0.5, label="bias")
-    plt_vspan()
-    plt.legend()
-    plt.show()
+#     plot_risk_2d(x_val, y_val, y_hat, risk, 'histogram')
 
 
 test_regression(1)

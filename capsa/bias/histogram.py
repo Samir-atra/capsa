@@ -1,13 +1,24 @@
 from numpy import histogram
 import tensorflow as tf
 from tensorflow import keras
-from ..wrapper import Wrapper
-from ..utils import copy_layer
 import tensorflow_probability as tfp
-import numpy as np
+
+from ..controller_wrapper import ControllerWrapper
+from ..base_wrapper import BaseWrapper
 
 
-class HistogramWrapper(keras.Model):
+class HistogramCallback(tf.keras.callbacks.Callback):
+    def on_epoch_begin(self, epoch, logs=None):
+        if epoch > 0:
+            if type(self.model) == HistogramWrapper:
+                self.model.histogram_layer.update_state()
+            elif type(self.model) == ControllerWrapper:
+                for name, m in self.model.metric_compiled.items():
+                    if name == "HistogramWrapper":
+                        m.histogram_layer.update_state()
+
+
+class HistogramWrapper(BaseWrapper):
     """
         A wrapper that generates feature histograms for a given model.
         Args:
@@ -40,31 +51,31 @@ class HistogramWrapper(keras.Model):
 
         return loss, out
 
-    def train_step(self, data):
+    def train_step(self, data, features=None, prefix=None):
         x, y = data
-        with tf.GradientTape() as t:
-            loss, predictor_y = self.loss_fn(x, y)
-            trainable_vars = self.trainable_variables
-            gradients = t.gradient(loss, trainable_vars)
-            self.optimizer.apply_gradients(zip(gradients, trainable_vars))
-            self.compiled_metrics.update_state(y, predictor_y)
-            return {m.name: m.result() for m in self.metrics}
-
-    @tf.function
-    def wrapped_train_step(self, x, y, features, prefix):
 
         with tf.GradientTape() as t:
-            loss, y_hat = self.loss_fn(x, y, features)
-        self.compiled_metrics.update_state(y, y_hat)
+            if self.metric_wrapper is not None:
+                if not self.is_standalone:
+                    _ = self.metric_wrapper.train_step(data)
+                loss, y_hat = self.loss_fn(
+                    x, y, self.metric_wrapper.input_to_histogram(x, features=features)
+                )
+            else:
+                loss, y_hat = self.loss_fn(x, y, features)
 
         trainable_vars = self.trainable_variables
         gradients = t.gradient(loss, trainable_vars)
         self.optimizer.apply_gradients(zip(gradients, trainable_vars))
 
-        return (
-            {f"{prefix}_{m.name}": m.result() for m in self.metrics},
-            tf.gradients(loss, features),
-        )
+        self.compiled_metrics.update_state(y, y_hat)
+        prefix = self.metric_name if prefix is None else prefix
+        keras_metrics = {f"{prefix}_{m.name}": m.result() for m in self.metrics}
+
+        if self.is_standalone:
+            return keras_metrics
+        else:
+            return keras_metrics, tf.gradients(loss, features)
 
     def call(self, x, training=False, return_risk=True, features=None, softmax=False):
         if self.is_standalone:
@@ -73,11 +84,11 @@ class HistogramWrapper(keras.Model):
         predictor_y = self.output_layer(features)
         bias = self.histogram_layer(features, training=training, softmax=softmax)
 
-        return predictor_y, bias
+        return y_hat, bias
 
 
 class HistogramLayer(tf.keras.layers.Layer):
-    """A custom layer that tracks the distribution of feature values during training. 
+    """A custom layer that tracks the distribution of feature values during training.
     Outputs the probability of a sample given this feature distribution at inferenfce time.
     """
 
@@ -148,9 +159,7 @@ class HistogramLayer(tf.keras.layers.Layer):
             probabilities = tf.gather_nd(hist_probs, indices)
             logits = tf.reduce_sum(tf.math.log(probabilities), axis=1)
             logits = logits - tf.math.reduce_mean(logits)
-            if softmax:
-                return tf.math.softmax(logits)
-            return logits
+            return tf.math.softmax(logits)
 
     def update_state(self):
         self.edges.assign(tf.linspace(self.minimums, self.maximums, self.num_bins + 1))
