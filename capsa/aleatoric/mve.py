@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 from ..utils import MLP, _get_out_dim, copy_layer
-
+import numpy as np
 
 class MVEWrapper(keras.Model):
 
@@ -21,27 +21,26 @@ class MVEWrapper(keras.Model):
         output_layer = base_model.layers[-1]
         self.out_y = copy_layer(output_layer)
         self.out_mu = copy_layer(output_layer, override_activation="linear")
-        self.out_logvar = copy_layer(output_layer, override_activation="linear")
+        self.out_logsigma = copy_layer(output_layer, override_activation="linear")
 
     @staticmethod
-    def neg_log_likelihood(y, mu, logvariance):
-        variance = tf.exp(logvariance)
-        return logvariance + (y-mu)**2 / variance
+    def nll_loss(y, mu, sigma, reduce=True):
+        ax = list(range(1, len(y.shape)))
+
+        logprob = -tf.math.log(sigma) - 0.5*tf.math.log(2*np.pi) - 0.5*((y-mu)/sigma)**2
+        loss = tf.reduce_mean(-logprob, axis=ax)
+        return tf.reduce_mean(loss) if reduce else loss 
 
     def loss_fn(self, x, y, features=None):
         if self.is_standalone:
             features = self.feature_extractor(x, training=True)
 
         y_hat = self.out_y(features)
-        mu = self.out_mu(features)
-        logvariance = self.out_logvar(features)
+        logsigma = self.out_logsigma(features)
+        
 
         loss = tf.reduce_mean(
-            self.compiled_loss(y, y_hat, regularization_losses=self.losses),
-        )
-
-        loss += tf.reduce_mean(
-            self.neg_log_likelihood(y, mu, logvariance)
+            self.nll_loss(y, y_hat, tf.nn.softplus(logsigma) + 1e-6)
         )
 
         return loss, y_hat
@@ -51,7 +50,6 @@ class MVEWrapper(keras.Model):
 
         with tf.GradientTape() as t:
             loss, y_hat = self.loss_fn(x, y)
-        self.compiled_metrics.update_state(y, y_hat)
 
         trainable_vars = self.trainable_variables
         gradients = t.gradient(loss, trainable_vars)
@@ -60,29 +58,37 @@ class MVEWrapper(keras.Model):
         if prefix is None:
             prefix = self.metric_name
         return {f'{prefix}_{m.name}': m.result() for m in self.metrics}
-
+    
     @tf.function
     def wrapped_train_step(self, x, y, features, prefix):
-
         with tf.GradientTape() as t:
-            loss, y_hat = self.loss_fn(x, y, features)
-        self.compiled_metrics.update_state(y, y_hat)
+            loss, predictor_y = self.loss_fn(x, y, features)
 
         trainable_vars = self.trainable_variables
         gradients = t.gradient(loss, trainable_vars)
         self.optimizer.apply_gradients(zip(gradients, trainable_vars))
 
-        return {f'{prefix}_{m.name}': m.result() for m in self.metrics}, tf.gradients(loss, features)
+        return (
+            {f"{prefix}_{m.name}": m.result() for m in self.metrics},
+            tf.gradients(loss, features),
+        )
+
+    def test_step(self, data, prefix=None):
+        x, y = data
+        loss, y_hat = self.loss_fn(x, y)
+        if prefix is None:
+            prefix = self.metric_name
+        return {f'{prefix}_loss': loss}
 
     def call(self, x, training=False, return_risk=True, features=None):
 
         if self.is_standalone:
-            features = self.feature_extractor(x, training)
+            features = self.feature_extractor(x, training=training)
         y_hat = self.out_y(features)
 
         if return_risk:
-            logvariance = self.out_logvar(features)
-            variance = tf.exp(logvariance)
-            return (y_hat, variance)
+            logsigma = self.out_logsigma(features)
+            std = tf.nn.softplus(logsigma) + 1e-6
+            return (y_hat, std**2)
         else:
             return y_hat

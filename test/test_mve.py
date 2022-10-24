@@ -28,6 +28,7 @@ def plot_aleatoric(x_val, y_val, y_pred, variance, label):
     axs[1].scatter(x_val, variance, s=0.5, label=label)
     plt_vspan()
     plt.legend()
+    plt.savefig("aleatoric.PNG")
     plt.show()
 
 
@@ -63,10 +64,10 @@ def test_regression(use_case=None):
         plot_loss(history)
 
         metrics_out = model(x_val)
-        y_pred, variance = metrics_out[0]
+        y_pred, variance = metrics_out[list(metrics_out.keys())[0]]
 
     preds_names = get_preds_names(history)
-    plot_aleatoric(x_val, y_val, y_pred, variance, preds_names[0])
+    plot_aleatoric(x_val, y_val, y_pred, variance, "mve_wrapper")
 
 
 def test_regression_predict():
@@ -89,7 +90,7 @@ def test_regression_predict():
     # predict cats batch output to a single tensor under the hood
     # metrics_out is a list (of len 1) of tuples (x_val_batch, y_val_batch)
     metrics_out = model.predict(ds_val)
-    y_pred, variance = metrics_out[0]
+    y_pred, variance = metrics_out[list(metrics_out.keys())[0]]
 
     # need this for plotting -- cat all batches
     # list(ds_val) is a list (of len num of batches) of tuples (x_val_batch, y_val_batch)
@@ -97,7 +98,7 @@ def test_regression_predict():
     x_val, y_val = cat[0], cat[1]
 
     preds_names = get_preds_names(history)
-    plot_aleatoric(x_val, y_val, y_pred, variance, preds_names[0])
+    plot_aleatoric(x_val, y_val, y_pred, variance, "mve_wrapper")
 
 
 def test_bias(use_case=None):
@@ -154,6 +155,6 @@ def test_bias(use_case=None):
     plt.show()
 
 
-#test_regression(1)
+test_regression(1)
 test_regression(2)
-#test_regression_predict()
+test_regression_predict()
