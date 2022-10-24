@@ -5,17 +5,17 @@ import tensorflow_probability as tfp
 
 from ..controller_wrapper import ControllerWrapper
 from ..base_wrapper import BaseWrapper
-
+from ..utils import copy_layer
 
 class HistogramCallback(tf.keras.callbacks.Callback):
     def on_epoch_begin(self, epoch, logs=None):
         if epoch > 0:
-            if type(self.model) == HistogramWrapper:
-                self.model.histogram_layer.update_state()
-            elif type(self.model) == ControllerWrapper:
+            if type(self.model) == ControllerWrapper:
                 for name, m in self.model.metric_compiled.items():
                     if name == "HistogramWrapper":
                         m.histogram_layer.update_state()
+            else:
+                self.model.histogram_layer.update_state()
 
 
 class HistogramWrapper(BaseWrapper):
@@ -27,7 +27,7 @@ class HistogramWrapper(BaseWrapper):
     """
 
     def __init__(self, base_model, is_standalone=True, num_bins=5):
-        super(HistogramWrapper, self).__init__()
+        super(HistogramWrapper, self).__init__(base_model, is_standalone)
         self.base_model = base_model
         self.metric_name = "HistogramWrapper"
         self.is_standalone = is_standalone
@@ -55,14 +55,7 @@ class HistogramWrapper(BaseWrapper):
         x, y = data
 
         with tf.GradientTape() as t:
-            if self.metric_wrapper is not None:
-                if not self.is_standalone:
-                    _ = self.metric_wrapper.train_step(data)
-                loss, y_hat = self.loss_fn(
-                    x, y, self.metric_wrapper.input_to_histogram(x, features=features)
-                )
-            else:
-                loss, y_hat = self.loss_fn(x, y, features)
+            loss, y_hat = self.loss_fn(x, y, features)
 
         trainable_vars = self.trainable_variables
         gradients = t.gradient(loss, trainable_vars)
@@ -84,7 +77,7 @@ class HistogramWrapper(BaseWrapper):
         predictor_y = self.output_layer(features)
         bias = self.histogram_layer(features, training=training, softmax=softmax)
 
-        return y_hat, bias
+        return predictor_y, bias
 
 
 class HistogramLayer(tf.keras.layers.Layer):

@@ -11,9 +11,10 @@ from .histogram import HistogramWrapper
 class HistogramCallback(tf.keras.callbacks.Callback):
     def on_epoch_begin(self, epoch, logs=None):
         if epoch > 0:
-            if type(self.model) == HistogramWrapper or type(self.model) == VAEWrapper:
+            if type(self.model) == BaseWrapper:
+                print("reset histogram")
                 self.model.histogram_layer.update_state()
-            elif type(self.model) == Wrapper:
+            elif type(self.model) == ControllerWrapper:
                 for name, m in self.model.metric_compiled.items():
-                    if name == "HistogramWrapper" or name == "VAEWrapper":
+                    if name == "HistogramWrapper":
                         m.histogram_layer.update_state()

@@ -26,7 +26,8 @@ def test_bias(use_case):
             loss=tf.keras.losses.MeanSquaredError(),
         )
         history = model.fit(ds_train, epochs=30, callbacks=[HistogramCallback()])
-        plt.plot(history.history["histogram_loss"])
+        plt.clf()
+        plt.plot(history.history["HistogramWrapper_loss"])
         plt.show()
 
         y_pred, bias = model(x_val)
@@ -55,6 +56,7 @@ def test_bias(use_case):
     axs[1].scatter(x_val, bias, s=0.5, label="bias")
     plt_vspan()
     plt.legend()
+    plt.savefig("1_res.png")
     plt.show()
 
 
@@ -190,7 +192,7 @@ def test_bias_with_wrap(complexity):
 
 #test_bias_with_wrap(complexity=2)
 
-#test_bias(use_case=1)
-#test_bias(use_case=2)
+test_bias(use_case=1)
+test_bias(use_case=2)
 test_bias_chained()
 

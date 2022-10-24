@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras import layers
 
-
 def get_user_model():
     return tf.keras.Sequential(
         [
