@@ -29,7 +29,7 @@ class HistogramWrapper(BaseWrapper):
     def __init__(self, base_model, is_standalone=True, num_bins=5):
         super(HistogramWrapper, self).__init__(base_model, is_standalone)
         self.base_model = base_model
-        self.metric_name = "HistogramWrapper"
+        self.metric_name = "histogram"
         self.is_standalone = is_standalone
 
         if is_standalone:
@@ -151,7 +151,7 @@ class HistogramLayer(tf.keras.layers.Layer):
 
             probabilities = tf.gather_nd(hist_probs, indices)
             logits = tf.reduce_sum(tf.math.log(probabilities), axis=1)
-            logits = logits - tf.math.reduce_mean(logits)
+            logits = logits - tf.math.reduce_mean(logits) #log probabilities are the wrong sign if we don't subtract the mean
             return tf.math.softmax(logits)
 
     def update_state(self):

@@ -55,7 +55,7 @@ class DropoutWrapper(BaseWrapper):
         """
         super(DropoutWrapper, self).__init__(base_model, is_standalone)
 
-        self.metric_name = "DropoutWrapper"
+        self.metric_name = "dropout"
         self.is_standalone = is_standalone
         self.new_model = add_dropout(base_model, p)
 
