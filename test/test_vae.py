@@ -20,11 +20,7 @@ def test_vae(use_case):
 
     ### use case 1 - user can interact with a MetricWrapper directly
     if use_case == 1:
-<<<<<<< HEAD
-        model = VAEWrapper(their_model, bias=False)
-=======
-        model = VAEWrapper(user_model)
->>>>>>> 9c21c08ed2bca7491bcf18a9f3e4bf140deb00ef
+        model = VAEWrapper(user_model, bias=False)
         model.compile(
             optimizer=tf.keras.optimizers.Adam(learning_rate=2e-3),
             loss=tf.keras.losses.MeanSquaredError(),

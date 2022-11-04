@@ -101,11 +101,7 @@ def test_regression_predict():
     # predict cats batch output to a single tensor under the hood
     # metrics_out is a list (of len 1) of tuples (x_val_batch, y_val_batch)
     metrics_out = model.predict(ds_val)
-<<<<<<< HEAD
-    y_pred, variance = metrics_out[list(metrics_out.keys())[0]]
-=======
     y_hat, risk = metrics_out["mve"]
->>>>>>> 9c21c08ed2bca7491bcf18a9f3e4bf140deb00ef
 
     # need this for plotting -- cat all batches
     # list(ds_val) is a list (of len num of batches) of tuples (x_val_batch, y_val_batch)
@@ -113,11 +109,7 @@ def test_regression_predict():
     x_val, y_val = cat[0], cat[1]
 
     preds_names = get_preds_names(history)
-<<<<<<< HEAD
-    plot_aleatoric(x_val, y_val, y_pred, variance, "mve_wrapper")
-=======
     plot_risk_2d(x_val, y_val, y_hat, risk, "mve")
->>>>>>> 9c21c08ed2bca7491bcf18a9f3e4bf140deb00ef
 
 
 # def test_bias(use_case):
