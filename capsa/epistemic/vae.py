@@ -7,6 +7,8 @@ from keras import layers
 from ..utils import copy_layer, _get_out_dim
 from ..base_wrapper import BaseWrapper
 from ..bias.histogram import HistogramLayer
+from ..risk_tensor import RiskTensor
+
 
 def kl_loss(mu, log_std):
     return -0.5 * tf.reduce_mean(
@@ -16,7 +18,11 @@ def kl_loss(mu, log_std):
 
 
 def rec_loss(x, rec, reduce=True):
-    loss = tf.reduce_sum(tf.math.square(x - rec), axis=-1)
+    loss = tf.reduce_sum(
+        tf.math.square(x - rec),
+        axis=-1,
+        keepdims=(False if reduce else True),
+    )
     return tf.reduce_mean(loss) if reduce else loss
 
 
@@ -36,6 +42,13 @@ class VAEWrapper(BaseWrapper):
     We're making a restrictive assumption about the prior. Our prior over latent space is a
     standard unit diagonal gaussian. In other words, the encoder doesn't output a full covariance
     matrix over all dimensions (doesn't output a high dim Gaussian).
+
+    NOTE: in the VAEWrapper we bottleneck the representation inside the model,
+    reconstruct the input from that low dimensional representation, and use the MSE
+    between the input and its reconstruction as a measure of epistemic uncertainty.
+    However, if the input is already very low dimensional, it's unreasonable to
+    talk about bottlenecking this representation even further -- thus it doesn't
+    make sense to use the VAEWrapper with e.g. 1-dim inputs.
 
     Example usage outside of the ``ControllerWrapper`` (standalone):
         >>> # initialize a keras model
@@ -179,31 +192,30 @@ class VAEWrapper(BaseWrapper):
 
         Returns
         -------
-        y_hat : tf.Tensor
-            Predicted label.
-        risk : tf.Tensor
-            Epistemic uncertainty estimate.
+        out : capsa.RiskTensor
+            Risk aware tensor, contains both the predicted label y_hat (tf.Tensor) and the epistemic
+            uncertainty estimate (tf.Tensor).
         """
         if self.is_standalone:
-            features = self.feature_extractor(x, training=training)
-        y_hat = self.out_layer(features, training=training)
+            features = self.feature_extractor(x, training)
+        y_hat = self.out_layer(features)
+
         if not return_risk:
-            return y_hat
+            return RiskTensor(y_hat)
         else:
-            mu = self.mean_layer(features, training=training)
-            log_std = self.log_std_layer(features, training=training)
-            risk = [y_hat]
-            if self.bias:
-                bias = self.histogram_layer(mu, training=training)
+            mu = self.mean_layer(features)
+            log_std = self.log_std_layer(features)
 
             # deterministic
             if T == 1 and not training:
-                rec = self.decoder(mu)
-                risk.append(rec_loss(y_hat, x, reduce=False))
+                rec = self.decoder(mu, training)
+                epistemic = rec_loss(x, rec, reduce=False)
+                return RiskTensor(y_hat, epistemic=epistemic)
 
             # stochastic
             else:
                 if training:
+                    # used in loss_fn
                     sampled_latent = self.sampling(mu, log_std)
                     rec = self.decoder(sampled_latent)
                     return y_hat, rec, mu, log_std
@@ -212,11 +224,8 @@ class VAEWrapper(BaseWrapper):
                     for _ in T:
                         sampled_latent = self.sampling(mu, log_std)
                         recs.append(self.decoder(sampled_latent))
-                        risk.append(tf.reduce_std(recs))
-            
-            if self.bias:
-                risk.append(bias)
-            return risk
+                    std = tf.reduce_std(recs)
+                    return RiskTensor(y_hat, epistemic=std)
 
 
 def reverse_model(model, latent_dim):
