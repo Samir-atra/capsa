@@ -20,6 +20,9 @@ def load_split_data():
         y_age = label_map["age"][file_name_splits[1] + "_" + file_name_splits[2]]
         y_color = int(file_name_splits[4])
         path_to_imgs = os.path.join(data_path, f)
+
+        print("Reading files in: {}".format(f))
+
         for img_path in os.listdir(path_to_imgs):
             if img_path == ".DS_Store":
                 continue
@@ -28,11 +31,13 @@ def load_split_data():
             split_data_x.append(x_np)
             split_data_y.append([y_gender, y_age, y_color])
 
-    split_data_x = np.array(split_data_x)
-    split_data_y = np.array(split_data_y)
+    split_data_x_np = np.array(split_data_x)
+    split_data_y_np = np.array(split_data_y)
 
-    np.save(os.path.join(data_path, "split_data_x.npy"), split_data_x)
-    np.save(os.path.join(data_path, "split_data_y.npy"), split_data_y)
+    np.save(os.path.join(data_path, "split_data_x.npy"), split_data_x_np)
+    np.save(os.path.join(data_path, "split_data_y.npy"), split_data_y_np)
+
+    print("Saved split data in {} & {}".format(os.path.join(data_path, "split_data_x.npy"), os.path.join(data_path, "split_data_y.npy")))
 
 
 def main():
