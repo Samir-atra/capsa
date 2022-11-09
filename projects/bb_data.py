@@ -3,7 +3,7 @@ import pandas as pd
 from PIL import Image
 import numpy as np
 
-data_path="./test_data" #'/data/biasbounty/split'
+data_path = '/data/biasbounty/split'
 
 def load_split_data():
     label_map = {"gender": {"male": 1, "female": 2}, 
