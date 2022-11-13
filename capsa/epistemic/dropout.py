@@ -46,7 +46,6 @@ class DropoutWrapper(BaseWrapper):
             Indicates whether or not a metric wrapper will be used inside the ``ControllerWrapper``.
         p : float, default 0.1
             Float between 0 and 1. Fraction of the units to drop.
-
         Attributes
         ----------
         metric_name : str

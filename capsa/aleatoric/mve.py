@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
+import numpy as np
 
 from ..base_wrapper import BaseWrapper
 from ..risk_tensor import RiskTensor

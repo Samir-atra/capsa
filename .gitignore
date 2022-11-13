@@ -131,3 +131,6 @@ dmypy.json
 
 .DS_Store
 *diff*
+aaai_23_submission/
+logs/
+save/

@@ -187,6 +187,40 @@ class EnsembleWrapper(BaseWrapper):
         else:
             return keras_metrics, accum_grads
 
+
+    # todo-high: almost exactly same as train_step -- reduce code duplication
+    def test_step(self, data):
+        keras_metrics = {}
+
+        for name, wrapper in self.metrics_compiled.items():
+
+            # ensembling user model
+            if self.metric_wrapper is None:
+                _ = wrapper.test_step(data)
+                for m in wrapper.metrics:
+                    keras_metrics[f"{name}_{m.name}"] = m.result()
+
+            # ensembling one of our metrics
+            else:
+                keras_metric = wrapper.test_step(data, name)
+                keras_metrics.update(keras_metric)
+
+        return keras_metrics
+
+    def wrapped_train_step(self, x, y, features, prefix):
+        keras_metrics = {}
+
+        accum_grads = tf.zeros_like(features)
+        scalar = 1 / self.num_members
+
+        for name, wrapper in self.metrics_compiled.items():
+            keras_metric, grad = wrapper.wrapped_train_step(
+                x, y, features, f"{prefix}_{name}"
+            )
+            keras_metrics.update(keras_metric)
+            accum_grads += tf.scalar_mul(scalar, grad[0])
+        return keras_metrics, [accum_grads]
+
     def call(self, x, training=False, return_risk=True, features=None):
         """
         Forward pass of the model
@@ -232,3 +266,4 @@ class EnsembleWrapper(BaseWrapper):
             # ensembling one of our own metrics
             else:
                 return tf.reduce_mean(outs, 0)
+
