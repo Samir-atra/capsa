@@ -1,47 +1,52 @@
-import os
-import pandas as pd
-from PIL import Image
 import numpy as np
+import pandas as pd
+import os, glob
+from PIL import Image
+from tqdm import tqdm
+import pdb
 
-data_path="./test_data" #'/data/biasbounty/split'
+def save_split_data_as_np(data_path='/data/biasbounty/split'):
+    split = "/data/biasbounty/split"
+    label_file = "/data/biasbounty/train/labels_numeric.csv"
 
-def load_split_data():
-    label_map = {"gender": {"male": 1, "female": 2}, 
-                 "age": {"0_17": 1, "18_30": 2, "31_60": 3, "61_100": 4} 
-                 }
-    split_data_x = []
-    split_data_y = []
-    for f in os.listdir(data_path):
-        if f == ".DS_Store":
+    labels = pd.read_csv(label_file).set_index("name")  # read labels
+    all_images = glob.glob(os.path.join(split, "*", "*.png"))  # grab all images
+    X_data, Y_data = [], []
+
+    for image_path in tqdm(all_images):  # loop through all images
+        # get the image as numpy array
+        x = np.array(Image.open(image_path), dtype=np.uint8)
+
+        # check if the image is grayscale, if so either
+        # 1. convert to rgb
+        # 2. skip it
+        if x.shape[-1] != 3:
+            print("found faulty data named: {} with shape: {}".format(image_path, x.shape))
             continue
-        # Asumption for the format gender_l-b-age_u-b-age_monk_color-range
-        file_name_splits = f.split("_")
-        y_gender = label_map["gender"][file_name_splits[0]]
-        y_age = label_map["age"][file_name_splits[1] + "_" + file_name_splits[2]]
-        y_color = int(file_name_splits[4])
-        path_to_imgs = os.path.join(data_path, f)
 
-        print("Reading files in: {}".format(f))
+        X_data.append(x)
+        # get the labels
+        fname = os.path.basename(image_path)
+        y = np.array(labels.loc[fname], dtype=int)
+        Y_data.append(y)
 
-        for img_path in os.listdir(path_to_imgs):
-            if img_path == ".DS_Store":
-                continue
-            x_pil = Image.open(os.path.join(path_to_imgs, img_path))
-            x_np = np.array(x_pil.getdata())
-            split_data_x.append(x_np)
-            split_data_y.append([y_gender, y_age, y_color])
-    print(split_data_x)
-    split_data_x_np = np.array(split_data_x)
-    split_data_y_np = np.array(split_data_y)
+    X_data = np.array(X_data)
+    Y_data = np.array(Y_data)
 
-    np.save(os.path.join(data_path, "split_data_x.npy"), split_data_x_np)
-    np.save(os.path.join(data_path, "split_data_y.npy"), split_data_y_np)
+    np.save(os.path.join("/data/biasbounty/", "split_data_x.npy"), X_data)
+    np.save(os.path.join("/data/biasbounty/", "split_data_y.npy"), Y_data)
 
     print("Saved split data in {} & {}".format(os.path.join(data_path, "split_data_x.npy"), os.path.join(data_path, "split_data_y.npy")))
+    pdb.set_trace()
 
+
+def read_split_data(data_path='/data/biasbounty/'):
+    split_x = np.load(os.path.join(data_path, "split_data_x.npy"))
+    split_y = np.load(os.path.join(data_path, "split_data_y.npy"))
+    return split_x, split_y
 
 def main():
-    load_split_data()
+    save_split_data_as_np()
 
 
 if __name__ == "__main__":

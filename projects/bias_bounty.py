@@ -13,9 +13,13 @@ from capsa.utils import (
     plot_epistemic_2d,
 )
 
-def get_bias_bounty_data():
-    data_path="/data/bias_bounty/split/"
-    
+from bb_data import load_split_data
+
+def get_bias_bounty_data(name="split"):
+    if name == "split":
+        x_train, y_train = load_split_data()
+        
+    return x_train, y_train
 
 def main():
     user_model = get_user_model()
