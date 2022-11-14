@@ -22,11 +22,6 @@ def load_depth_data():
     test = h5py.File('/data/capsa/data/depth_test.h5', 'r')
     return (train['image'], train['depth']), (test['image'], test['depth'])
 
-
-def load_depth_data_train():
-    train = h5py.File('/data/capsa/data/depth_train.h5', 'r')
-    return (train['image'], train['depth'])
-
 def load_apollo_data():
     test = h5py.File('/data/capsa/data/apolloscape_test.h5', 'r')
     return (None, None), (test['image'], test['depth'])
@@ -185,7 +180,7 @@ def select_best_checkpoint(model_path):
     path = model_paths[0].split('.tf')[0]
     return f'{path}.tf', model_name
 
-def load_model(path, model_name, ds, opts={'num_members':3}, quiet=True):
+def load_model(path, model_name, ds, opts={'num_members':3}, quite=True):
     # path = tf.train.latest_checkpoint(checkpoints_path)
 
     # d = {
@@ -251,17 +246,16 @@ def load_model(path, model_name, ds, opts={'num_members':3}, quiet=True):
             optimizer=keras.optimizers.Adam(learning_rate=config.LR),
             loss=MSE,
         )
-    print("******* Train to load ******* ")
-    # https://github.com/tensorflow/tensorflow/issues/33150#issuecomment-574517363
-    _ = model.fit(ds, epochs=1, verbose=1)
-    load_status = model.load_weights(path)
 
+    # https://github.com/tensorflow/tensorflow/issues/33150#issuecomment-574517363
+    _ = model.fit(ds, epochs=1, verbose=0)
+    load_status = model.load_weights(path)
 
     # base mode tires to load optimizer as well, so load_status gives error
     if model_name not in ['base', 'notebook_base']:
         # used as validation that all variable values have been restored from the checkpoint
         load_status.assert_consumed()
-    if not quiet:
+    if not quite:
         print(f'Successfully loaded weights from {path}.')
     return model
 
@@ -283,20 +277,15 @@ def notebook_select_gpu(idx, quite=True):
             print(e)
 
 # used for the demo
-def get_datasets(only_train=False):
-    if not only_train:
-        (x_train, y_train), (x_test, y_test) = load_depth_data()
+def get_datasets():
+    (x_train, y_train), (x_test, y_test) = load_depth_data()
 
-        ds_train = get_normalized_ds(x_train[:config.N_TRAIN], y_train[:config.N_TRAIN])
-        ds_test = get_normalized_ds(x_test, y_test)
+    ds_train = get_normalized_ds(x_train[:config.N_TRAIN], y_train[:config.N_TRAIN])
+    ds_test = get_normalized_ds(x_test, y_test)
 
-        _, (x_ood, y_ood) = load_apollo_data()
-        ds_ood = get_normalized_ds(x_ood, y_ood)
-        return ds_train, ds_test, ds_ood
-    else:
-        (x_train, y_train) = load_depth_data_train()
-        ds_train = get_normalized_ds(x_train[:config.N_TRAIN], y_train[:config.N_TRAIN])
-        return ds_train
+    _, (x_ood, y_ood) = load_apollo_data()
+    ds_ood = get_normalized_ds(x_ood, y_ood)
+    return ds_train, ds_test, ds_ood
 
 def gen_ood_comparison(ds_test, ds_ood, model):
     def _itter_and_cat(ds, model):
