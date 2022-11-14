@@ -6,6 +6,7 @@ import tensorflow_probability as tfp
 from ..controller_wrapper import ControllerWrapper
 from ..base_wrapper import BaseWrapper
 from ..utils import copy_layer
+from ..risk_tensor import RiskTensor
 
 class HistogramCallback(tf.keras.callbacks.Callback):
     def on_epoch_begin(self, epoch, logs=None):
@@ -19,73 +20,115 @@ class HistogramCallback(tf.keras.callbacks.Callback):
 
 
 class HistogramWrapper(BaseWrapper):
-    """
-        A wrapper that generates feature histograms for a given model.
-        Args:
-            base_model (model): the model to generate features from
-            num_bins: how many bins to use in the histogram
+    """Tracks the feature histogram given a model.
+    Calculates feature probabilities by discretizing features before the last layer.
+    To calculate the bias of a sample, we calculate probability of those combinations of features
+    occurring in the distribution learned so far.
+    Example usage outside of the ``ControllerWrapper`` (standalone):
+        >>> # initialize a keras model
+        >>> user_model = Unet()
+        >>> # wrap the model to transform it into a risk-aware variant
+        >>> model = HistogramWrapper(user_model)
+        >>> # compile and fit as a regular keras model
+        >>> model.compile(...)
+        >>> model.fit(...)
     """
 
     def __init__(self, base_model, is_standalone=True, num_bins=5):
+        """
+        Parameters
+        ----------
+        base_model : tf.keras.Model
+            A model to be transformed into a risk-aware variant.
+        is_standalone : bool
+            Indicates whether or not the metric wrapper will be used inside the ``ControllerWrapper``.
+        num_bins: int
+            The number of bins to discretize the histogram distribution into.
+        """
         super(HistogramWrapper, self).__init__(base_model, is_standalone)
         self.base_model = base_model
         self.metric_name = "histogram"
         self.is_standalone = is_standalone
 
-        if is_standalone:
-            self.feature_extractor = tf.keras.Model(
-                base_model.inputs, base_model.layers[-2].output
-            )
-        last_layer = base_model.layers[-1]
-        self.output_layer = copy_layer(last_layer)  # duplicate last layer
         self.histogram_layer = HistogramLayer(num_bins=num_bins)
 
-    def loss_fn(self, x, y, extractor_out=None):
-        if extractor_out is None:
-            extractor_out = self.feature_extractor(x, training=True)
-        self.histogram_layer(extractor_out, training=True)
-        out = self.output_layer(extractor_out)
+    def loss_fn(self, x, y, features=None):
+        """
+        Parameters
+        ----------
+        x : tf.Tensor
+            Input.
+        y : tf.Tensor
+            Ground truth label.
+        features : tf.Tensor, default None
+            Extracted ``features`` will be passed to the ``loss_fn`` if the metric wrapper
+            is used inside the ``ControllerWrapper``, otherwise evaluates to ``None``.
+        Returns
+        -------
+        loss : tf.Tensor
+            Float, reflects how well does the algorithm perform given the ground truth label,
+            predicted label and the metric specific loss function. In this case it is
+            0 because ``HistogramWrapper`` does not introduce an additional loss function,
+            and the compiled loss is already added in the parent class ``BaseWrapper.train_step()``.
+        y_hat : tf.Tensor
+            Predicted label.
+        """
+        if self.is_standalone:
+            features = self.feature_extractor(x, training=True)
+        self.histogram_layer(features, training=True)
+        out = self.output_layer(features)
         loss = tf.reduce_mean(
             self.compiled_loss(y, out, regularization_losses=self.losses),
         )
 
         return loss, out
 
-    def train_step(self, data, features=None, prefix=None):
-        x, y = data
-
-        with tf.GradientTape() as t:
-            loss, y_hat = self.loss_fn(x, y, features)
-
-        trainable_vars = self.trainable_variables
-        gradients = t.gradient(loss, trainable_vars)
-        self.optimizer.apply_gradients(zip(gradients, trainable_vars))
-
-        self.compiled_metrics.update_state(y, y_hat)
-        prefix = self.metric_name if prefix is None else prefix
-        keras_metrics = {f"{prefix}_{m.name}": m.result() for m in self.metrics}
-
-        if self.is_standalone:
-            return keras_metrics
-        else:
-            return keras_metrics, tf.gradients(loss, features)
-
-    def call(self, x, training=False, return_risk=True, features=None, softmax=False):
+    def call(self, x, training=False, return_risk=True, features=None):
+        """
+        Forward pass of the model
+        Parameters
+        ----------
+        x : tf.Tensor
+            Input.
+        training : bool, default False
+            Can be used to specify a different behavior in training and inference.
+        return_risk : bool, default True
+            Indicates whether or not to output a risk estimate in addition to the model's prediction.
+        features : tf.Tensor, default None
+            Extracted ``features`` will be passed to the ``call`` if the metric wrapper
+            is used inside the ``ControllerWrapper``, otherwise evaluates to ``None``.
+        T : int, default 20
+            Number of forward passes with different dropout masks.
+        Returns
+        -------
+        out : capsa.RiskTensor
+            Risk aware tensor, contains both the predicted label y_hat (tf.Tensor) and the bias
+            uncertainty estimate (tf.Tensor).
+        """
         if self.is_standalone:
             features = self.feature_extractor(x, training=False)
-
-        predictor_y = self.output_layer(features)
-        bias = self.histogram_layer(features, training=training, softmax=softmax)
-
-        return predictor_y, bias
+        
+        y_hat = self.output_layer(features)
+        if not return_risk:
+            return RiskTensor(y_hat)
+        else:
+            bias = self.histogram_layer(features, training=training)
+            return RiskTensor(y_hat, bias=bias)
 
 
 class HistogramLayer(tf.keras.layers.Layer):
-    """A custom layer that tracks the distribution of feature values during training.
-    Outputs the probability of a sample given this feature distribution at inferenfce time.
+    """Custom layer that calculates feature histograms at every epoch. 
+    Discretizing input features into `num_bins` per dimension, and resets the histogram at every epoch.
     """
 
     def __init__(self, num_bins=5):
+        """
+        Parameters
+        ----------
+        num_bins: int
+            The number of bins to discretize the histogram distribution into.
+        """
+
         super(HistogramLayer, self).__init__()
         self.num_bins = num_bins
 
@@ -108,7 +151,7 @@ class HistogramLayer(tf.keras.layers.Layer):
             initial_value=tf.zeros(input_shape[1:]), trainable=False
         )
 
-    def call(self, inputs, training=True, softmax=False):
+    def call(self, inputs, training=True):
         # Updates frequencies if we are training
         if training:
             self.minimums.assign(
