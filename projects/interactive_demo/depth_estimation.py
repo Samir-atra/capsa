@@ -6,14 +6,17 @@ import os
 from capsa import MVEWrapper, EnsembleWrapper
 from models import unet
 from losses import MSE
+import matplotlib.pyplot as plt
+import numpy as np
 import config
 import keras
 import h5py
 import json
 import PIL
+import gradio
 
-config.BS = 32
-config.N_TRAIN = 32*3
+config.BS = 1
+config.N_TRAIN = 1*3
 
 
 def notebook_select_gpu(idx, quite=True):
@@ -128,6 +131,43 @@ def read_json(file_name):
     return content
 
 
+def predict(inp):
+    # Preprocess the data
+    inp_resized = inp.resize((160, 128))
+    ## convert to array & change shape to match model input
+    inp_np = np.reshape(np.array(inp_resized), (1, 128, 160, 3))
+    ## convert to tensor and normalize
+    inp_tf = tf.convert_to_tensor(inp_np, tf.float32) / 255.
+
+    # load model
+    best_checkpoints_path = "best_checkpoints.json"
+    model_name_aleatoric = 'mve'
+    checkpoints_dict = read_json(best_checkpoints_path)
+    small_train_ds = get_train_datasets()
+    trained_aleatoric = load_model(checkpoints_dict['aleatoric'], model_name_aleatoric, small_train_ds, quiet=False)
+
+    # run model on the input
+    pred = trained_aleatoric(inp_tf)
+    # convert pred to numpy
+    y_hat, aleatoric, epistemic, bias = pred.numpy()
+
+    # transfer to -1 to 1 range
+    y_hat_clipped = (np.clip(y_hat, a_min=0, a_max=1)*2 - 1)
+    print("y_hat min = {}, max = {}".format(np.amax(y_hat_clipped), np.amin(y_hat_clipped)))
+    y_hat_img_np = y_hat_clipped[0, :, :, 0]
+
+    # aleatoric = aleatoric*255/np.amax(aleatoric)
+    aleatoric_img_np = aleatoric[0, :, :, 0]
+    # transfer to -1 to 1 range
+    alea_min = np.amin(aleatoric_img_np)
+    alea_max = np.amax(aleatoric_img_np)
+    print("alea min {} and max {} before transfer".format(alea_min, alea_max))
+    aleatoric_img_np = -1 + (aleatoric_img_np-alea_min)/(alea_max-alea_min) * 2
+    print("alea min {} and max {} before transfer".format(np.amin(aleatoric_img_np), np.amax(aleatoric_img_np)))
+
+    return (inp_np[0], y_hat_img_np, aleatoric_img_np)
+
+
 def main():
     best_checkpoints_path = "best_checkpoints.json"
     model_name_aleatoric = 'mve'
@@ -155,30 +195,42 @@ def main():
     # print("checkpoint_paths: ", checkpoint_paths)
     # write_json(checkpoint_paths, 'best_checkpoints.json')
 
-    # -------------- Load the model -----------------
-    checkpoints_dict = read_json(best_checkpoints_path)
-    small_train_ds = get_train_datasets()
-    trained_aleatoric = load_model(checkpoints_dict['aleatoric'], model_name_aleatoric, small_train_ds, quiet=False)
-
-    # -------------- test the model on an image -----------------
-    # read the image
+    # # -------------- Load the model -----------------
+    # checkpoints_dict = read_json(best_checkpoints_path)
+    # small_train_ds = get_train_datasets()
+    # trained_aleatoric = load_model(checkpoints_dict['aleatoric'], model_name_aleatoric, small_train_ds, quiet=False)
+    #
+    # # -------------- test the model on an image ----------------- TODO: FIX the bug
+    # # read the image
     # test_img = PIL.Image.open("test_1.jpeg")
-    # img_resized = test_img.resize(img_shape)
+    # img_resized = test_img.resize((128, 160))
     # # convert to array
     # # change shape to match model input
-    # img_np = np.reshape(np.array(img_resized), (1, img_shape[0], img_shape[1], 3))
+    # img_np = np.reshape(np.array(img_resized), (1, 128, 160, 3))
+    # # img_np = np.array(img_resized)
+    #
     # # convert to tensor and normalize
+    #
     # img_tf = tf.convert_to_tensor(img_np, tf.float32) / 255.
     #
-    # pred, uncert = trained_aleatoric(img_tf, training=False)
-    # print("pred, uncert shape: {}, {}".format(pred.shape, uncert.shape))
+    # pred = trained_aleatoric(img_tf)
+    # y_hat, aleatorics, _, _ = pred.numpy()
+    #
+    # #clipping y_hat to 0 and 1
+    # y_hat_clipped = np.clip(y_hat, a_min=0, a_max=1)
+    # cmap = plt.cm.jet
+    # cmap.set_bad(color='black')
+    # plt.imsave("test_1_pred.jpeg", y_hat_clipped[0, :, :, 0], cmap=cmap)
+    # plt.imsave("test_1_uncert.jpeg", aleatorics[0, :, :, 0], cmap=cmap)
 
 
 
-
-
-
-
+    # -------------- Now that we can run prediction for each image lets setup Gradio ----------------
+    gradio.Interface(fn=predict,
+                     inputs=gradio.Image(type="pil"),
+                     outputs=[gradio.Image(), gradio.Image(),
+                              gradio.Image()],
+                     examples=["test_1.jpeg"]).launch(share=True)
 
 
 if __name__ == "__main__":
