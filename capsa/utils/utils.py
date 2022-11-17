@@ -32,7 +32,7 @@ def get_decoder():
     )
 
 
-def plot_loss(history):
+def plot_loss(history, show=True, save=False):
     for k, v in history.history.items():
         plt.plot(v, label=k)
     plt.legend(loc="upper right")
