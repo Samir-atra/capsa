@@ -91,7 +91,10 @@ def main():
 
     plot_loss(history, show_plt=False, save=True, path_to_save=os.path.join(checkpoint_filepath, "loss_plot.png"))
 
-    model.save(os.path.join(checkpoint_filepath, "cnn_model"))
+    try:
+        model.save(os.path.join(checkpoint_filepath, "cnn_model"))
+    except:
+        print("An exception occurred when saving the model")
 
 
 if __name__ == "__main__":
