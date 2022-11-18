@@ -32,11 +32,14 @@ def get_decoder():
     )
 
 
-def plot_loss(history, show=True, save=False):
+def plot_loss(history, show_plt=True, save=False, path_to_save=""):
     for k, v in history.history.items():
         plt.plot(v, label=k)
     plt.legend(loc="upper right")
-    plt.show()
+    if show_plt:
+        plt.show()
+    if save:
+        plt.savefig(path_to_save)
 
 
 def get_preds_names(history):
@@ -74,7 +77,7 @@ def plot_epistemic_2d(x, y, x_val, y_val, y_pred, risk, k=3):
     plt.show()
 
 
-def plot_risk_2d(x_val, y_val, risk_tens, label):
+def plot_risk_2d(x_val, y_val, risk_tens, label, show_plt=True, save=False, path_to_save=""):
     if risk_tens.aleatoric != None and risk_tens.epistemic != None:
         Exception(
             "RiskTensor has both aleatoric and epistemic uncertainties, please specify which one you would like to plot."
@@ -90,7 +93,10 @@ def plot_risk_2d(x_val, y_val, risk_tens, label):
     axs[1].scatter(x_val, risk, s=0.5, label=label)
     plt_vspan()
     plt.legend()
-    plt.show()
+    if show_plt:
+        plt.show()
+    if save:
+        plt.savefig(path_to_save)
 
 
 def _get_out_dim(model):

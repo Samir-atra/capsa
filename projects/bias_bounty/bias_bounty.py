@@ -1,7 +1,9 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
+from keras import layers
 
 from capsa import ControllerWrapper, EnsembleWrapper, MVEWrapper, VAEWrapper
 
@@ -22,16 +24,30 @@ def get_bias_bounty_data(name="split"):
     return x_train, y_train
 
 
-def get_model():
-    model = keras.models.Sequential()
-    model.add(layers.Conv2D(128, (3, 3), activation='relu', input_shape=(256, 256, 3)))
-    model.add(layers.MaxPooling2D((2, 2)))
-    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-    model.add(layers.MaxPooling2D((2, 2)))
-    model.add(layers.Conv2D(32, (3, 3), activation='relu'))
-    model.add(layers.Conv2D(16, (3, 3), activation='relu'))
-    model.add(layers.Dense(3, activation='relu'))
-    return model
+def get_model(model_name="3_layer"):
+    if model_name == "4_layer":
+        return tf.keras.Sequential(
+            [
+                tf.keras.Input(shape=(256, 256, 3)),
+                layers.Conv2D(128, (3, 3), activation='relu'),
+                layers.Conv2D(64, (3, 3), activation='relu'),
+                layers.Conv2D(32, (3, 3), activation='relu'),
+                layers.Conv2D(16, (3, 3), activation='relu'),
+                layers.Flatten(),
+                layers.Dense(3),
+            ]
+        )
+    if model_name == "3_layer":
+        return tf.keras.Sequential(
+            [
+                tf.keras.Input(shape=(256, 256, 3)),
+                layers.Conv2D(64, (3, 3), activation='relu'),
+                layers.Conv2D(32, (3, 3), activation='relu'),
+                layers.Conv2D(16, (3, 3), activation='relu'),
+                layers.Flatten(),
+                layers.Dense(3, activation="relu"),
+            ]
+        )
 
 
 def get_ordinal_loss_f():
@@ -49,8 +65,10 @@ def main():
     train_x, train_y = load_split_data()
 
     # normalize y
-    y[:, 0] = y[:, 0] / 9
-    y[:, 2] = y[:, 0] / 3
+    train_y[:, 0] = train_y[:, 0] / 9
+    train_y[:, 2] = train_y[:, 0] / 3
+
+    print("train_y shape: {}".format(train_y.shape))
 
     model = EnsembleWrapper(user_model, num_members=3)
 
@@ -62,26 +80,18 @@ def main():
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_filepath,
         save_weights_only=True,
-        mode='max',
-        save_best_only=True)
+        save_freq="epoch",
+        mode='max')
 
-    history = model.fit(train_x, train_y, epochs=30, callbacks=[model_checkpoint_callback], verbose=1)
+    random_pred = model.call(train_x[1:2, :, :, :])
 
-    model.save(os.path.join(checkpoint_filepath, "cnn_model.h5"))
+    print("random_pred shape: {}".format(random_pred.shape))
+
+    history = model.fit(train_x, train_y, batch_size=32, epochs=30, callbacks=[model_checkpoint_callback], verbose=1)
 
     plot_loss(history, show_plt=False, save=True, path_to_save=os.path.join(checkpoint_filepath, "loss_plot.png"))
 
-    risk_tensor = model(train_x)
-
-    plot_risk_2d(
-        train_x,
-        train_y,
-        risk_tensor,
-        model.metric_name,
-        show_plt=False,
-        save=True,
-        path_to_save=os.path.join(checkpoint_filepath, "plot_risk_2d.png")
-    )
+    model.save(os.path.join(checkpoint_filepath, "cnn_model"))
 
 
 if __name__ == "__main__":
