@@ -10,7 +10,7 @@ from .utils import (
     plot_risk_2d,
 )
 
-from .eval.py import (
+from .eval import (
     expected_calibration_error,
     maximum_calibration_error,
 
