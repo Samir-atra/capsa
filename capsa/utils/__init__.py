@@ -9,3 +9,9 @@ from .utils import (
     get_preds_names,
     plot_risk_2d,
 )
+
+from .eval.py import (
+    expected_calibration_error,
+    maximum_calibration_error,
+
+)
