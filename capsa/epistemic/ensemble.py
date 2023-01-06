@@ -235,7 +235,7 @@ class EnsembleWrapper(BaseWrapper):
             outs.append(out)
 
         if not return_risk:
-            return out
+            return outs
         else:
             outs = tf.stack(outs)
             # ensembling the user model
