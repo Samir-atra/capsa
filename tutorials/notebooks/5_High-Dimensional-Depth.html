@@ -1,0 +1,927 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Anomaly Detection (Advanced)" href="6_OOD-Detection.html" /><link rel="prev" title="Eliminate Aleatoric Uncertainty with capsa" href="4_MVE-Regression.html" />
+
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>High Level Introduction to Capsa with a Real World Problem - capsa documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">capsa  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">capsa  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/index.html">👋 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/installation.html">💾 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../risk_metrics/index.html">⭐️ Risk Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/basic_usage.html">🎬 Basic Usage</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">👩‍🏫 Tutorials</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1_Ensemble-Classification.html">Ensemble Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_Histogram-Classification.html">Histogram Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3_MVE-Classification.html">MVE Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4_MVE-Regression.html">MVE Wrapper (Regression)</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">High Level Introduction to Capsa with a Real World Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6_OOD-Detection.html">Anomaly Detection (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7_Composability.html">Composability (Advanced)</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_documentation/index.html">‍💻 Metric Wrapper API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_documentation/BaseWrapper.html">BaseWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_documentation/RiskTensor.html">RiskTensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_documentation/MVEWrapper.html">MVEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_documentation/VAEWrapper.html">VAEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_documentation/EnsembleWrapper.html">EnsembleWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_documentation/DropoutWrapper.html">DropoutWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_documentation/HistogramWrapper.html">HistogramWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_documentation/HistogramVAEWrapper.html">HistogramVAEWrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute/index.html">🧿 Contribute</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars and line breaks on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+    white-space: pre;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<p><img alt="1b429f7ef72e4dfe8035e1bcd8f4a7a5" src="https://i.ibb.co/2P3SLwK/colab.png" /> <a class="reference external" href="https://colab.research.google.com/github/themis-ai/capsa/blob/main/notebooks/5_High-Dimensional-Depth.ipynb">Run In Google Colab</a></p>
+<section id="High-Level-Introduction-to-Capsa-with-a-Real-World-Problem">
+<h1>High Level Introduction to <code class="docutils literal notranslate"><span class="pre">Capsa</span></code> with a Real World Problem<a class="headerlink" href="#High-Level-Introduction-to-Capsa-with-a-Real-World-Problem" title="Permalink to this heading">#</a></h1>
+<p>There are two axes of neural network uncertainty that can be modeled: - uncertainty in the data, called aleatoric uncertainty. This could be for example sensor noise or motion noise, resulting in uncertainty which cannot be reduced even if more data were to be collected. - uncertainty in the prediction, called epistemic uncertainty. It can be explained away given enough data, and is often referred to as model uncertainty.</p>
+<p>In this notebook we will train models which can predict both types of uncertainty. We will see that model exhibits - increased aleatoric uncertainty on object boundaries and for objects far from the camera - increased epistemic uncertainty for semantically and visually challenging pixels.</p>
+<p>However modeling only one of them comes at a cost. Out-of-distribution examples, which can be identified with epistemic uncertainty, cannot be identified with aleatoric uncertainty alone and vice versa. Thus we will combine both of the uncertainties to leverage their strength.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!pip install capsa
+
+# download helper functions for this tutorial
+!git clone --depth 1 https://github.com/themis-ai/capsa.git
+%cd /content/capsa/notebooks/utils/depth
+
+# download and extract dataset
+!wget -q http://argo-1.themisai.io/demos/nyu_depth/nyu.h5
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import tensorflow as tf
+import config as config
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from utils import get_datasets
+ds_train, ds_test = get_datasets(
+    id_path = &quot;nyu.h5&quot;,
+)
+</pre></div>
+</div>
+</div>
+<p>In this tutorial we will demonstrate how capsa can be used as a large-scale risk and uncertainty benchmarking framework for existing methods in the community. To that end, we will train a U-Net style model on the task of monocular end-to-end depth estimation using the “NYU Depth V2” dataset (RGB-to-depth image pairs of indoor scenes). Specifically, model’s final layer outputs a single H × W activation map.</p>
+<section id="Base-model">
+<h2>Base model<a class="headerlink" href="#Base-model" title="Permalink to this heading">#</a></h2>
+<p>First, we initialize a base model and visualize its prediction. A “base model” could be any keras Sequential or Functional model for any arbitrary task.</p>
+<p>We will use a <a class="reference external" href="https://arxiv.org/abs/1505.04597">U-Net</a> style model for our task. On a high level through its contracting path (left side) the model is able to capture the global context information, however for the pixel level tasks (e.g. semantic segmentation, depth estimation) granular local information is also required, therefore in the expansive path (right side) the architecture combines the upsampled global representation with the local context from the corresponding earlier layers.
+This allows the network to propagate context information to higher resolution layers. As a consequence, the expansive path is more or less symmetric to the contracting path, and yields a u-shaped architecture.</p>
+<p><img alt="a51c5f9db159432db0d4b2b8a933f6d4" class="no-scaled-link" src="../../_images/unet_architecture.png" style="width: 800px; height: 400px;" /></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from models import unet
+base_model = unet(compile=True)
+</pre></div>
+</div>
+</div>
+<p>Let’s visualize predictions of the model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from utils import vis_depth_map
+vis_depth_map(base_model, ds_test, plot_risk=False)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_notebooks_5_High-Dimensional-Depth_11_0.png" src="../../_images/tutorials_notebooks_5_High-Dimensional-Depth_11_0.png" />
+</div>
+</div>
+<p>As expected, the model outputs random predictions… It’s time to train it!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>history = base_model.fit(ds_train, epochs=config.EP,
+    validation_data=ds_test,
+)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch 1/20
+256/256 [==============================] - 19s 69ms/step - loss: 0.0709 - val_loss: 0.0442
+Epoch 2/20
+256/256 [==============================] - 17s 68ms/step - loss: 0.0343 - val_loss: 0.0262
+Epoch 3/20
+256/256 [==============================] - 18s 68ms/step - loss: 0.0203 - val_loss: 0.0157
+Epoch 4/20
+256/256 [==============================] - 18s 69ms/step - loss: 0.0110 - val_loss: 0.0099
+Epoch 5/20
+256/256 [==============================] - 18s 69ms/step - loss: 0.0066 - val_loss: 0.0092
+Epoch 6/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0050 - val_loss: 0.0044
+Epoch 7/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0038 - val_loss: 0.0034
+Epoch 8/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0030 - val_loss: 0.0031
+Epoch 9/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0027 - val_loss: 0.0027
+Epoch 10/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0022 - val_loss: 0.0024
+Epoch 11/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0021 - val_loss: 0.0024
+Epoch 12/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0023 - val_loss: 0.0029
+Epoch 13/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0019 - val_loss: 0.0019
+Epoch 14/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0017 - val_loss: 0.0020
+Epoch 15/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0018 - val_loss: 0.0021
+Epoch 16/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0016 - val_loss: 0.0018
+Epoch 17/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0014 - val_loss: 0.0017
+Epoch 18/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0014 - val_loss: 0.0018
+Epoch 19/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0014 - val_loss: 0.0015
+Epoch 20/20
+256/256 [==============================] - 18s 70ms/step - loss: 0.0014 - val_loss: 0.0013
+</pre></div></div>
+</div>
+<p>Let’s visualize predictions of the trained model.</p>
+<p>We see that the model produces reasonable predictions on the train and test datasets, however by default the model does not provide a risk estimate. We see that on the out of distribution dataset model’s performance is close to random, but the model cannot distinguish such out of distribution scenarios. In other words, the model cannot estimate when it’s predictions are not to be trusted therefore using such a model in production for any real world problem (and especially for time and safety
+critical applications) could lead to disastrous results.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vis_depth_map(base_model, ds_test, plot_risk=False)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_notebooks_5_High-Dimensional-Depth_15_0.png" src="../../_images/tutorials_notebooks_5_High-Dimensional-Depth_15_0.png" />
+</div>
+</div>
+<section id="Capsa">
+<h3>Capsa<a class="headerlink" href="#Capsa" title="Permalink to this heading">#</a></h3>
+<p>Existing algorithms to achieve risk-awareness of NNs are complex and ad-hoc. Specifically, these methods require significant engineering changes, are often developed only for particular settings, and are not easily composable.</p>
+<p>We present Capsa – a model agnostic framework for risk estimation. Which allows for seamless and efficient integration of the uncertainty estimates to the existing models in a couple lines of code.</p>
+<p>Wrappers transform a model into a risk-aware variant. They are given an arbitrary neural network and, while preserving the structure and function of the network, add and modify the relevant components of the model in order to be a drop-in replacement while being able to estimate the risk metric.</p>
+<p>Capsa <a class="reference external" href="https://themisai.io/capsa/api_documentation/index.html#">implements</a> multiple different wrappers which allow us to capture different forms of risk.</p>
+<p>Let’s see it in practice and wrap our “base model” …</p>
+</section>
+</section>
+<section id="1.-Aleatoric-Wrapper">
+<h2>1. Aleatoric Wrapper<a class="headerlink" href="#1.-Aleatoric-Wrapper" title="Permalink to this heading">#</a></h2>
+<p>Allows to capture uncertainty in the data. This could be for example sensor noise or motion noise, resulting in uncertainty which cannot be reduced even if more data were to be collected. Detailed documentation could be found <a class="reference external" href="https://themisai.io/capsa/api_documentation/MVEWrapper.html">here</a>.</p>
+<p>To leverage the functionality provided by Capsa, user could simply wrap their model with one of our wrappers. Importantly, capsa works “out of the box” without requiring any modifications since it is a highly configurable, model-agnostic framework with modularity as one of the core of its design principles.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from capsa import MVEWrapper
+user_model = unet()
+aleatoric_model = MVEWrapper(user_model)
+aleatoric_model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=config.LR),
+    loss=&quot;mse&quot;,
+)
+</pre></div>
+</div>
+</div>
+<p>Now, let’s train a risk aware model! Note, it doesn’t take any additional steps.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>history = aleatoric_model.fit(ds_train, epochs=config.EP,
+    validation_data=ds_test,
+)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch 1/20
+WARNING:tensorflow:Gradients do not exist for variables [&#39;conv2d_37/kernel:0&#39;, &#39;conv2d_37/bias:0&#39;] when minimizing the loss. If you&#39;re using `model.compile()`, did you forget to provide a `loss`argument?
+WARNING:tensorflow:Gradients do not exist for variables [&#39;conv2d_37/kernel:0&#39;, &#39;conv2d_37/bias:0&#39;] when minimizing the loss. If you&#39;re using `model.compile()`, did you forget to provide a `loss`argument?
+256/256 [==============================] - 20s 74ms/step - mve_compiled_loss: 0.1167 - mve_wrapper_loss: -1.6244 - val_mve_compiled_loss: 0.0492 - val_mve_wrapper_loss: -1.8938
+Epoch 2/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0475 - mve_wrapper_loss: -2.0799 - val_mve_compiled_loss: 0.0381 - val_mve_wrapper_loss: -1.9391
+Epoch 3/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0365 - mve_wrapper_loss: -2.4177 - val_mve_compiled_loss: 0.0381 - val_mve_wrapper_loss: -2.2012
+Epoch 4/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0241 - mve_wrapper_loss: -2.9760 - val_mve_compiled_loss: 0.0208 - val_mve_wrapper_loss: -2.0158
+Epoch 5/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0187 - mve_wrapper_loss: -3.2135 - val_mve_compiled_loss: 0.0112 - val_mve_wrapper_loss: -3.9911
+Epoch 6/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0109 - mve_wrapper_loss: -3.9542 - val_mve_compiled_loss: 0.0099 - val_mve_wrapper_loss: -3.6887
+Epoch 7/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0075 - mve_wrapper_loss: -4.2189 - val_mve_compiled_loss: 0.0072 - val_mve_wrapper_loss: -4.3475
+Epoch 8/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0067 - mve_wrapper_loss: -4.4589 - val_mve_compiled_loss: 0.0052 - val_mve_wrapper_loss: -4.8666
+Epoch 9/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0067 - mve_wrapper_loss: -4.7351 - val_mve_compiled_loss: 0.0046 - val_mve_wrapper_loss: -5.0845
+Epoch 10/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0049 - mve_wrapper_loss: -5.1272 - val_mve_compiled_loss: 0.0037 - val_mve_wrapper_loss: -5.4385
+Epoch 11/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0036 - mve_wrapper_loss: -5.3123 - val_mve_compiled_loss: 0.0034 - val_mve_wrapper_loss: -5.7237
+Epoch 12/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0031 - mve_wrapper_loss: -5.5358 - val_mve_compiled_loss: 0.0032 - val_mve_wrapper_loss: -5.4647
+Epoch 13/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0029 - mve_wrapper_loss: -5.5297 - val_mve_compiled_loss: 0.0031 - val_mve_wrapper_loss: -5.0414
+Epoch 14/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0033 - mve_wrapper_loss: -5.7428 - val_mve_compiled_loss: 0.0029 - val_mve_wrapper_loss: -5.7484
+Epoch 15/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0033 - mve_wrapper_loss: -5.4543 - val_mve_compiled_loss: 0.0028 - val_mve_wrapper_loss: -5.5491
+Epoch 16/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0027 - mve_wrapper_loss: -6.0533 - val_mve_compiled_loss: 0.0023 - val_mve_wrapper_loss: -6.1347
+Epoch 17/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0022 - mve_wrapper_loss: -6.1902 - val_mve_compiled_loss: 0.0022 - val_mve_wrapper_loss: -6.3634
+Epoch 18/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0027 - mve_wrapper_loss: -5.9534 - val_mve_compiled_loss: 0.0022 - val_mve_wrapper_loss: -6.0409
+Epoch 19/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0021 - mve_wrapper_loss: -6.3857 - val_mve_compiled_loss: 0.0021 - val_mve_wrapper_loss: -6.3746
+Epoch 20/20
+256/256 [==============================] - 19s 73ms/step - mve_compiled_loss: 0.0018 - mve_wrapper_loss: -6.4920 - val_mve_compiled_loss: 0.0021 - val_mve_wrapper_loss: -5.5325
+</pre></div></div>
+</div>
+<p>Now we see that in addition to y_hat (as the base model above) our risk aware model also produces a risk estimate (we plot is as the rightmost column), this measurement reflects model’s uncertainty. We see that when we wrap the model with an aleatoric method we can successfully detect label noise or mislabeled data – the model exhibits increased aleatoric uncertainty on object boundaries, and indeed we see that the ground truth has noisy labels particularly on the edges of these objects; this
+could be due to sensor noise or motion noise.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vis_depth_map(aleatoric_model, ds_test)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_notebooks_5_High-Dimensional-Depth_22_0.png" src="../../_images/tutorials_notebooks_5_High-Dimensional-Depth_22_0.png" />
+</div>
+</div>
+<p>Let’s try out another Capsa’s wrapper, which measures a different type of risk.</p>
+</section>
+<section id="2.-Epistemic-Wrapper">
+<h2>2. Epistemic Wrapper<a class="headerlink" href="#2.-Epistemic-Wrapper" title="Permalink to this heading">#</a></h2>
+<p>This wrapper allows to capture uncertainty in the model prediction. As opposed to the risk estimate we saw earlier, epistemic uncertainty can be explained away given enough data / or a more expressive model, and is often referred to as model uncertainty. Detailed documentation could be found here: <a class="reference external" href="https://themisai.io/capsa/api_documentation/DropoutWrapper.html">DropoutWrapper</a>, <a class="reference external" href="https://themisai.io/capsa/api_documentation/VAEWrapper.html">VAEWrapper</a>,
+<a class="reference external" href="https://themisai.io/capsa/api_documentation/EnsembleWrapper.html">EnsembleWrapper</a>.</p>
+<p>Same as with any other Capsa wrapper, user could simply wrap their model with it.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from capsa import EnsembleWrapper
+user_model = unet()
+epistemic_model = EnsembleWrapper(user_model, num_members=3)
+epistemic_model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=config.LR),
+    loss=&quot;mse&quot;,
+)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>history = epistemic_model.fit(ds_train, epochs=config.EP,
+    validation_data=ds_test,
+)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch 1/20
+256/256 [==============================] - 55s 206ms/step - usermodel_0_compiled_loss: 0.0842 - usermodel_1_compiled_loss: 0.1010 - usermodel_2_compiled_loss: 0.1916 - average_loss: 0.1256 - val_usermodel_0_compiled_loss: 0.0557 - val_usermodel_1_compiled_loss: 0.0615 - val_usermodel_2_compiled_loss: 0.0871
+Epoch 2/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0495 - usermodel_1_compiled_loss: 0.0540 - usermodel_2_compiled_loss: 0.0719 - average_loss: 0.0585 - val_usermodel_0_compiled_loss: 0.0437 - val_usermodel_1_compiled_loss: 0.0472 - val_usermodel_2_compiled_loss: 0.0605
+Epoch 3/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0390 - usermodel_1_compiled_loss: 0.0419 - usermodel_2_compiled_loss: 0.0532 - average_loss: 0.0447 - val_usermodel_0_compiled_loss: 0.0347 - val_usermodel_1_compiled_loss: 0.0370 - val_usermodel_2_compiled_loss: 0.0468
+Epoch 4/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0313 - usermodel_1_compiled_loss: 0.0333 - usermodel_2_compiled_loss: 0.0420 - average_loss: 0.0355 - val_usermodel_0_compiled_loss: 0.0281 - val_usermodel_1_compiled_loss: 0.0298 - val_usermodel_2_compiled_loss: 0.0377
+Epoch 5/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0257 - usermodel_1_compiled_loss: 0.0272 - usermodel_2_compiled_loss: 0.0346 - average_loss: 0.0292 - val_usermodel_0_compiled_loss: 0.0235 - val_usermodel_1_compiled_loss: 0.0248 - val_usermodel_2_compiled_loss: 0.0316
+Epoch 6/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0218 - usermodel_1_compiled_loss: 0.0230 - usermodel_2_compiled_loss: 0.0293 - average_loss: 0.0247 - val_usermodel_0_compiled_loss: 0.0202 - val_usermodel_1_compiled_loss: 0.0213 - val_usermodel_2_compiled_loss: 0.0272
+Epoch 7/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0189 - usermodel_1_compiled_loss: 0.0199 - usermodel_2_compiled_loss: 0.0255 - average_loss: 0.0214 - val_usermodel_0_compiled_loss: 0.0177 - val_usermodel_1_compiled_loss: 0.0186 - val_usermodel_2_compiled_loss: 0.0239
+Epoch 8/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0167 - usermodel_1_compiled_loss: 0.0176 - usermodel_2_compiled_loss: 0.0226 - average_loss: 0.0190 - val_usermodel_0_compiled_loss: 0.0158 - val_usermodel_1_compiled_loss: 0.0166 - val_usermodel_2_compiled_loss: 0.0213
+Epoch 9/20
+256/256 [==============================] - 53s 206ms/step - usermodel_0_compiled_loss: 0.0150 - usermodel_1_compiled_loss: 0.0158 - usermodel_2_compiled_loss: 0.0202 - average_loss: 0.0170 - val_usermodel_0_compiled_loss: 0.0143 - val_usermodel_1_compiled_loss: 0.0150 - val_usermodel_2_compiled_loss: 0.0192
+Epoch 10/20
+256/256 [==============================] - 53s 206ms/step - usermodel_0_compiled_loss: 0.0136 - usermodel_1_compiled_loss: 0.0143 - usermodel_2_compiled_loss: 0.0184 - average_loss: 0.0154 - val_usermodel_0_compiled_loss: 0.0130 - val_usermodel_1_compiled_loss: 0.0137 - val_usermodel_2_compiled_loss: 0.0175
+Epoch 11/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0125 - usermodel_1_compiled_loss: 0.0131 - usermodel_2_compiled_loss: 0.0168 - average_loss: 0.0142 - val_usermodel_0_compiled_loss: 0.0120 - val_usermodel_1_compiled_loss: 0.0126 - val_usermodel_2_compiled_loss: 0.0161
+Epoch 12/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0116 - usermodel_1_compiled_loss: 0.0121 - usermodel_2_compiled_loss: 0.0156 - average_loss: 0.0131 - val_usermodel_0_compiled_loss: 0.0111 - val_usermodel_1_compiled_loss: 0.0117 - val_usermodel_2_compiled_loss: 0.0150
+Epoch 13/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0108 - usermodel_1_compiled_loss: 0.0113 - usermodel_2_compiled_loss: 0.0145 - average_loss: 0.0122 - val_usermodel_0_compiled_loss: 0.0104 - val_usermodel_1_compiled_loss: 0.0109 - val_usermodel_2_compiled_loss: 0.0140
+Epoch 14/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0101 - usermodel_1_compiled_loss: 0.0106 - usermodel_2_compiled_loss: 0.0135 - average_loss: 0.0114 - val_usermodel_0_compiled_loss: 0.0098 - val_usermodel_1_compiled_loss: 0.0102 - val_usermodel_2_compiled_loss: 0.0131
+Epoch 15/20
+256/256 [==============================] - 53s 206ms/step - usermodel_0_compiled_loss: 0.0095 - usermodel_1_compiled_loss: 0.0099 - usermodel_2_compiled_loss: 0.0127 - average_loss: 0.0107 - val_usermodel_0_compiled_loss: 0.0092 - val_usermodel_1_compiled_loss: 0.0097 - val_usermodel_2_compiled_loss: 0.0124
+Epoch 16/20
+256/256 [==============================] - 53s 206ms/step - usermodel_0_compiled_loss: 0.0090 - usermodel_1_compiled_loss: 0.0094 - usermodel_2_compiled_loss: 0.0120 - average_loss: 0.0101 - val_usermodel_0_compiled_loss: 0.0088 - val_usermodel_1_compiled_loss: 0.0091 - val_usermodel_2_compiled_loss: 0.0117
+Epoch 17/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0085 - usermodel_1_compiled_loss: 0.0089 - usermodel_2_compiled_loss: 0.0114 - average_loss: 0.0096 - val_usermodel_0_compiled_loss: 0.0083 - val_usermodel_1_compiled_loss: 0.0087 - val_usermodel_2_compiled_loss: 0.0111
+Epoch 18/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0081 - usermodel_1_compiled_loss: 0.0085 - usermodel_2_compiled_loss: 0.0108 - average_loss: 0.0091 - val_usermodel_0_compiled_loss: 0.0079 - val_usermodel_1_compiled_loss: 0.0083 - val_usermodel_2_compiled_loss: 0.0106
+Epoch 19/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0078 - usermodel_1_compiled_loss: 0.0081 - usermodel_2_compiled_loss: 0.0103 - average_loss: 0.0087 - val_usermodel_0_compiled_loss: 0.0076 - val_usermodel_1_compiled_loss: 0.0079 - val_usermodel_2_compiled_loss: 0.0101
+Epoch 20/20
+256/256 [==============================] - 53s 205ms/step - usermodel_0_compiled_loss: 0.0074 - usermodel_1_compiled_loss: 0.0077 - usermodel_2_compiled_loss: 0.0099 - average_loss: 0.0084 - val_usermodel_0_compiled_loss: 0.0073 - val_usermodel_1_compiled_loss: 0.0076 - val_usermodel_2_compiled_loss: 0.0097
+</pre></div></div>
+</div>
+<p>Same as earlier let’s visualize the predictions of the risk aware model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vis_depth_map(epistemic_model, ds_test)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_notebooks_5_High-Dimensional-Depth_27_0.png" src="../../_images/tutorials_notebooks_5_High-Dimensional-Depth_27_0.png" />
+</div>
+</div>
+<p>With and epistemic method, we are able to capture uncertainty in model’s prediction itself. We see that increased epistemic uncertainty roughly corresponds to the semantically and visually challenging pixels where the model is making errors.</p>
+</section>
+<section id="To-sum-up-🏆">
+<h2>To sum up 🏆<a class="headerlink" href="#To-sum-up-🏆" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>With <code class="docutils literal notranslate"><span class="pre">Capsa</span></code> we converted our existing model to its risk aware variant with one line of code.</p></li>
+<li><p>We trained this model with the same steps as the initial (not wrapped) model.</p></li>
+<li><p>We saw different risk estimates in action, and explaind their semantic meaning!</p></li>
+</ul>
+<p>In the next part of the tutorial (part 6) we’ll use the risk estimates to solve an actual real world problem.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="6_OOD-Detection.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Anomaly Detection (Advanced)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="4_MVE-Regression.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Eliminate Aleatoric Uncertainty with <code class="docutils literal notranslate"><span class="pre">capsa</span></code></div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Themis AI Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">High Level Introduction to <code class="docutils literal notranslate"><span class="pre">Capsa</span></code> with a Real World Problem</a><ul>
+<li><a class="reference internal" href="#Base-model">Base model</a><ul>
+<li><a class="reference internal" href="#Capsa">Capsa</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#1.-Aleatoric-Wrapper">1. Aleatoric Wrapper</a></li>
+<li><a class="reference internal" href="#2.-Epistemic-Wrapper">2. Epistemic Wrapper</a></li>
+<li><a class="reference internal" href="#To-sum-up-🏆">To sum up 🏆</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

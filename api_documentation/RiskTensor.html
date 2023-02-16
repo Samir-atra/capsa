@@ -1,0 +1,710 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="MVEWrapper" href="MVEWrapper.html" /><link rel="prev" title="BaseWrapper" href="BaseWrapper.html" />
+
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>RiskTensor - capsa documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">capsa  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">capsa  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">👋 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">💾 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../risk_metrics/index.html">⭐️ Risk Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/basic_usage.html">🎬 Basic Usage</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">👩‍🏫 Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/1_Ensemble-Classification.html">Ensemble Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/2_Histogram-Classification.html">Histogram Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/3_MVE-Classification.html">MVE Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/4_MVE-Regression.html">MVE Wrapper (Regression)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/5_High-Dimensional-Depth.html">High Level Introduction to Capsa with a Real World Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/6_OOD-Detection.html">Anomaly Detection (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/7_Composability.html">Composability (Advanced)</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">‍💻 Metric Wrapper API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="BaseWrapper.html">BaseWrapper</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">RiskTensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MVEWrapper.html">MVEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VAEWrapper.html">VAEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EnsembleWrapper.html">EnsembleWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DropoutWrapper.html">DropoutWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HistogramWrapper.html">HistogramWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HistogramVAEWrapper.html">HistogramVAEWrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute/index.html">🧿 Contribute</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="risktensor">
+<span id="api-documentation-risktensor"></span><h1>RiskTensor<a class="headerlink" href="#risktensor" title="Permalink to this heading">#</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more examples of using the <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> check out: <code class="docutils literal notranslate"><span class="pre">tests/test_risk_tensor.py</span></code>, <code class="docutils literal notranslate"><span class="pre">test_risk_tensor_nn.py</span></code>, <code class="docutils literal notranslate"><span class="pre">MVEWrapper</span></code>, <code class="docutils literal notranslate"><span class="pre">HistogramWrapper</span></code>, <code class="docutils literal notranslate"><span class="pre">DropoutWrapper</span></code>, <code class="docutils literal notranslate"><span class="pre">EnsembleWrapper</span></code>, <code class="docutils literal notranslate"><span class="pre">VAEWrapper</span></code>.</p>
+</div>
+<span class="target" id="api-wrapper"></span><dl class="py class">
+<dt class="sig sig-object py" id="capsa.RiskTensor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">capsa.</span></span><span class="sig-name descname"><span class="pre">RiskTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_hat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aleatoric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epistemic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor" title="Permalink to this definition">#</a></dt>
+<dd><p>Extends the interface defined by the <code class="docutils literal notranslate"><span class="pre">tf.Tensor</span></code> type (tensor-like extension type
+see <a class="reference external" href="https://www.tensorflow.org/guide/extension_type">tf.extension_type</a> for more details).</p>
+<p>An instance of this class contains both <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> and the risk
+measures inside of it (which can be accessed). The output of
+every wrapper is a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>. We represent a risk tensor
+as four separate dense tensors: <code class="docutils literal notranslate"><span class="pre">y_hat</span></code>, <code class="docutils literal notranslate"><span class="pre">aleatoric</span></code>, <code class="docutils literal notranslate"><span class="pre">epistemic</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">bias</span></code> (anyone of those could be <code class="docutils literal notranslate"><span class="pre">None</span></code> besides <code class="docutils literal notranslate"><span class="pre">y_hat</span></code>),
+these tensors are collected into a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>
+class for ease of use.</p>
+<dl class="simple">
+<dt>The default behavior of this object mimics one of a regular <code class="docutils literal notranslate"><span class="pre">tf.Tensor</span></code>:</dt><dd><ul class="simple">
+<li><p>has a <code class="docutils literal notranslate"><span class="pre">shape</span></code>, and a <code class="docutils literal notranslate"><span class="pre">dtype</span></code>;</p></li>
+<li><p>could be used with Tensor operations (such as <code class="docutils literal notranslate"><span class="pre">tf.stack</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.concat</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tf.shape</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.add</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.math.reduce_std</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.reduce_mean</span></code>, etc.);</p></li>
+<li><p>could be used as input/output for <code class="docutils literal notranslate"><span class="pre">tf.keras.Model</span></code> and <code class="docutils literal notranslate"><span class="pre">tf.keras.layers</span></code>;</p></li>
+<li><p>could be used with <code class="docutils literal notranslate"><span class="pre">tf.data.Dataset</span></code>;</p></li>
+<li><p><a class="reference external" href="https://www.tensorflow.org/guide/extension_type#supported_apis">etc</a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Note: Not all <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/experimental/dispatch_for_api">tf operations</a>
+are currently supported to work natively with an instance of the <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>. The ones that are currently
+supported are: (i) all <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/experimental/dispatch_for_unary_elementwise_apis">unary elementwise operations</a>;
+(ii) all <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/experimental/dispatch_for_binary_elementwise_apis">binary elementwise operations</a>;
+(iii) the following <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/experimental/dispatch_for_api">operations</a>
+<code class="docutils literal notranslate"><span class="pre">tf.math.reduce_std</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.reduce_mean</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.reduce_sum</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.stack</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.concat</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.shape</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.reshape</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tf.size</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.transpose</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.matmul</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.convert_to_tensor</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.where</span></code>, <code class="docutils literal notranslate"><span class="pre">tf.debugging.assert_near</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tf.debugging.assert_equal</span></code>.</p>
+<p>When working with <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>, if you encounter an unexpected error most likely the tensorflow framework under the hood
+tries to use one of the <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/experimental/dispatch_for_api">tf operations</a>
+which is not currently supported – thus you may need to override the default behavior of the specified tf
+operation when it is called. You can use the <code class="docutils literal notranslate"><span class="pre">&#64;tf.experimental.dispatch_for_api</span></code> decorator to specify
+how a not yet supported operation (e.g., <code class="docutils literal notranslate"><span class="pre">tf.reduce_max()</span></code>) should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.
+For more examples see <code class="docutils literal notranslate"><span class="pre">capsa/risk_tensor.py</span></code>.</p>
+<p>Note: the <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> class overloads the standard Python arithmetic and comparison operators, making it easy to perform basic math.
+<code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> overloads the same set of operators as <code class="docutils literal notranslate"><span class="pre">tf.Tensor</span></code>: the unary operators <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">~</span></code>, and <code class="docutils literal notranslate"><span class="pre">abs()</span></code>;
+and the binary operators <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">//</span></code>, <code class="docutils literal notranslate"><span class="pre">%</span></code>, <code class="docutils literal notranslate"><span class="pre">**</span></code>, <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">|</span></code>, <code class="docutils literal notranslate"><span class="pre">^</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>.
+<code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> also supports Python-style indexing, including multidimensional indexing and slicing.
+For more examples see <code class="docutils literal notranslate"><span class="pre">test/test_risk_tensor.py</span></code>.</p>
+<dl>
+<dt>Example usage:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># initialize a keras model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_model</span> <span class="o">=</span> <span class="n">Unet</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># wrap the model to transform it into a risk-aware variant (e.g. with the vae wrapper)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">VAEWrapper</span><span class="p">(</span><span class="n">user_model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># compile and fit as a regular keras model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># output of a metric wrapper is a ``RiskTensor``. It acts like a regular</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># ``tf.Tensor`` -- as it was before a user wrapped their model with capsa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># type(output) == capsa.RiskTensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># in other words, using ``output`` feels the same as directly using ``y_hat``</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">real_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>   <span class="c1"># type(real_tensor) == tf.Tensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">+</span> <span class="n">real_tensor</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># but in addition to the model&#39;s prediction (y_hat) we can access risk measures as</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># part of the RiskTensor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">epistemic</span> <span class="c1">#  to return a tf.Tensor of the epistemic uncertainty</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.__validate__">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">__validate__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.__validate__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.__validate__" title="Permalink to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">tf.ExtensionType</span></code> adds a validation method (<code class="docutils literal notranslate"><span class="pre">__validate__</span></code>), to perform validation checks on fields.
+It is run after the constructor is called, and after fields have been type-checked and converted
+to their declared types, so it can assume that all fields have their declared types.</p>
+<p>We override this method to validate the shapes and dtypes of <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>’s fields.
+This method asserts that if a risk estimate is provided (e.g. if aleatoric is not <code class="docutils literal notranslate"><span class="pre">None</span></code>),
+the shape of this aleatoric tensor should match the shape of <code class="docutils literal notranslate"><span class="pre">y_hat</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.__repr__">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.__repr__" title="Permalink to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">tf.ExtensionType</span></code> adds a default printable representation method (<code class="docutils literal notranslate"><span class="pre">__repr__</span></code>). We override
+this default string conversion operator to generate a more readable string representation
+when values are printed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>risk_str</strong> – Printable representation of an object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.__getitem__">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slice_spec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.__getitem__" title="Permalink to this definition">#</a></dt>
+<dd><p>Overload for <code class="docutils literal notranslate"><span class="pre">RiskTensor.getitem</span></code>. This operation extracts the specified region from the tensor.
+The notation is similar to <code class="docutils literal notranslate"><span class="pre">tf.Tensor</span></code>.</p>
+<p>Note: applies to all elements of a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> (not only <code class="docutils literal notranslate"><span class="pre">y_hat</span></code>) reasoning behind such a design
+choice is that in this scenario when a user extracts a slice from a given tensor there is no need
+to keep around elements of risk tensors that correspond to the elements of <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> that do not
+exist anymore (after slicing). Thus no need to protect a user from accidentally modifying the contents
+of the risk tensors. Also if we slice only <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> leaving risk tensors untouched that would violate our own
+<code class="docutils literal notranslate"><span class="pre">__validate__</span></code> method as the <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> tensor and each of the risk tensors will have different shapes.</p>
+<p>For more examples see <code class="docutils literal notranslate"><span class="pre">test/test_risk_tensor.py</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>slice_spec</strong> (<em>slice</em>) – The arguments to <code class="docutils literal notranslate"><span class="pre">RiskTensor.__getitem__</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>out</strong> – The appropriate slice of a risk tensor, based on <code class="docutils literal notranslate"><span class="pre">slice_spec</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#capsa.RiskTensor" title="capsa.RiskTensor">capsa.RiskTensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.__len__">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.__len__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>out</strong> – The length of the first dimension of the <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> Tensor.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.replace_risk">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">replace_risk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_aleatoric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'keep'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_epistemic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'keep'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'keep'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.replace_risk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.replace_risk" title="Permalink to this definition">#</a></dt>
+<dd><p>In TensorFlow all <code class="docutils literal notranslate"><span class="pre">tf.Tensors</span></code> are immutable: you can never update the contents
+of a tensor, only create a new one <a class="reference external" href="https://www.tensorflow.org/guide/tensor">reference</a>.
+Mutable objects may be backed by a Tensor which holds the unique handle that identifies
+the mutable object <a class="reference external" href="https://github.com/tensorflow/tensorflow/blob/359c3cdfc5fabac82b3c70b3b6de2b0a8c16874f/tensorflow/python/types/core.py#L46-L47">reference</a>.
+In other words, normal <code class="docutils literal notranslate"><span class="pre">tf.Tensor</span></code> objects are immutable. To store model weights (or other mutable
+state) <code class="docutils literal notranslate"><span class="pre">tf.Variable</span></code> is used <a class="reference external" href="https://www.tensorflow.org/guide/basics#variables">reference</a>.</p>
+<p>Similarly, <a class="reference external" href="https://www.tensorflow.org/guide/extension_type">tf.extension_type</a> and therefore
+an instance of a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> is <a class="reference external" href="https://www.tensorflow.org/guide/extension_type#mutability">immutable</a>.
+Because <code class="docutils literal notranslate"><span class="pre">tf.ExtensionType</span></code> overrides the <code class="docutils literal notranslate"><span class="pre">__setattr__</span></code> and <code class="docutils literal notranslate"><span class="pre">__delattr__</span></code> methods to prevent mutation.
+This ensures that they can be properly tracked by TensorFlow’s graph-tracing mechanisms.</p>
+<p>If you find yourself wanting to mutate an extension type value, consider instead using this method that
+transforms values. For example, rather than defining a <code class="docutils literal notranslate"><span class="pre">set_risk</span></code> method to mutate a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>,
+you could use the <code class="docutils literal notranslate"><span class="pre">replace_risk</span></code> method that returns a new <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>. This is similar to e.g.
+<a class="reference external" href="https://github.com/tensorflow/tensorflow/blob/359c3cdfc5fabac82b3c70b3b6de2b0a8c16874f/tensorflow/python/framework/sparse_tensor.py#L177-L200">implementation</a>
+of the <code class="docutils literal notranslate"><span class="pre">tf.SparseTensor</span></code>.</p>
+<p>Note: If a value e.g. for the <code class="docutils literal notranslate"><span class="pre">new_epistemic</span></code> argument is not provided to replace <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>’s
+epistemic estimate, the current epistemic estimate will be kept.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_aleatoric</strong> (<em>tf.Tensor</em><em>, </em><em>default str</em>) – New aleatoric estimate.</p></li>
+<li><p><strong>new_epistemic</strong> (<em>tf.Tensor</em><em>, </em><em>default str</em>) – New epistemic estimate.</p></li>
+<li><p><strong>new_bias</strong> (<em>tf.Tensor</em><em>, </em><em>default str</em>) – New bias estimate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>out</strong> – New risk aware tensor, contains old <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> and new risk estimates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#capsa.RiskTensor" title="capsa.RiskTensor">capsa.RiskTensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.ndim">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">ndim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.ndim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.ndim" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>out</strong> – The number of dimensions of the <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> Tensor.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.device">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">device</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.device" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>out</strong> – The name of the device on which this risk tensor will be produced, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.to_list">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">to_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.to_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.to_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Similarly to <code class="docutils literal notranslate"><span class="pre">tf.RaggedTensor</span></code>, requires that risk tensor was constructed in eager execution mode.</p>
+<p>Returns a single nested <code class="docutils literal notranslate"><span class="pre">list</span></code> object with the values for the <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>.
+If an element of a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">RiskTensor.bias</span></code>) is <code class="docutils literal notranslate"><span class="pre">None</span></code> this method
+returns <code class="docutils literal notranslate"><span class="pre">None</span></code> for the corresponding element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>out</strong> – A nested Python <code class="docutils literal notranslate"><span class="pre">list</span></code> with the values for the <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.RiskTensor.numpy">
+<span class="sig-prename descclassname"><span class="pre">RiskTensor.</span></span><span class="sig-name descname"><span class="pre">numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#RiskTensor.numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.RiskTensor.numpy" title="Permalink to this definition">#</a></dt>
+<dd><p>Similarly to <code class="docutils literal notranslate"><span class="pre">tf.RaggedTensor</span></code>, requires that risk tensor was constructed
+in eager execution mode.</p>
+<p>Returns four <code class="docutils literal notranslate"><span class="pre">np.array</span></code> objects, one for each tensor contained in the <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>.
+If an element of a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">RiskTensor.bias</span></code>) is <code class="docutils literal notranslate"><span class="pre">None</span></code> this method
+returns <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> for the corresponding element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>y_hat</strong> (<em>np.array</em>) – Represents <code class="docutils literal notranslate"><span class="pre">RiskTensor.y_hat</span></code>.</p></li>
+<li><p><strong>aleatoric</strong> (<em>np.array</em>) – Represents <code class="docutils literal notranslate"><span class="pre">RiskTensor.aleatoric</span></code>.</p></li>
+<li><p><strong>epistemic</strong> (<em>np.array</em>) – Represents <code class="docutils literal notranslate"><span class="pre">RiskTensor.epistemic</span></code>.</p></li>
+<li><p><strong>bias</strong> (<em>np.array</em>) – Represents <code class="docutils literal notranslate"><span class="pre">RiskTensor.bias</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.unary_elementwise_op_handler">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">unary_elementwise_op_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#unary_elementwise_op_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.unary_elementwise_op_handler" title="Permalink to this definition">#</a></dt>
+<dd><p>Note: By design the <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/experimental/dispatch_for_unary_elementwise_apis">unary operations</a>
+are performed on <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> only. E.g. <code class="docutils literal notranslate"><span class="pre">tf.abs(output)</span></code> will only take the absolute values of the
+<code class="docutils literal notranslate"><span class="pre">y_hat</span></code> tensor, leaving the risk tensors untouched.</p>
+<p>The reasoning behind such a design choice is to protect a user from accidentally modifying the
+contents of risk tensors when the user intends to treat outputs of a metric wrapper as <code class="docutils literal notranslate"><span class="pre">y_hat</span></code>.</p>
+<p>Thus, you need to explicitly select other elements to perform uniary operations on them e.g.
+<code class="docutils literal notranslate"><span class="pre">tf.abs(output.epistemic)</span></code> to select absolute values of the epistemic tensor.</p>
+<p>For more details see <a class="reference external" href="https://www.tensorflow.org/guide/extension_type#dispatch_for_all_unary_elementwise_apis">dispatch for all unary elementwise APIs</a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.binary_elementwise_op_handler">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">binary_elementwise_op_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#binary_elementwise_op_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.binary_elementwise_op_handler" title="Permalink to this definition">#</a></dt>
+<dd><p>The decorated function (known as the “elementals api handler”) overrides the default implementation for any binary elementals API,
+whenever the value for the first two arguments (typically named <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>) match the specified type annotations.
+For more details see <a class="reference external" href="https://www.tensorflow.org/guide/extension_type#dispatch_for_binary_all_elementwise_apis">dispatch for binary elementwise APIs</a>.</p>
+<p>Note: By design the <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/experimental/dispatch_for_binary_elementwise_apis">binary operations</a>
+for two <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>’s are performed on <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> tensors, as well as on the risk tensors (if both of them are not <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+<p>The reasoning behind such a design choice is that in this scenario when operations are performed on two
+<code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>’s (<cite>not</cite> on a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> and e.g. a <code class="docutils literal notranslate"><span class="pre">tf.Tensor</span></code>) there’s no need to protect a user
+from accidentally modifying their risk contents because both inputs of the binary operation have the
+same type.</p>
+<p>Thus, you don’t need to explicitly select other elements to perform binary operations on them e.g.
+<code class="docutils literal notranslate"><span class="pre">tf.subtract(output1.epistemic,</span> <span class="pre">output2.epistemic)</span></code> to subtract values of the epistemic tensors,
+simply calling <code class="docutils literal notranslate"><span class="pre">tf.subtract(output1,</span> <span class="pre">output2)</span></code> will subtract all elements of the risk tensors.</p>
+<p>Note: By design the <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/experimental/dispatch_for_binary_elementwise_apis">binary operations</a>
+for a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> and a <code class="docutils literal notranslate"><span class="pre">Union[tf.Tensor,</span> <span class="pre">np.ndarray,</span> <span class="pre">int,</span> <span class="pre">float]</span></code> are performed on <code class="docutils literal notranslate"><span class="pre">y_hat</span></code> only.</p>
+<p>The reasoning behind such a design choice is that e.g. <code class="docutils literal notranslate"><span class="pre">tf.Tensor</span></code> simply doesn’t have the
+risk elements to perform a binary operation on.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_shape">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">tf.int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_shape" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.shape</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_size">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">tf.int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_size" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.size</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_convert_to_tensor">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_convert_to_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype_hint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_convert_to_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_convert_to_tensor" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.convert_to_tensor</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+<p>Since when initializing a risk tensor we already call <code class="docutils literal notranslate"><span class="pre">tf.convert_to_tensor</span></code>
+on every element of the tensor if running <code class="docutils literal notranslate"><span class="pre">tf.convert_to_tensor</span></code> on
+a risk tensor no need convert again.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_reshape">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_reshape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_reshape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_reshape" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.reshape</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_reduce_all">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_reduce_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_reduce_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_reduce_all" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.reduce_all</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_reduce_std">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_reduce_std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_reduce_std"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_reduce_std" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.math.reduce_std</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_reduce_mean">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_reduce_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_reduce_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_reduce_mean" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.reduce_mean</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_reduce_sum">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_reduce_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_reduce_sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_reduce_sum" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.reduce_sum</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_transpose">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_transpose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">perm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conjugate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'transpose'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_transpose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_transpose" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.transpose</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_stack">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'stack'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_stack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_stack" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.stack</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_concat">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'concat'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_concat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_concat" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.concat</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_add_n">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_add_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_add_n"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_add_n" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.add_n</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_where">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_where</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_where"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_where" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.where</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_assert_near">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_assert_near</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_assert_near"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_assert_near" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.debugging.assert_near</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_assert_equal">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_assert_equal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_assert_equal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_assert_equal" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.debugging.assert_equal</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="capsa.risk_tensor.risk_matmul">
+<span class="sig-prename descclassname"><span class="pre">capsa.risk_tensor.</span></span><span class="sig-name descname"><span class="pre">risk_matmul</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Variable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#capsa.RiskTensor" title="capsa.risk_tensor.RiskTensor"><span class="pre">RiskTensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Variable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose_a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose_b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint_a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint_b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_is_sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_is_sparse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/risk_tensor.html#risk_matmul"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.risk_tensor.risk_matmul" title="Permalink to this definition">#</a></dt>
+<dd><p>Specifies how <code class="docutils literal notranslate"><span class="pre">tf.matmul</span></code> should process <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> values.</p>
+<p>Since the <code class="docutils literal notranslate"><span class="pre">tf.matmul</span></code> API is used by standard Keras layers
+(e.g. <code class="docutils literal notranslate"><span class="pre">tf.keras.layers.Dense</span></code>), overriding it allows us to use
+those layers with a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>. Concretely, in the case of e.g.
+feeding a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> to a dense layer, <code class="docutils literal notranslate"><span class="pre">tf.matmul</span></code> gets called
+with a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> (input) as one argument and a <code class="docutils literal notranslate"><span class="pre">tf.Variable</span></code>
+(weight) as another – thus this function gets called.</p>
+<p>In the case described above the output is defined to not include the risk
+values in the product. In other words, returns just e.g. <code class="docutils literal notranslate"><span class="pre">a.y_hat</span> <span class="pre">&#64;</span> <span class="pre">b</span></code>,
+and not a <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>. Thus, we can construct a Keras model that
+accepts <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> inputs, using standard Keras layers.</p>
+<p>When both of the inputs to the <code class="docutils literal notranslate"><span class="pre">tf.matmul</span></code> are <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code>’s
+the corresponding elements of these tensors are matrix multiplied
+and a new <code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code> is returned.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">binary_elementwise_op_handler</span></code> for the logic behind these design choices.</p>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="MVEWrapper.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">MVEWrapper</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="BaseWrapper.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">BaseWrapper</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Themis AI Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">RiskTensor</a><ul>
+<li><a class="reference internal" href="#capsa.RiskTensor"><code class="docutils literal notranslate"><span class="pre">RiskTensor</span></code></a><ul>
+<li><a class="reference internal" href="#capsa.RiskTensor.__validate__"><code class="docutils literal notranslate"><span class="pre">RiskTensor.__validate__()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.RiskTensor.__repr__"><code class="docutils literal notranslate"><span class="pre">RiskTensor.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.RiskTensor.__getitem__"><code class="docutils literal notranslate"><span class="pre">RiskTensor.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.RiskTensor.__len__"><code class="docutils literal notranslate"><span class="pre">RiskTensor.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.RiskTensor.replace_risk"><code class="docutils literal notranslate"><span class="pre">RiskTensor.replace_risk()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.RiskTensor.ndim"><code class="docutils literal notranslate"><span class="pre">RiskTensor.ndim()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.RiskTensor.device"><code class="docutils literal notranslate"><span class="pre">RiskTensor.device()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.RiskTensor.to_list"><code class="docutils literal notranslate"><span class="pre">RiskTensor.to_list()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.RiskTensor.numpy"><code class="docutils literal notranslate"><span class="pre">RiskTensor.numpy()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#capsa.risk_tensor.unary_elementwise_op_handler"><code class="docutils literal notranslate"><span class="pre">unary_elementwise_op_handler()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.binary_elementwise_op_handler"><code class="docutils literal notranslate"><span class="pre">binary_elementwise_op_handler()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_shape"><code class="docutils literal notranslate"><span class="pre">risk_shape()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_size"><code class="docutils literal notranslate"><span class="pre">risk_size()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_convert_to_tensor"><code class="docutils literal notranslate"><span class="pre">risk_convert_to_tensor()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_reshape"><code class="docutils literal notranslate"><span class="pre">risk_reshape()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_reduce_all"><code class="docutils literal notranslate"><span class="pre">risk_reduce_all()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_reduce_std"><code class="docutils literal notranslate"><span class="pre">risk_reduce_std()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_reduce_mean"><code class="docutils literal notranslate"><span class="pre">risk_reduce_mean()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_reduce_sum"><code class="docutils literal notranslate"><span class="pre">risk_reduce_sum()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_transpose"><code class="docutils literal notranslate"><span class="pre">risk_transpose()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_stack"><code class="docutils literal notranslate"><span class="pre">risk_stack()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_concat"><code class="docutils literal notranslate"><span class="pre">risk_concat()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_add_n"><code class="docutils literal notranslate"><span class="pre">risk_add_n()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_where"><code class="docutils literal notranslate"><span class="pre">risk_where()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_assert_near"><code class="docutils literal notranslate"><span class="pre">risk_assert_near()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_assert_equal"><code class="docutils literal notranslate"><span class="pre">risk_assert_equal()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.risk_tensor.risk_matmul"><code class="docutils literal notranslate"><span class="pre">risk_matmul()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    </body>
+</html>

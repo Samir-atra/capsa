@@ -1,0 +1,335 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Basic Usage" href="../getting_started/basic_usage.html" /><link rel="prev" title="Installation" href="../getting_started/installation.html" />
+
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>Risk Metrics - capsa documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">capsa  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">capsa  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">👋 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">💾 Installation</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">⭐️ Risk Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/basic_usage.html">🎬 Basic Usage</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">👩‍🏫 Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/1_Ensemble-Classification.html">Ensemble Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/2_Histogram-Classification.html">Histogram Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/3_MVE-Classification.html">MVE Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/4_MVE-Regression.html">MVE Wrapper (Regression)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/5_High-Dimensional-Depth.html">High Level Introduction to Capsa with a Real World Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/6_OOD-Detection.html">Anomaly Detection (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/7_Composability.html">Composability (Advanced)</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_documentation/index.html">‍💻 Metric Wrapper API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_documentation/BaseWrapper.html">BaseWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_documentation/RiskTensor.html">RiskTensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_documentation/MVEWrapper.html">MVEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_documentation/VAEWrapper.html">VAEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_documentation/EnsembleWrapper.html">EnsembleWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_documentation/DropoutWrapper.html">DropoutWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_documentation/HistogramWrapper.html">HistogramWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_documentation/HistogramVAEWrapper.html">HistogramVAEWrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute/index.html">🧿 Contribute</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="risk-metrics">
+<span id="id1"></span><h1>Risk Metrics<a class="headerlink" href="#risk-metrics" title="Permalink to this heading">#</a></h1>
+<p>Each risk metric uses different algorithms. Because of this, risk metrics are implemented via their corresponding wrappers. In <strong>capsa</strong>, we call these <strong>Metric Wrappers</strong>. These Metric Wrappers are implemented as objects that inherit from the <strong>Base Wrapper</strong> class, which itself inherits from the <strong>Keras.Model</strong>. This allows us to use the same workflow as a Keras model, but with the added functionality of the risk metrics.</p>
+<p>Most Metric Wrappers have a similar workflow:</p>
+<ol class="arabic simple">
+<li><p><strong>Initialize</strong> the Metric Wrapper with the appropriate parameters.</p></li>
+<li><p><strong>Compile</strong> the Metric Wrapper with optimizer, loss, metrics, etc. (Similar to a Keras model)</p></li>
+<li><p><strong>Fit</strong> the Metric Wrapper to the data.</p></li>
+</ol>
+<p>We can also treat our use a custom training loop to train the Metric Wrapper using tensorflow functionalities such as tf.GradientTape(). <a class="reference external" href="../getting_started/basic_usage.html">Read more here</a></p>
+<section id="representation-bias">
+<h2>Representation Bias<a class="headerlink" href="#representation-bias" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/bias-light.png" class="only-light" src="../_images/bias-light.png" />
+<img alt="../_images/bias-dark.png" class="only-dark" src="../_images/bias-dark.png" />
+<p><strong>Bias</strong> of a dataset uncovers the imbalance in the feature space and captures whether certain combinations of features are more frequent than others.
+For example, it has been demonstrated the vast majority of open datasets for training autonomous vehicles comes from straight roads, good weather, and minimal traffic – leading to a performance bias against other feature combinations that are commonly observed in reality (e.g., intersections, bad weather and visibility). It has also been demonstrated that machine learning algorithms can discriminate based on classes like race and gender. Joy Buolamwini and Timnit Gebru have <a class="reference external" href="https://proceedings.mlr.press/v81/buolamwini18a.html">shown</a> that facial recognition algorithms are biased against darker-skinned faces.</p>
+</section>
+<section id="epistemic-uncertainty">
+<h2>Epistemic Uncertainty<a class="headerlink" href="#epistemic-uncertainty" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/epistemic-light.png" class="only-light" src="../_images/epistemic-light.png" />
+<img alt="../_images/epistemic-dark.png" class="only-dark" src="../_images/epistemic-dark.png" />
+<p>This risk metric measures the uncertainty in the model’s predictive process - this captures scenarios such as examples that are “hard” to learn, examples whose features are underrepresented, and/or out-of-distribution data.</p>
+<p>For example, take a look at the classification figure above. What you’ll see is that the model is very confident in its predictions for the majority of the data. However, there are a few examples that are very close to the decision boundary. These examples are the ones that are “hard” to learn. The model is uncertain about these examples, and therefore, we can say that the model is epistemically uncertain about these examples.</p>
+</section>
+<section id="aleatoric-uncertainty-label-noise">
+<h2>Aleatoric Uncertainty (Label Noise)<a class="headerlink" href="#aleatoric-uncertainty-label-noise" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/aleatoric-light.png" class="only-light" src="../_images/aleatoric-light.png" />
+<img alt="../_images/aleatoric-dark.png" class="only-dark" src="../_images/aleatoric-dark.png" />
+<p>This risk metric captures noise in the data: mislabeled datapoints, ambiguous labels, classes with low seperation, etc.</p>
+<p>For example, lets take a look at the Fashion-MNIST dataset, which containts two very similar classes: “tshirt” and “shirt”. The following image shows the confusion matrix for a model trained on this dataset. As we can see, the model is very confused between these two classes.</p>
+<img alt="../_images/confusion-light.png" class="only-light" src="../_images/confusion-light.png" />
+<img alt="../_images/confusion-dark.png" class="only-dark" src="../_images/confusion-dark.png" />
+<p>Now, let’s inspect the samples that the model misclassifies. We can see that the average aleatoric uncertainty is higher among samples that are misclassified compared to samples that are correctly classified. Even we as humans have problems classifying samples with high uncertainty. Here are some examples:</p>
+<img alt="../_images/fashion-light.png" class="only-light" src="../_images/fashion-light.png" />
+<img alt="../_images/fashion-dark.png" class="only-dark" src="../_images/fashion-dark.png" />
+<p>Aleatoric uncertainty is irreducable, and cannot be reduced by adding more data, since it stems from the underlying data collection mechanism. The only solution is to improve data collection and labeling process.</p>
+<p>But epistemic uncertainty is something different. We can find less fundemental ways to reduce epistemic uncertainty. Usually, this type of uncertainty stems from model’s limitations on learning the underlying distribution of the data. We can reduce this uncertainty by adding more data to better represent the data distribution, or by using a more complex model.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../getting_started/basic_usage.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Basic Usage</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../getting_started/installation.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Installation</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Themis AI Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Risk Metrics</a><ul>
+<li><a class="reference internal" href="#representation-bias">Representation Bias</a></li>
+<li><a class="reference internal" href="#epistemic-uncertainty">Epistemic Uncertainty</a></li>
+<li><a class="reference internal" href="#aleatoric-uncertainty-label-noise">Aleatoric Uncertainty (Label Noise)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    </body>
+</html>

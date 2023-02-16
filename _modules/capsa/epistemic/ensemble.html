@@ -1,0 +1,505 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>capsa.epistemic.ensemble - capsa documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">capsa  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">capsa  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/index.html">👋 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/installation.html">💾 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../risk_metrics/index.html">⭐️ Risk Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/basic_usage.html">🎬 Basic Usage</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/index.html">👩‍🏫 Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/notebooks/1_Ensemble-Classification.html">Ensemble Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/notebooks/2_Histogram-Classification.html">Histogram Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/notebooks/3_MVE-Classification.html">MVE Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/notebooks/4_MVE-Regression.html">MVE Wrapper (Regression)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/notebooks/5_High-Dimensional-Depth.html">High Level Introduction to Capsa with a Real World Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/notebooks/6_OOD-Detection.html">Anomaly Detection (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/notebooks/7_Composability.html">Composability (Advanced)</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_documentation/index.html">‍💻 Metric Wrapper API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_documentation/BaseWrapper.html">BaseWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_documentation/RiskTensor.html">RiskTensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_documentation/MVEWrapper.html">MVEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_documentation/VAEWrapper.html">VAEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_documentation/EnsembleWrapper.html">EnsembleWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_documentation/DropoutWrapper.html">DropoutWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_documentation/HistogramWrapper.html">HistogramWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_documentation/HistogramVAEWrapper.html">HistogramVAEWrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribute/index.html">🧿 Contribute</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for capsa.epistemic.ensemble</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">optimizers</span> <span class="k">as</span> <span class="n">optim</span>
+
+<span class="kn">from</span> <span class="nn">..base_wrapper</span> <span class="kn">import</span> <span class="n">BaseWrapper</span>
+<span class="kn">from</span> <span class="nn">..risk_tensor</span> <span class="kn">import</span> <span class="n">RiskTensor</span>
+
+
+<div class="viewcode-block" id="EnsembleWrapper"><a class="viewcode-back" href="../../../api_documentation/EnsembleWrapper.html#capsa.EnsembleWrapper">[docs]</a><span class="k">class</span> <span class="nc">EnsembleWrapper</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses an ensemble of N models (each one is randomly initialized) to accurately</span>
+<span class="sd">    estimate epistemic uncertainty Lakshminarayanan et al. (2017).</span>
+
+<span class="sd">    This approach presents the gold-standard of estimating epistemic uncertainty.</span>
+<span class="sd">    However, it comes with significant computational costs.</span>
+
+<span class="sd">    Example of usage:</span>
+<span class="sd">        &gt;&gt;&gt; # initialize a keras model</span>
+<span class="sd">        &gt;&gt;&gt; user_model = Unet()</span>
+<span class="sd">        &gt;&gt;&gt; # wrap the model to transform it into a risk-aware variant</span>
+<span class="sd">        &gt;&gt;&gt; model = EnsembleWrapper(user_model, metric_wrapper=MVEWrapper, num_members=3)</span>
+<span class="sd">        &gt;&gt;&gt; # compile and fit as a regular tf.keras model</span>
+<span class="sd">        &gt;&gt;&gt; model.compile(...)</span>
+<span class="sd">        &gt;&gt;&gt; model.fit(...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnsembleWrapper.__init__"><a class="viewcode-back" href="../../../api_documentation/EnsembleWrapper.html#capsa.EnsembleWrapper.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">base_model</span><span class="p">,</span>
+        <span class="n">num_members</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">metric_wrapper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">kwargs</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        base_model : tf.keras.Model</span>
+<span class="sd">            A model to be transformed into a risk-aware variant.</span>
+<span class="sd">        num_members : int, default 3</span>
+<span class="sd">            Number of members in the deep ensemble.</span>
+<span class="sd">        metric_wrapper : capsa.BaseWrapper, default None</span>
+<span class="sd">            Class object of an individual metric wrapper (which subclass ``capsa.BaseWrapper``) that</span>
+<span class="sd">            user wants to ensemble, if it&#39;s ``None`` then this wrapper ensembles the ``base_model``.</span>
+<span class="sd">        kwargs : dict</span>
+<span class="sd">            Keyword args used to initialize metric wrappers, used only if ``metric_wrapper`` is provided.</span>
+<span class="sd">            The kwargs are metric wrapper specific, they could be different depending on the wrapper to</span>
+<span class="sd">            be ensembled. But they should not include the ``base_model`` keyword.</span>
+
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        metric_name : str</span>
+<span class="sd">            Represents the name of the metric wrapper.</span>
+<span class="sd">        metrics_compiled : dict</span>
+<span class="sd">            An empty dict, will be used to map ``metric_name``s (string identifiers) of the wrappers that</span>
+<span class="sd">            a user wants to ensemble to their respective compiled models.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EnsembleWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_model</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_name</span> <span class="o">=</span> <span class="s2">&quot;ensemble&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_wrapper</span> <span class="o">=</span> <span class="n">metric_wrapper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_members</span> <span class="o">=</span> <span class="n">num_members</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics_compiled</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span></div>
+
+<div class="viewcode-block" id="EnsembleWrapper.compile"><a class="viewcode-back" href="../../../api_documentation/EnsembleWrapper.html#capsa.EnsembleWrapper.compile">[docs]</a>    <span class="k">def</span> <span class="nf">compile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiles every member in the deep ensemble. Overrides ``tf.keras.Model.compile()``.</span>
+
+<span class="sd">        If user passes only 1 ``optimizer`` and ``loss_fn`` yet they specified e.g. ``num_members``=3,</span>
+<span class="sd">        duplicate that one ``optimizer`` and ``loss_fn`` for all members in the ensemble.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        optimizer : tf.keras.optimizer or list</span>
+<span class="sd">        loss : tf.keras.losses or list</span>
+<span class="sd">        metrics : tf.keras.metrics or list, default None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EnsembleWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="p">[</span><span class="n">optimizer</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">optimizer</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="p">[</span><span class="n">loss</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">loss</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">metrics</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">metrics</span>
+
+        <span class="c1"># if user passes only 1 optimizer or loss_fn yet they specified e.g. num_members=3,</span>
+        <span class="c1"># duplicate that one optimizer and loss_fn for all members in the ensemble</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_members</span><span class="p">:</span>
+            <span class="n">optim_conf</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">optimizer</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="p">[</span><span class="n">optim</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">optim_conf</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_members</span><span class="p">)]</span>
+        <span class="c1"># losses and *most* keras metrics are stateless, no need to serialize as above</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_members</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="p">[</span><span class="n">loss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_members</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_members</span><span class="p">:</span>
+            <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_members</span><span class="p">)]</span>
+
+        <span class="n">base_model_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">base_model_config</span> <span class="o">!=</span> <span class="p">{},</span> <span class="s2">&quot;Please implement get_config().&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_members</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">base_model_config</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">base_model_config</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Please provide a Sequential, Functional or subclassed model.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">m</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">m</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_wrapper</span> <span class="o">==</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_wrapper</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">m_name</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;usermodel_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_wrapper</span> <span class="o">==</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">metric_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">loss</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">metrics</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metrics_compiled</span><span class="p">[</span><span class="n">m_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span></div>
+    
+<div class="viewcode-block" id="EnsembleWrapper.train_step"><a class="viewcode-back" href="../../../api_documentation/EnsembleWrapper.html#capsa.EnsembleWrapper.train_step">[docs]</a>    <span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+    <span class="k">def</span> <span class="nf">train_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The logic for one training step.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : tuple</span>
+<span class="sd">            (x, y) pairs, as in the regular Keras ``train_step``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keras_metrics : dict</span>
+<span class="sd">            `Keras metrics &lt;https://keras.io/api/metrics/&gt;`_.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keras_metrics</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">wrapper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics_compiled</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="c1"># ensembling user model</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_wrapper</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">_</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">train_step</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+                    <span class="n">keras_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_compiled_</span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+            <span class="c1"># ensembling one of our metric wrappers</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">keras_metric</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">train_step</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">keras_metrics</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">keras_metric</span><span class="p">)</span>
+
+        <span class="c1"># # If user utilizes a callback, which saves weights by monitoring loss,</span>
+        <span class="c1"># # but in this model there&#39;s no single loss that we can monitor -- each member</span>
+        <span class="c1"># # has its own loss. So add another entry to the keras metric dict called</span>
+        <span class="c1"># # &quot;average loss&quot; which is an average of all member&#39;s losses.</span>
+        <span class="c1"># # Account for the case of metrics containing two different losses, or even non loss items.</span>
+        <span class="c1"># if self.metric_wrapper == None:</span>
+        <span class="c1">#     keras_metrics[&quot;loss&quot;] = tf.reduce_mean(</span>
+        <span class="c1">#         [v for k, v in keras_metrics.items() if &quot;loss&quot; in k]</span>
+        <span class="c1">#     )</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     keras_metrics[&quot;wrapper_loss&quot;] = tf.reduce_mean(</span>
+        <span class="c1">#         [v for k, v in keras_metrics.items() if &quot;wrapper_loss&quot; in k]</span>
+        <span class="c1">#     )</span>
+
+        <span class="k">return</span> <span class="n">keras_metrics</span></div>
+
+<div class="viewcode-block" id="EnsembleWrapper.test_step"><a class="viewcode-back" href="../../../api_documentation/EnsembleWrapper.html#capsa.EnsembleWrapper.test_step">[docs]</a>    <span class="k">def</span> <span class="nf">test_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The logic for one evaluation step.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : tuple</span>
+<span class="sd">            (x, y) pairs, as in the regular Keras ``test_step``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keras_metrics : dict</span>
+<span class="sd">            `Keras metrics &lt;https://keras.io/api/metrics/&gt;`_.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keras_metrics</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">wrapper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics_compiled</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="c1"># ensembling user model</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_wrapper</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">_</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">test_step</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+                    <span class="n">keras_metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_compiled_</span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+            <span class="c1"># ensembling one of our metric wrappers</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">keras_metric</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">test_step</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">keras_metrics</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">keras_metric</span><span class="p">)</span>
+
+        <span class="c1"># if self.metric_wrapper == None:</span>
+        <span class="c1">#     keras_metrics[&quot;loss&quot;] = tf.reduce_mean(</span>
+        <span class="c1">#         [v for k, v in keras_metrics.items() if &quot;val_loss&quot; in k]</span>
+        <span class="c1">#     )</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     keras_metrics[&quot;wrapper_loss&quot;] = tf.reduce_mean(</span>
+        <span class="c1">#         [v for k, v in keras_metrics.items() if &quot;val_wrapper_loss&quot; in k]</span>
+        <span class="c1">#     )</span>
+
+        <span class="k">return</span> <span class="n">keras_metrics</span></div>
+
+<div class="viewcode-block" id="EnsembleWrapper.call"><a class="viewcode-back" href="../../../api_documentation/EnsembleWrapper.html#capsa.EnsembleWrapper.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_risk</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forward pass of the model</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : tf.Tensor</span>
+<span class="sd">            Input.</span>
+<span class="sd">        training : bool, default False</span>
+<span class="sd">            Can be used to specify a different behavior in training and inference.</span>
+<span class="sd">        return_risk : bool, default True</span>
+<span class="sd">            Indicates whether or not to output a risk estimate in addition to the model&#39;s prediction.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out : capsa.RiskTensor</span>
+<span class="sd">            Risk aware tensor, contains both the predicted label y_hat (tf.Tensor) and the epistemic</span>
+<span class="sd">            uncertainty estimate (tf.Tensor).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">return_risk</span> <span class="o">==</span> <span class="kc">False</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_members</span>
+
+        <span class="n">outs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">wrapper</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics_compiled</span><span class="o">.</span><span class="n">values</span><span class="p">())[:</span><span class="n">T</span><span class="p">]:</span>
+            <span class="c1"># ensembling the user model</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_wrapper</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="c1"># ensembling one of our own metrics</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="p">,</span> <span class="n">return_risk</span><span class="p">)</span>
+            <span class="n">outs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">return_risk</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">out</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">outs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outs</span><span class="p">)</span>
+            <span class="c1"># ensembling the user model</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_wrapper</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">mean</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">outs</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_std</span><span class="p">(</span><span class="n">outs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">RiskTensor</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">epistemic</span><span class="o">=</span><span class="n">std</span><span class="p">)</span>
+            <span class="c1"># ensembling one of our own metrics</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">outs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Themis AI Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    </body>
+</html>

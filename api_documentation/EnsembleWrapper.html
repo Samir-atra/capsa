@@ -1,0 +1,446 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="DropoutWrapper" href="DropoutWrapper.html" /><link rel="prev" title="VAEWrapper" href="VAEWrapper.html" />
+
+    <!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>EnsembleWrapper - capsa documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">capsa  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">capsa  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">👋 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">💾 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../risk_metrics/index.html">⭐️ Risk Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/basic_usage.html">🎬 Basic Usage</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/index.html">👩‍🏫 Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/1_Ensemble-Classification.html">Ensemble Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/2_Histogram-Classification.html">Histogram Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/3_MVE-Classification.html">MVE Wrapper (Classification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/4_MVE-Regression.html">MVE Wrapper (Regression)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/5_High-Dimensional-Depth.html">High Level Introduction to Capsa with a Real World Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/6_OOD-Detection.html">Anomaly Detection (Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/notebooks/7_Composability.html">Composability (Advanced)</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">‍💻 Metric Wrapper API</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="BaseWrapper.html">BaseWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RiskTensor.html">RiskTensor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MVEWrapper.html">MVEWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VAEWrapper.html">VAEWrapper</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">EnsembleWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DropoutWrapper.html">DropoutWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HistogramWrapper.html">HistogramWrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HistogramVAEWrapper.html">HistogramVAEWrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute/index.html">🧿 Contribute</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="ensemblewrapper">
+<span id="api-documentation-ensemblewrapper"></span><h1>EnsembleWrapper<a class="headerlink" href="#ensemblewrapper" title="Permalink to this heading">#</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more examples of using the <code class="docutils literal notranslate"><span class="pre">EnsembleWrapper</span></code> check out <code class="docutils literal notranslate"><span class="pre">capsa/tests/test_ensemble.py</span></code>.</p>
+</div>
+<span class="target" id="api-wrapper"></span><dl class="py class">
+<dt class="sig sig-object py" id="capsa.EnsembleWrapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">capsa.</span></span><span class="sig-name descname"><span class="pre">EnsembleWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/epistemic/ensemble.html#EnsembleWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.EnsembleWrapper" title="Permalink to this definition">#</a></dt>
+<dd><p>Uses an ensemble of N models (each one is randomly initialized) to accurately
+estimate epistemic uncertainty Lakshminarayanan et al. (2017).</p>
+<p>This approach presents the gold-standard of estimating epistemic uncertainty.
+However, it comes with significant computational costs.</p>
+<dl>
+<dt>Example of usage:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># initialize a keras model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_model</span> <span class="o">=</span> <span class="n">Unet</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># wrap the model to transform it into a risk-aware variant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">EnsembleWrapper</span><span class="p">(</span><span class="n">user_model</span><span class="p">,</span> <span class="n">metric_wrapper</span><span class="o">=</span><span class="n">MVEWrapper</span><span class="p">,</span> <span class="n">num_members</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># compile and fit as a regular tf.keras model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.EnsembleWrapper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_members</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_wrapper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/epistemic/ensemble.html#EnsembleWrapper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.EnsembleWrapper.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_model</strong> (<em>tf.keras.Model</em>) – A model to be transformed into a risk-aware variant.</p></li>
+<li><p><strong>num_members</strong> (<em>int</em><em>, </em><em>default 3</em>) – Number of members in the deep ensemble.</p></li>
+<li><p><strong>metric_wrapper</strong> (<a class="reference internal" href="BaseWrapper.html#capsa.BaseWrapper" title="capsa.BaseWrapper"><em>capsa.BaseWrapper</em></a><em>, </em><em>default None</em>) – Class object of an individual metric wrapper (which subclass <code class="docutils literal notranslate"><span class="pre">capsa.BaseWrapper</span></code>) that
+user wants to ensemble, if it’s <code class="docutils literal notranslate"><span class="pre">None</span></code> then this wrapper ensembles the <code class="docutils literal notranslate"><span class="pre">base_model</span></code>.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Keyword args used to initialize metric wrappers, used only if <code class="docutils literal notranslate"><span class="pre">metric_wrapper</span></code> is provided.
+The kwargs are metric wrapper specific, they could be different depending on the wrapper to
+be ensembled. But they should not include the <code class="docutils literal notranslate"><span class="pre">base_model</span></code> keyword.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="capsa.EnsembleWrapper.metric_name">
+<span class="sig-name descname"><span class="pre">metric_name</span></span><a class="headerlink" href="#capsa.EnsembleWrapper.metric_name" title="Permalink to this definition">#</a></dt>
+<dd><p>Represents the name of the metric wrapper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="capsa.EnsembleWrapper.metrics_compiled">
+<span class="sig-name descname"><span class="pre">metrics_compiled</span></span><a class="headerlink" href="#capsa.EnsembleWrapper.metrics_compiled" title="Permalink to this definition">#</a></dt>
+<dd><p>An empty dict, will be used to map <a href="#id1"><span class="problematic" id="id2">``</span></a>metric_name``s (string identifiers) of the wrappers that
+a user wants to ensemble to their respective compiled models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.EnsembleWrapper.compile">
+<span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/epistemic/ensemble.html#EnsembleWrapper.compile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.EnsembleWrapper.compile" title="Permalink to this definition">#</a></dt>
+<dd><p>Compiles every member in the deep ensemble. Overrides <code class="docutils literal notranslate"><span class="pre">tf.keras.Model.compile()</span></code>.</p>
+<p>If user passes only 1 <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> and <code class="docutils literal notranslate"><span class="pre">loss_fn</span></code> yet they specified e.g. <code class="docutils literal notranslate"><span class="pre">num_members``=3,</span>
+<span class="pre">duplicate</span> <span class="pre">that</span> <span class="pre">one</span> <span class="pre">``optimizer</span></code> and <code class="docutils literal notranslate"><span class="pre">loss_fn</span></code> for all members in the ensemble.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>optimizer</strong> (<em>tf.keras.optimizer</em><em> or </em><em>list</em>) – </p></li>
+<li><p><strong>loss</strong> (<em>tf.keras.losses</em><em> or </em><em>list</em>) – </p></li>
+<li><p><strong>metrics</strong> (<em>tf.keras.metrics</em><em> or </em><em>list</em><em>, </em><em>default None</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.EnsembleWrapper.train_step">
+<span class="sig-name descname"><span class="pre">train_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/epistemic/ensemble.html#EnsembleWrapper.train_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.EnsembleWrapper.train_step" title="Permalink to this definition">#</a></dt>
+<dd><p>The logic for one training step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>tuple</em>) – (x, y) pairs, as in the regular Keras <code class="docutils literal notranslate"><span class="pre">train_step</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>keras_metrics</strong> – <a class="reference external" href="https://keras.io/api/metrics/">Keras metrics</a>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.EnsembleWrapper.test_step">
+<span class="sig-name descname"><span class="pre">test_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/epistemic/ensemble.html#EnsembleWrapper.test_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.EnsembleWrapper.test_step" title="Permalink to this definition">#</a></dt>
+<dd><p>The logic for one evaluation step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>tuple</em>) – (x, y) pairs, as in the regular Keras <code class="docutils literal notranslate"><span class="pre">test_step</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>keras_metrics</strong> – <a class="reference external" href="https://keras.io/api/metrics/">Keras metrics</a>.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="capsa.EnsembleWrapper.call">
+<span class="sig-name descname"><span class="pre">call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_risk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/capsa/epistemic/ensemble.html#EnsembleWrapper.call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#capsa.EnsembleWrapper.call" title="Permalink to this definition">#</a></dt>
+<dd><p>Forward pass of the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>tf.Tensor</em>) – Input.</p></li>
+<li><p><strong>training</strong> (<em>bool</em><em>, </em><em>default False</em>) – Can be used to specify a different behavior in training and inference.</p></li>
+<li><p><strong>return_risk</strong> (<em>bool</em><em>, </em><em>default True</em>) – Indicates whether or not to output a risk estimate in addition to the model’s prediction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>out</strong> – Risk aware tensor, contains both the predicted label y_hat (tf.Tensor) and the epistemic
+uncertainty estimate (tf.Tensor).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="RiskTensor.html#capsa.RiskTensor" title="capsa.RiskTensor">capsa.RiskTensor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="DropoutWrapper.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">DropoutWrapper</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="VAEWrapper.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">VAEWrapper</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Themis AI Inc
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">EnsembleWrapper</a><ul>
+<li><a class="reference internal" href="#capsa.EnsembleWrapper"><code class="docutils literal notranslate"><span class="pre">EnsembleWrapper</span></code></a><ul>
+<li><a class="reference internal" href="#capsa.EnsembleWrapper.__init__"><code class="docutils literal notranslate"><span class="pre">EnsembleWrapper.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.EnsembleWrapper.metric_name"><code class="docutils literal notranslate"><span class="pre">EnsembleWrapper.metric_name</span></code></a></li>
+<li><a class="reference internal" href="#capsa.EnsembleWrapper.metrics_compiled"><code class="docutils literal notranslate"><span class="pre">EnsembleWrapper.metrics_compiled</span></code></a></li>
+<li><a class="reference internal" href="#capsa.EnsembleWrapper.compile"><code class="docutils literal notranslate"><span class="pre">EnsembleWrapper.compile()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.EnsembleWrapper.train_step"><code class="docutils literal notranslate"><span class="pre">EnsembleWrapper.train_step()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.EnsembleWrapper.test_step"><code class="docutils literal notranslate"><span class="pre">EnsembleWrapper.test_step()</span></code></a></li>
+<li><a class="reference internal" href="#capsa.EnsembleWrapper.call"><code class="docutils literal notranslate"><span class="pre">EnsembleWrapper.call()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    </body>
+</html>
