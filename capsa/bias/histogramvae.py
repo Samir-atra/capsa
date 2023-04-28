@@ -187,7 +187,7 @@ class HistogramVAEWrapper(BaseWrapper):
         sampled_latent = self.sampling(mu, log_std)
         rec = self.decoder(sampled_latent)
         loss = kl(mu, log_std) + mse(x, rec)
-        return loss, y_hat, bias
+        return loss, y_hat
     
 
     #@tf.function
@@ -223,7 +223,7 @@ class HistogramVAEWrapper(BaseWrapper):
         x, y = data
 
         with tf.GradientTape() as t:
-            metric_loss, y_hat,bias = self.loss_fn(x, y)
+            metric_loss, y_hat = self.loss_fn(x, y)
             compiled_loss = self.compiled_loss(
                 y, y_hat, regularization_losses=self.losses
             )
@@ -240,8 +240,6 @@ class HistogramVAEWrapper(BaseWrapper):
         }
         keras_metrics[f"{prefix}_wrapper_loss"] = loss
 
-
-        #Possible area to add DB-VAE additions: the variable ``bias`` is available in this scope
 
 
         return keras_metrics
