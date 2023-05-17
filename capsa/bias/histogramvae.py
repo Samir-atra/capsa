@@ -12,7 +12,7 @@ from ..risk_tensor import RiskTensor
 
 def kl(mu, log_std):
     return -0.5 * tf.reduce_sum(                                       
-        1 + log_std - tf.math.square(mu) - tf.math.log(log_std),
+        1 + log_std - tf.math.square(mu) - tf.math.exp(log_std),
         axis=-1,
     )
 
