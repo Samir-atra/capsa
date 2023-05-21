@@ -18,11 +18,8 @@ def kl(mu, log_std):
 
 def mse(y, y_hat, reduce=True):
     ax = list(range(1, len(y.shape)))
-    mse = tf.reduce_sum(
-        (y - y_hat) ** 2,
-        axis=ax,
-        keepdims=(False if reduce else True),
-    )
+    mse = tf.reduce_sum((y - y_hat) ** 2,axis=ax,keepdims=(False if reduce else True),)
+    
     return tf.expand_dims(mse,axis=-1) if reduce else mse
 
 class HistogramVAEWrapper(BaseWrapper):
@@ -220,9 +217,7 @@ class HistogramVAEWrapper(BaseWrapper):
         feature_shape = tf.shape(features)
 
         # Create a queue with the shape of the features and an index to keep track of how many values are in the queue
-        self.queue = tf.Variable(
-            tf.zeros([self.queue_size, feature_shape[-1]]), trainable=False
-        )
+        self.queue = tf.Variable(tf.zeros([self.queue_size, feature_shape[-1]]), trainable=False)
         self.queue_index = tf.Variable(0, trainable=False)
         
     # def build(self,input_shape):
@@ -283,9 +278,7 @@ class HistogramVAEWrapper(BaseWrapper):
         )
 
         # Multiply probabilities together to compute bias
-        second_element = tf.repeat(
-            [tf.range(tf.shape(features)[1])], repeats=[tf.shape(features)[0]], axis=0
-        )
+        second_element = tf.repeat([tf.range(tf.shape(features)[1])], repeats=[tf.shape(features)[0]], axis=0)
         indices = tf.stack([bin_indices, second_element], axis=2)
 
         probabilities = tf.gather_nd(hist_probs, indices)
@@ -308,9 +301,7 @@ class HistogramVAEWrapper(BaseWrapper):
 
         # Add the features to the queue
         queue_state = self.queue.value()
-        updated_queue_state = tf.tensor_scatter_nd_update(
-            queue_state, updates=features, indices=index
-        )
+        updated_queue_state = tf.tensor_scatter_nd_update(queue_state, updates=features, indices=index)
         self.queue.assign(updated_queue_state)
 
 
